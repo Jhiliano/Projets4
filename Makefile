@@ -11,7 +11,7 @@ BINDIR = bin
 OBJDIR = obj
 DISKSDIR = disk
 
-RAID5DIR = raid5
+RAID5DIR = Raid5
 
 ifeq ($(DEBUG),yes)
 	CFLAG += -g
@@ -29,6 +29,9 @@ $(EXEC): $(OBJ)
 	mv $(EXEC) $(BINDIR)/
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
+		$(CC) -o $@ -c $< $(SYS) $(INC)
+
+main.o: $(SRCDIR)/main.c
 		$(CC) -o $@ -c $< $(SYS) $(INC)
 
 .PHONY: clean mrproper doc
