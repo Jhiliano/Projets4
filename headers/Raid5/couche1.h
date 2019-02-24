@@ -7,8 +7,12 @@
 #define COUCHE1_H
 
 /* Dépendances */
+
+
 #include "global.h"
 
+
 /* Fonctions */
+
 
 #endif

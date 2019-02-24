@@ -6,9 +6,14 @@
 #ifndef COUCHE3_H
 #define COUCHE3_H
 
+
 /* Dépendances */
+
+
 #include "global.h"
 
+
 /* Fonctions */
+
 
 #endif

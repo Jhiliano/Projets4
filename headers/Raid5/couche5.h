@@ -6,9 +6,14 @@
 #ifndef COUCHE5_H
 #define COUCHE5_H
 
+
 /* Dépendances */
+
+
 #include "global.h"
 
+
 /* Fonctions */
+
 
 #endif
