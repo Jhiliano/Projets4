@@ -12,4 +12,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+/* Definitions */
+
+#define BLOCK_SIZE 4
+#define FILENAME_MAX_SIZE 32
+#define INODE_TABLE_SIZE 10
+#define MAX_FILE_SIZE (50*1024)
+
 #endif
