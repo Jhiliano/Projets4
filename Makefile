@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Specific part of the Makefile
 EXEC=exec
 
@@ -47,7 +46,3 @@ mrproper: clean
 # End generic part of the makefile
 
 # Specific file dependencies
-
-
-=======
->>>>>>> 3ef1e3825b8b92aac69b152701cb66c6cab576f4
