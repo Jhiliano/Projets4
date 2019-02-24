@@ -2,9 +2,15 @@
 EXEC=exec
 
 # Begin generic part of the Makefile
-CC=gcc
-CFLAGS=-std=c99 -Werror -Wextra -Wall -ansi -pedantic
-LDFLAGS=
+CC = gcc
+CFLAGS = -Werror -Wextra -Wall -pedantic
+LDFLAGS =
+
+OBJ = couche1.o\
+			couche2.o\
+			couche3.o\
+			couche4.o\
+			couche5.o
 
 SRCDIR = src
 BINDIR = bin
@@ -23,16 +29,16 @@ endif
 
 all: $(EXEC)
 
-$(EXEC): $(OBJ)
+$(EXEC): $(OBJ) main.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 	mv *.o $(OBJDIR)/
 	mv $(EXEC) $(BINDIR)/
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
-		$(CC) -o $@ -c $< $(SYS) $(INC)
+		$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
 main.o: $(SRCDIR)/main.c
-		$(CC) -o $@ -c $< $(SYS) $(INC)
+		$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
 .PHONY: clean mrproper doc
 

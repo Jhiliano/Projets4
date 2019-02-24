@@ -14,6 +14,8 @@
 
 /* Definitions */
 
+#define uchar unsigned char
+
 #define BLOCK_SIZE 4
 /// \def BLOCK_SIZE
 /// taille du bloc (default 4)
