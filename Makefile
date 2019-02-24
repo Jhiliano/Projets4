@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 # Specific part of the Makefile
-EXEC=stack_ex1
+EXEC=exec
 
 # Begin generic part of the Makefile
 CC=gcc
@@ -10,12 +10,9 @@ LDFLAGS=
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
-DISKSDIR = disque
+DISKSDIR = disk
 
-RAID5DIR = Raid5
-
-SRC= $(wildcard *.c)
-OBJ= $(SRC:.c=.o)
+RAID5DIR = raid5
 
 ifeq ($(DEBUG),yes)
 	CFLAG += -g
@@ -32,8 +29,8 @@ $(EXEC): $(OBJ)
 	mv *.o $(OBJDIR)/
 	mv $(EXEC) $(BINDIR)/
 
-%.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+%.o: $(SRCDIR)/$(RAID5DIR)/%.c
+		$(CC) -o $@ -c $< $(SYS) $(INC)
 
 .PHONY: clean mrproper doc
 
@@ -54,4 +51,3 @@ mrproper: clean
 
 =======
 >>>>>>> 3ef1e3825b8b92aac69b152701cb66c6cab576f4
-
