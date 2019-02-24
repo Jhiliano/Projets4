@@ -41,14 +41,14 @@ $(EXEC): $(OBJ) main.o
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-	
+
 %.o: $(SRCDIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
 .PHONY: clean mrproper doc
 
-doc: stack.h main.c
+doc:
 	@echo "Creation de la documentation"
 	@doxygen doc/doxyfile
 

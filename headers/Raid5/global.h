@@ -118,17 +118,17 @@ typedef struct super_block_s{
 typedef struct virtual_disk_s {
 /// \struct virtual_disk_s
 /// \brief type du disque virtuel
-/// \var virtual_disk_t::number_of_files
+/// \var virtual_disk_s::number_of_files
 /// nombre de fichiers
-/// \var virtual_disk_t::super_block
+/// \var virtual_disk_s::super_block
 /// superbock du fichier contenant les information sur le fichier
-/// \var virtual_disk_t::inodes
+/// \var virtual_disk_s::inodes
 /// tableau d'inodes
-/// \var virtual_disk_t::ndisk
+/// \var virtual_disk_s::ndisk
 /// nb de disques
-/// \var virtual_disk_t::raidmode
+/// \var virtual_disk_s::raidmode
 /// type du raid utilisé
-/// \var virtual_disk_t::storage
+/// \var virtual_disk_s::storage
 /// disques du systeme : tab[NUMBER_OF_DISKS]
     int number_of_files;
     super_block_t super_block;
@@ -143,7 +143,7 @@ typedef struct virtual_disk_s {
 typedef struct stripe_s {
 /// \struct stripe_s
 /// \brief inclut le bloc de parité
-/// \var stripe_s::nblock
+/// \var stripe_s::nblocks
 /// egal à NB_DISK : un bloc par disque
 /// \var stripe_s::stripe
 /// stripe[NB_DISK] les data

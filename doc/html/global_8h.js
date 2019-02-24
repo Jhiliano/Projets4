@@ -1,0 +1,36 @@
+var global_8h =
+[
+    [ "block_s", "structblock__s.html", "structblock__s" ],
+    [ "inode_s", "structinode__s.html", "structinode__s" ],
+    [ "super_block_s", "structsuper__block__s.html", "structsuper__block__s" ],
+    [ "virtual_disk_s", "structvirtual__disk__s.html", "structvirtual__disk__s" ],
+    [ "stripe_s", "structstripe__s.html", "structstripe__s" ],
+    [ "file_s", "structfile__s.html", "structfile__s" ],
+    [ "ERREUR", "global_8h.html#a8a9dac7f648d09d16b17ff585c9f2efe", null ],
+    [ "BLOCK_SIZE", "global_8h.html#ad51ded0bbd705f02f73fc60c0b721ced", null ],
+    [ "FILENAME_MAX_SIZE", "global_8h.html#a24c1405225e4ce27b24bcf4f32f4ff0e", null ],
+    [ "INODE_TABLE_SIZE", "global_8h.html#a6c041fac527c965e3db582c4c19c1ab4", null ],
+    [ "MAX_FILE_SIZE", "global_8h.html#a649ad5274d988d17a275a3cead056746", null ],
+    [ "MAX_MSG", "global_8h.html#aa24597a54a085c6c2c33b64138f09eff", null ],
+    [ "SUPER_BLOCK_SIZE", "global_8h.html#a42178fcae46f09d3c91ca3da27188231", null ],
+    [ "INODES_START", "global_8h.html#a1a1399be80da10bab823671e773453bb", null ],
+    [ "INODE_SIZE", "global_8h.html#a34a3a3e2e3a4bd30b993bce5b19f3d73", null ],
+    [ "uint", "global_8h.html#a38f1fee666517bad3dcc99e3b1b529f4", null ],
+    [ "uchar", "global_8h.html#a86a4b5380e358b45113e47f1340c1a56", null ],
+    [ "block_t", "global_8h.html#a9497df9c1d65b018066a9760da7be4e6", null ],
+    [ "inode_t", "global_8h.html#aecc98d5532293d656a2a4f8c09b31af0", null ],
+    [ "inode_table_t", "global_8h.html#aeefd2dcfacb07076636e65188dcc5665", null ],
+    [ "super_block_t", "global_8h.html#ab4262e4ae89403a13833a1163293e494", null ],
+    [ "virtual_disk_t", "global_8h.html#a2528d976f382013ac3618d4257959399", null ],
+    [ "stripe_t", "global_8h.html#a8a78758ce04c466e650a58a3e469508a", null ],
+    [ "file_t", "global_8h.html#a2c5a2f621090a7801e6aa449667d73d5", null ],
+    [ "raid", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e", [
+      [ "ZERO", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6eae117e3533122c80b262257b49b21cddf", null ],
+      [ "UN", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6ea84d559f3e898f067d4529c5eb3ab5a61", null ],
+      [ "CINQ", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6eae2996d8da47978a309deebde23aec4ab", null ],
+      [ "ZERO_UN", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6ea1b4aedfb0f4ef011d964bcf01befdeaa", null ],
+      [ "UN_ZERO", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6eaee746b0b3b0072f79606f2bd004621cc", null ],
+      [ "CINQUANTE", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6ea2226995f0db9d32c88c3c3bf7ba47482", null ],
+      [ "CENT", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6eaf59ee3d128b9d3f5d89bc37bff97b5ab", null ]
+    ] ]
+];
