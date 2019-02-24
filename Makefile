@@ -1,20 +1,23 @@
 # Specific part of the Makefile
-EXEC=exec
+EXEC = Exec
 
 # Begin generic part of the Makefile
 CC = gcc
 CFLAGS = -Werror -Wextra -Wall -pedantic
 LDFLAGS =
 
-OBJ = couche1.o\
-			couche2.o\
-			couche3.o\
-			couche4.o\
-			couche5.o
+SRC = couche1.c\
+			couche2.c\
+			couche3.c\
+			couche4.c\
+			couche5.c
+OBJ = $(SRC:.c=.o)
+HEAD = $(SRC:.c=.h)
 
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
+HEADIR = headers
 DISKSDIR = disk
 
 RAID5DIR = Raid5
@@ -30,28 +33,32 @@ endif
 all: $(EXEC)
 
 $(EXEC): $(OBJ) main.o
-	$(CC) -o $@ $^ $(LDFLAGS)
-	mv *.o $(OBJDIR)/
-	mv $(EXEC) $(BINDIR)/
+	@$(CC) -o $@ $^ $(LDFLAGS)
+	@mv *.o $(OBJDIR)/
+	@mv $(EXEC) $(BINDIR)/
+	@echo "Création de l'executabe "$@
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
-		$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-
-main.o: $(SRCDIR)/main.c
-		$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+	@echo "Création de "$@
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+%.o: $(SRCDIR)/%.c
+	@echo "Création de "$@
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
 .PHONY: clean mrproper doc
 
 doc: stack.h main.c
+	@echo "Creation de la documentation"
 	@doxygen doc/doxyfile
 
+
 clean:
-	rm -f *.o
-	rm -f $(OBJDIR)/*.o
-	rm -f $(BINDIR)/*
+	@rm -f $(OBJDIR)/*.o
+	@echo "Fichiers intermédiaires supprimés"
 
 mrproper: clean
-	@rm -rf $(EXEC)
+	@rm -f $(BINDIR)/*
+	@echo "Executable supprimé"
 # End generic part of the makefile
 
 # Specific file dependencies
