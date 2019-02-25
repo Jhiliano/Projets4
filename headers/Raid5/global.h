@@ -165,4 +165,8 @@ uchar data [MAX_FILE_SIZE] ;
 /// \typedef file_t
 /// redefinit file_s en file_t
 
+/*Variables globales*/
+
+virtual_disk_t r5Disk;
+
 #endif

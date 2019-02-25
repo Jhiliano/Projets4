@@ -9,7 +9,7 @@
 /* Dépendances */
 
 
-#include "../global.h"
+#include "global.h"
 #include <sys/types.h>
 #include <dirent.h>
 
