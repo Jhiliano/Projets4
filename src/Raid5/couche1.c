@@ -17,7 +17,7 @@ void init_disk_raid5(char* adresse)
 {
 	DIR* rep;
 	struct dirent* elem;
-	struct stat* infosFichier;
+	struct stat infosFichier;
 	char cheminFichier[66];
 
 	r5Disk.ndisk = 0;
@@ -29,12 +29,16 @@ void init_disk_raid5(char* adresse)
 			strcpy(cheminFichier,adresse);
 			strcat(cheminFichier,"/");
 			strcat(cheminFichier,elem->d_name);
-			stat(cheminFichier, infosFichier);
-			/*if (!S_ISDIR(infosFichier->st_mode))
+			stat(cheminFichier, &infosFichier);
+			if (!S_ISDIR(infosFichier.st_mode))
 			{
-				printf("HA");
+			/*	r5Disk.storage[r5Disk.ndisk] = fopen(cheminFichier,"r+");
+				if (r5Disk.storage[r5Disk.ndisk] == NULL) {
+					fprintf(stderr,"ouverture du disque impossible");
+				}*/
 				r5Disk.ndisk++;
-			}*/
+
+			}
 		}
 	}
 	closedir(rep);
