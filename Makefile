@@ -20,6 +20,8 @@ OBJDIR = obj
 HEADIR = headers
 DISKSDIR = disk
 
+
+
 RAID5DIR = Raid5
 
 ifeq ($(DEBUG),yes)
@@ -33,18 +35,20 @@ endif
 all: $(EXEC)
 
 $(EXEC): $(OBJ) main.o
-	@$(CC) -o $@ $^ $(LDFLAGS)
-	@mv *.o $(OBJDIR)/
+	@$(CC) -o $@ $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+
 	@mv $(EXEC) $(BINDIR)/
 	@echo "Création de l'executabe "$@
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+	@mv *.o $(OBJDIR)/
 
 %.o: $(SRCDIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+	@mv *.o $(OBJDIR)/
 
 .PHONY: clean mrproper doc
 
@@ -63,3 +67,8 @@ mrproper: clean
 # End generic part of the makefile
 
 # Specific file dependencies
+main.o: $(addprefix $(HEADIR)/$(RAID5DIR)/,$(HEAD))
+couche2.o: $(HEADIR)/$(RAID5DIR)/couche2.h
+couche3.o: $(HEADIR)/$(RAID5DIR)/couche3.h
+couche4.o: $(HEADIR)/$(RAID5DIR)/couche4.h
+couche5.o: $(HEADIR)/$(RAID5DIR)/couche5.h
