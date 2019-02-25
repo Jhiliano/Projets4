@@ -18,5 +18,6 @@ int main(void)
 /// \return EXIT_SUCCESS le programme n'a pas eut d'encombre sinon il aurrai rencontré un exit(EXIT_FAILURE)
 {
   init_disk_raid5("disk");
+  eteindre_disk_raid5();
   return EXIT_SUCCESS;
 }
