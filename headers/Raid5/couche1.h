@@ -10,9 +10,13 @@
 
 
 #include "../global.h"
-
+#include <sys/types.h>
+#include <dirent.h>
 
 /* Fonctions */
-
+void init_disk_raid5(char* adresse){
+	DIR* rep;
+	rep = opendir(adresse);
+}
 
 #endif
