@@ -1,6 +1,6 @@
 # Specific part of the Makefile
 EXEC = Exec
-
+CREATEDISK = createdisk
 # Begin generic part of the Makefile
 CC = gcc
 CFLAGS = -Werror -Wextra -Wall -pedantic
@@ -19,6 +19,7 @@ BINDIR = bin
 OBJDIR = obj
 HEADIR = headers
 DISKSDIR = disk
+CREATEDISKDIR = genDisk
 
 
 
@@ -35,10 +36,10 @@ endif
 all: $(EXEC)
 
 $(EXEC): $(OBJ) main.o
-	@$(CC) -o $@ $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
-
-	@mv $(EXEC) $(BINDIR)/
 	@echo "Création de l'executabe "$@
+	@$(CC) -o $@ $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@mv $(EXEC) $(BINDIR)/
+
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
@@ -55,6 +56,11 @@ $(EXEC): $(OBJ) main.o
 doc:
 	@echo "Creation de la documentation"
 	@doxygen doc/doxyfile
+
+$(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
+	@echo "Création du disque"
+	@$(CC) -o $@ $^
+	@mv $(CREATEDISK) $(BINDIR)/
 
 
 clean:
