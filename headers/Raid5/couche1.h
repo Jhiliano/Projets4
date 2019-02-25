@@ -6,14 +6,19 @@
 #ifndef COUCHE1_H
 #define COUCHE1_H
 
+
 /* Dépendances */
 
 
 #include "global.h"
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 
+
 /* Fonctions */
+
+
 void init_disk_raid5(char* adresse);
 
 #endif

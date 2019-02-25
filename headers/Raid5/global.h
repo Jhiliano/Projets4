@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 
 /* Definitions */
@@ -165,7 +166,9 @@ uchar data [MAX_FILE_SIZE] ;
 /// \typedef file_t
 /// redefinit file_s en file_t
 
+
 /*Variables globales*/
+
 
 virtual_disk_t r5Disk;
 

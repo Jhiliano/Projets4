@@ -11,8 +11,31 @@
 
 
 /* fonctions */
-void init_disk_raid5(char* adresse){
+
+
+void init_disk_raid5(char* adresse)
+{
 	DIR* rep;
+	struct dirent* elem;
+	struct stat* infosFichier;
+	char cheminFichier[66];
+
+	r5Disk.ndisk = 0;
 	rep = opendir(adresse);
-	
+	while ((elem = readdir(rep)) != NULL)
+	{
+		if (strcmp(elem->d_name,"..") && strcmp(elem->d_name,"."))
+		{
+			strcpy(cheminFichier,adresse);
+			strcat(cheminFichier,"/");
+			strcat(cheminFichier,elem->d_name);
+			stat(cheminFichier, infosFichier);
+			/*if (!S_ISDIR(infosFichier->st_mode))
+			{
+				printf("HA");
+				r5Disk.ndisk++;
+			}*/
+		}
+	}
+	closedir(rep);
 }

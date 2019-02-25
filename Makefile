@@ -3,7 +3,7 @@ EXEC = Exec
 CREATEDISK = createdisk
 # Begin generic part of the Makefile
 CC = gcc
-CFLAGS = -Werror -Wextra -Wall -pedantic
+CFLAGS = -Wextra -Wall -pedantic
 LDFLAGS =
 
 SRC = couche1.c\
@@ -39,6 +39,9 @@ $(EXEC): $(OBJ) main.o
 	@echo "Création de l'executabe "$@
 	@$(CC) -o $@ $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 	@mv $(EXEC) $(BINDIR)/
+
+run:
+	./$(BINDIR)/$(EXEC)
 
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
