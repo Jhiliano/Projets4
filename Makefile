@@ -61,6 +61,7 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@echo "Création de l'executable de generation du disque"
 	@$(CC) -o $@ $^
 	@mv $(CREATEDISK) $(BINDIR)/
+	@echo "Création de 4 disk de 50*1024 octets"
 	@./bin/$@ $(DISKSDIR) 4 51200
 
 clean:
