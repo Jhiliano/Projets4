@@ -47,12 +47,12 @@ run:
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-	@mv *.o $(OBJDIR)/
+	@mv $@ $(OBJDIR)/
 
 %.o: $(SRCDIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-	@mv *.o $(OBJDIR)/
+	@mv $@ $(OBJDIR)/
 
 .PHONY: clean mrproper doc
 
@@ -69,6 +69,7 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 
 clean:
 	@rm -f $(OBJDIR)/*.o
+	@rm -f *.o
 	@echo "Fichiers intermédiaires supprimés"
 
 mrproper: clean
