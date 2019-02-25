@@ -58,10 +58,10 @@ doc:
 	@doxygen doc/doxyfile
 
 $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
-	@echo "Création du disque"
+	@echo "Création de l'executable de generation du disque"
 	@$(CC) -o $@ $^
 	@mv $(CREATEDISK) $(BINDIR)/
-
+	@./bin/$@ $(DISKSDIR) 4 51200
 
 clean:
 	@rm -f $(OBJDIR)/*.o

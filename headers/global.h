@@ -77,7 +77,6 @@ typedef struct block_s{
   uchar data[BLOCK_SIZE];
 } block_t;
 
-/* Type of the pseudo-inode structure */
 typedef struct inode_s{
 /// \struct inode_s
 /// \brief structure d'une inode
