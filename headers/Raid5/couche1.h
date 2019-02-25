@@ -14,9 +14,6 @@
 #include <dirent.h>
 
 /* Fonctions */
-void init_disk_raid5(char* adresse){
-	DIR* rep;
-	rep = opendir(adresse);
-}
+void init_disk_raid5(char* adresse);
 
 #endif

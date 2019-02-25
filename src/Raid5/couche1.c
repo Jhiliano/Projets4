@@ -11,4 +11,8 @@
 
 
 /* fonctions */
-void init_disk_raid5(char* adresse);
+void init_disk_raid5(char* adresse){
+	DIR* rep;
+	rep = opendir(adresse);
+	
+}
