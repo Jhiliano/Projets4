@@ -40,8 +40,7 @@ $(EXEC): $(OBJ) main.o
 	@$(CC) -o $(addprefix $(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
 run:
-	@echo "Execution de l'executable" $(EXEC)
-	@./$(BINDIR)/$(EXEC)
+	bin/Exec $(ARGS)
 
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
@@ -62,6 +61,7 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@echo "Création de l'executable de generation du disque"
 	@$(CC) -o $(BINDIR)/$@ $^
 	@echo "Création de 4 disk de 50*1024 octets"
+
 	@./bin/$@ $(DISKSDIR) 4 51200
 
 clean:
