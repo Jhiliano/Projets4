@@ -40,7 +40,7 @@ $(EXEC): $(OBJ) main.o
 	@$(CC) -o $(addprefix $(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
 run:
-	bin/Exec $(ARGS)
+	$(BINDIR)/$(EXEC) $(ARGS)
 
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
