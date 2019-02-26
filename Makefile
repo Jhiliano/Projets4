@@ -41,18 +41,19 @@ $(EXEC): $(OBJ) main.o
 	@mv $(EXEC) $(BINDIR)/
 
 run:
-	./$(BINDIR)/$(EXEC)
+	@echo "Execution de l'executable" $(EXEC)
+	@./$(BINDIR)/$(EXEC)
 
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-	@mv $@ $(OBJDIR)/
+	@mv *.o $(OBJDIR)/
 
 %.o: $(SRCDIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-	@mv $@ $(OBJDIR)/
+	@mv *.o $(OBJDIR)/
 
 .PHONY: clean mrproper doc
 
