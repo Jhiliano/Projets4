@@ -19,5 +19,6 @@ int main(void)
 {
   init_disk_raid5("disk");
   eteindre_disk_raid5();
+
   return EXIT_SUCCESS;
 }

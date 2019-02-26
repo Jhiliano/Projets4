@@ -37,8 +37,7 @@ all: $(EXEC)
 
 $(EXEC): $(OBJ) main.o
 	@echo "Création de l'executabe "$@
-	@$(CC) -o $@ $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
-	@mv $(EXEC) $(BINDIR)/
+	@$(CC) -o $(addprefix $(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
 run:
 	@echo "Execution de l'executable" $(EXEC)
@@ -47,13 +46,11 @@ run:
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
-	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-	@mv *.o $(OBJDIR)/
+	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
 
 %.o: $(SRCDIR)/%.c
 	@echo "Création de "$@
-	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
-	@mv *.o $(OBJDIR)/
+	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
 
 .PHONY: clean mrproper doc
 
@@ -63,8 +60,7 @@ doc:
 
 $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@echo "Création de l'executable de generation du disque"
-	@$(CC) -o $@ $^
-	@mv $(CREATEDISK) $(BINDIR)/
+	@$(CC) -o $(BINDIR)/$@ $^
 	@echo "Création de 4 disk de 50*1024 octets"
 	@./bin/$@ $(DISKSDIR) 4 51200
 
@@ -75,6 +71,7 @@ clean:
 
 mrproper: clean
 	@rm -f $(BINDIR)/*
+	@rm -f $(EXEC) $(CREATEDISK)
 	@echo "Executable supprimé"
 # End generic part of the makefile
 
