@@ -1,6 +1,8 @@
 # Specific part of the Makefile
 EXEC = Exec
 CREATEDISK = createdisk
+
+ARGS = 
 # Begin generic part of the Makefile
 CC = gcc
 CFLAGS = -Wextra -Wall -pedantic
@@ -40,7 +42,7 @@ $(EXEC): $(OBJ) main.o
 	@$(CC) -o $(addprefix $(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
 run:
-	$(BINDIR)/$(EXEC) $(ARGS)
+	./$(BINDIR)/$(EXEC) $(ARGS)
 
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
