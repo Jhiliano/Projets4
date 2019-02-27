@@ -83,11 +83,11 @@ uint compute_nblock(uint n)
 
 void write_block(int pos, FILE *disk, block_t block){
 	fseek(disk, pos, SEEK_SET);
-	fputs((char*)block.data, disk);
+	fwrite(block.data, sizeof(uchar), BLOCK_SIZE, disk);
 }
 
 int read_block(int pos, FILE *disk, block_t* block){
 	fseek(disk, pos, SEEK_SET);
-	if (fgets((char*)block->data, BLOCK_SIZE, disk) == NULL) return ERR_READ;
+	if (fread(block->data, sizeof(uchar), BLOCK_SIZE, disk) < BLOCK_SIZE) return ERR_READ;
 	return 0;
 }
