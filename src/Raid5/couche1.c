@@ -80,3 +80,7 @@ uint compute_nblock(uint n)
 	nBlockNecessaire += nBlockNecessaire%r5Disk.number_of_files; // on verifie qu'il y ai bien 4 block par fichiers utilisé
 	return nBlockNecessaire;
 }
+
+void write_block(int pos, virtual_disk_t disk){
+
+}

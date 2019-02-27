@@ -27,4 +27,6 @@ void eteindre_disk_raid5(void);
 
 uint compute_nblock(uint n);
 
+void write_block(int pos, virtual_disk_t disk);
+
 #endif
