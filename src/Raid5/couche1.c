@@ -81,6 +81,6 @@ uint compute_nblock(uint n)
 	return nBlockNecessaire;
 }
 
-void write_block(int pos, virtual_disk_t disk, block_t block){
-
+void write_block(int pos, virtual_disk_t* disk, block_t block){
+	fputs((char*)block.data, disk->storage[pos]);
 }
