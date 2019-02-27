@@ -86,8 +86,8 @@ void write_block(int pos, FILE *disk, block_t block){
 	fputs((char*)block.data, disk);
 }
 
-block_t read_block(int pos, FILE *disk){
-	block_t chaine;
-	if (fgets(chaine.data, BLOCK_SIZE, FILE* disk) == ) return ERR_READ;
-	return chaine;
+int read_block(int pos, FILE *disk, block_t* block){
+	fseek(disk, pos, SEEK_SET);
+	if (fgets((char*)block->data, BLOCK_SIZE, disk) == NULL) return ERR_READ;
+	return 1;
 }

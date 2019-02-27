@@ -28,6 +28,6 @@ void eteindre_disk_raid5(void);
 uint compute_nblock(uint n);
 
 void write_block(int pos, FILE *disk, block_t block);
-block_t read_block(int pos, FILE *disk);
+int read_block(int pos, FILE *disk, block_t* block);
 
 #endif
