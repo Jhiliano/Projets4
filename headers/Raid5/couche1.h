@@ -25,4 +25,6 @@ void remplir_storage(char* cheminFichier);
 void creation_chemin_fichier(char *cheminFichier, const char* adresse, const char* nomFichier);
 void eteindre_disk_raid5(void);
 
+uint compute_nblock(uint n);
+
 #endif

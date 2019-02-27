@@ -19,24 +19,24 @@ void init_disk_raid5(char* adresse)
 	struct dirent* elem;
 	struct stat infosFichier;
 	char cheminFichier[66];
-	r5Disk.storage = (FILE**) malloc(0);
+	r5Disk.storage = (FILE**) malloc(0); // setup du tableau de fichier
 	r5Disk.ndisk = 0;
 	rep = opendir(adresse);
-	while ((elem = readdir(rep)) != NULL)
+	while ((elem = readdir(rep)) != NULL) // acces a tous les fichiers du rep
 	{
 		if (strcmp(elem->d_name,"..") && strcmp(elem->d_name,"."))
 		{
-			creation_chemin_fichier(cheminFichier, adresse, elem->d_name);
+			creation_chemin_fichier(cheminFichier, adresse, elem->d_name);// creation du chemin du fichier
 			stat(cheminFichier, &infosFichier);
 			if (!S_ISDIR(infosFichier.st_mode))
 			{
-				remplir_storage(cheminFichier);
+				remplir_storage(cheminFichier);// remplissage du tableau de fichier
 			}
 		}
 	}
-	r5Disk.number_of_files = r5Disk.ndisk;
+	r5Disk.number_of_files = r5Disk.ndisk;// IDK j'ai l'impression que c'est la mm chose
 	r5Disk.raidmode = CINQ;
-	super_block_init();
+	super_block_init();// setup du superblock
 	closedir(rep);
 }
 
@@ -68,7 +68,15 @@ void creation_chemin_fichier(char *cheminFichier, const char* adresse, const cha
 void eteindre_disk_raid5(void)
 {
 	for (int i = 0; i < r5Disk.ndisk;i++) {
-		fclose(r5Disk.storage[i]);
+		fclose(r5Disk.storage[i]);//fermeture des fichiers ouverts
 	}
 	free(r5Disk.storage);
+}
+
+uint compute_nblock(uint n)
+{
+	uint nBlockNecessaire = (n/BLOCK_SIZE+(n%BLOCK_SIZE != 0)); // division simple : un block vaux 4 octets (si cela n'est pas entier on rajoute un block)
+	nBlockNecessaire = ((nBlockNecessaire*r5Disk.number_of_files)/(r5Disk.number_of_files-1)+((nBlockNecessaire*r5Disk.number_of_files)%(r5Disk.number_of_files-1) != 0)); // un block d'un fichier n'est pas utilisé : si c'est pas rond,on rajoute un block
+	nBlockNecessaire += nBlockNecessaire%r5Disk.number_of_files; // on verifie qu'il y ai bien 4 block par fichiers utilisé
+	return nBlockNecessaire;
 }

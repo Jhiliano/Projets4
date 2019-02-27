@@ -19,6 +19,7 @@ int main(void)
 {
   init_disk_raid5("disk");
   eteindre_disk_raid5();
+  printf("%d\n",compute_nblock(50));
 
   return EXIT_SUCCESS;
 }
