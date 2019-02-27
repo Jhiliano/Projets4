@@ -81,6 +81,13 @@ uint compute_nblock(uint n)
 	return nBlockNecessaire;
 }
 
-void write_block(int pos, virtual_disk_t* disk, block_t block){
-	fputs((char*)block.data, disk->storage[pos]);
+void write_block(int pos, FILE *disk, block_t block){
+	fseek(disk, pos, SEEK_SET);
+	fputs((char*)block.data, disk);
+}
+
+block_t read_block(int pos, FILE *disk){
+	block_t chaine;
+	if (fgets(chaine.data, BLOCK_SIZE, FILE* disk) == ) return ERR_READ;
+	return chaine;
 }
