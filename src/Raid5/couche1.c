@@ -92,17 +92,20 @@ int read_block(int pos, FILE *disk, block_t* block){
 	return 0;
 }
 
-void block_repair(virtual_disk_t *raid, int block_id, block_t parite, int pos){
+int block_repair(virtual_disk_t *raid, int block_id, block_t parite, int pos){
 	block_t block;// block réparé
 	block_t d; // block pour copier un block
-	block.data = parite.data;
+	memcpy(block.data, parite.data, BLOCK_SIZE); // copie de parite.data dans block.data
 	for (int i = 0; i < raid->ndisk; i++){
 		if (i != block_id){
 			fseek(raid->storage[i], pos, SEEK_SET);
-			fread(d.data, sizeof(uchar), BLOCK_SIZE, raid->storage[i]);
-			block.data = block.data ^ d.data;
+			if (fread(d.data, sizeof(uchar), BLOCK_SIZE, raid->storage[i]) < BLOCK_SIZE) return ERR_READ;
+			for (int e = 0; e < BLOCK_SIZE; e++){ // XOR sur chaque élément
+				block.data[e] = block.data[e] ^ d.data[e];
+			}
 		}
 	}
 	fseek(raid->storage[block_id], pos, SEEK_SET);
-	fwrite(block.data, sizeof(uchar), BLOCK_SIZE, raid->storage[block_id]);
+	fwrite(block.data, sizeof(uchar), BLOCK_SIZE, raid->storage[block_id]); // Ecriture du block réparer dans le fichier endommagé 
+	return 0;
 }
