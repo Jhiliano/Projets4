@@ -91,3 +91,18 @@ int read_block(int pos, FILE *disk, block_t* block){
 	if (fread(block->data, sizeof(uchar), BLOCK_SIZE, disk) < BLOCK_SIZE) return ERR_READ;
 	return 0;
 }
+
+void block_repair(virtual_disk_t *raid, int block_id, block_t parite, int pos){
+	block_t block;// block réparé
+	block_t d; // block pour copier un block
+	block.data = parite.data;
+	for (int i = 0; i < raid->ndisk; i++){
+		if (i != block_id){
+			fseek(raid->storage[i], pos, SEEK_SET);
+			fread(d.data, sizeof(uchar), BLOCK_SIZE, raid->storage[i]);
+			block.data = block.data ^ d.data;
+		}
+	}
+	fseek(raid->storage[block_id], pos, SEEK_SET);
+	fwrite(block.data, sizeof(uchar), BLOCK_SIZE, raid->storage[block_id]);
+}
