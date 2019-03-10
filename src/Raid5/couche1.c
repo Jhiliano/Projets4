@@ -81,6 +81,7 @@ uint compute_nblock(uint n)
 	return nBlockNecessaire;
 }
 
+/*ecrit un bloc block à pos sur disk*/
 void write_block(int pos, FILE *disk, block_t block){
 	fseek(disk, pos, SEEK_SET);
 	fwrite(block.data, sizeof(uchar), BLOCK_SIZE, disk);

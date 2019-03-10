@@ -8,7 +8,7 @@
 
 
 #include "../../headers/Raid5/couche2.h"
-
+#include "../../headers/Raid5/couche1.h"
 
 /* fonctions */
 int compute_nstripe(int nb_blocks){
@@ -33,9 +33,28 @@ int compute_parity_index(int numBande){
   return (r5Disk.ndisk-1)-(numBande%r5Disk.ndisk);
 }
 
+int write_stripe(stripe_t bande, int pos){
+  block_t parite;
+  int indP = compute_parity_index(pos);
+  int posParite = ((indP-1)*(BLOCK_SIZE*bande.nblocks))+1;
+  int posOct = ((pos-1)*(BLOCK_SIZE*bande.nblocks))+1;
+
+  for(int i=0; i<bande.nblocks; i++){
+    if(i==indP){
+      posOct+= BLOCK_SIZE;
+    }
+    write_block(posOct, r5Disk.storage[i], bande.stripe[i]);
+    posOct+= BLOCK_SIZE;
+  }
+  parite = compute_parity(bande, pos);
+  write_block(posParite, r5Disk.storage[indP], parite);
+  return 0;
+}
+
+/*
 int write_chunk(int n, uchar* buffer[]){
   for (int i = 0; i < n; i++){
 
   }
   return 0;
-}
+}*/

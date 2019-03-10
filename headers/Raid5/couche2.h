@@ -13,6 +13,9 @@
 
 
 /* Fonctions */
-
+int compute_nstripe(int nb_blocks);
+block_t compute_parity(stripe_t bande, int posP);
+int compute_parity_index(int numBande);
+int write_stripe(stripe_t bande, int pos);
 
 #endif
