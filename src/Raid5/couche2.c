@@ -32,3 +32,10 @@ block_t compute_parity(stripe_t bande, int posP){
 int compute_parity_index(int numBande){
   return (r5Disk.ndisk-1)-(numBande%r5Disk.ndisk);
 }
+
+int write_chunk(int n, uchar* buffer[]){
+  for (int i = 0; i < n; i++){
+
+  }
+  return 0;
+}
