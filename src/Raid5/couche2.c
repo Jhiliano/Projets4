@@ -12,49 +12,104 @@
 
 /* fonctions */
 int compute_nstripe(int nb_blocks){
-  if (nb_blocks%r5Disk.ndisk == 0) return nb_blocks/r5Disk.ndisk;
-  return nb_blocks/r5Disk.ndisk+1;
+  if (nb_blocks%r5Disk.ndisk-1 == 0) return nb_blocks/(r5Disk.ndisk-1);
+  return nb_blocks/(r5Disk.ndisk-1)+1;
 }
 
-block_t compute_parity(stripe_t bande, int posP){
-  int i;
-  block_t parite = bande.stripe[0];
-  for(i=1; i<bande.nblocks; i++){
-    if(i!=posP){
-      for(int e=0; e<BLOCK_SIZE; e++){
-        parite.data[e]=parite.data[e]^bande.stripe[i].data[e];
-      }
-    }
-  }
-  return parite;
+
+void compute_parity(virtual_disk_t* raid, stripe_t* tab, int posP){
+  block_repair(raid, posP, tab->stripe);
 }
 
 int compute_parity_index(int numBande){
-  return (r5Disk.ndisk-1)-(numBande%r5Disk.ndisk);
+  return (r5Disk.ndisk)-(numBande%r5Disk.ndisk)+1;
 }
 
-int write_stripe(stripe_t bande, int pos){
-  block_t parite;
-  int indP = compute_parity_index(pos);
-  int posParite = ((indP-1)*(BLOCK_SIZE*bande.nblocks))+1;
-  int posOct = ((pos-1)*(BLOCK_SIZE*bande.nblocks))+1;
-
-  for(int i=0; i<bande.nblocks; i++){
-    if(i==indP){
-      posOct+= BLOCK_SIZE;
-    }
-    write_block(posOct, r5Disk.storage[i], bande.stripe[i]);
-    posOct+= BLOCK_SIZE;
+int write_stripe(stripe_t tab, int pos){
+  for(int i=0; i<tab.nblocks; i++){
+    if (write_block(pos, r5Disk.storage[i], tab.stripe[i])!=BLOCK_SIZE) return 1;
   }
-  parite = compute_parity(bande, pos);
-  write_block(posParite, r5Disk.storage[indP], parite);
   return 0;
 }
+ void read_stripe(stripe_t* stripe, int posP, virtual_disk_t *raid){
+   for (int i = 0;i < stripe->nblocks;i++) {
+     read_block(posP, raid->storage[i], &stripe->stripe[i]);
+   }
+ }
 
-/*
-int write_chunk(int n, uchar* buffer[]){
-  for (int i = 0; i < n; i++){
+ int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
+ 	int nb = compute_nblock(size);
+ 	int nb_stripe = compute_nstripe(nb);
+ 	int ind_p;
+ 	stripe_t tab;
+  tab.nblocks = raid->ndisk;
+  tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+ 	int pos=0;
+ 	int test;
 
-  }
-  return 0;
-}*/
+
+    int i =0;
+    while(i<nb_stripe){
+ 		/*init_stripe(&tab);*/
+    tab.nblocks = raid->ndisk;
+    tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+ 		ind_p = compute_parity_index(i+1);
+ 		for(int id_block=0; id_block<tab.nblocks; id_block++){
+      int num_b = 0;
+ 			if(num_b != ind_p-1){
+          int num_o = 0;
+          while(num_o < BLOCK_SIZE){
+ 					if(pos<size)
+ 						tab.stripe[num_b].data[num_o] = buffer[pos];
+ 					else
+ 						tab.stripe[num_b].data[num_o] = '0';
+ 					pos++;
+          num_o ++ ;
+ 				}
+ 			}
+ 		}
+ 		compute_parity(raid, &tab, ind_p);
+ 		test = write_stripe(tab, position);
+ 		if(test != 0){
+ 			free(tab.stripe);
+ 			return 1;
+ 		}
+ 		position += BLOCK_SIZE;
+    ++i;
+ 	}
+ 	free(tab.stripe);
+ 	return 0;
+ }
+
+
+ void read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid){
+ 	int nb = compute_nblock(size);
+ 	int nb_stripe = compute_nstripe(nb);
+ 	int id_p;
+ 	stripe_t tab;
+ 	int decalage=0;
+ 	int i=0;
+  tab.nblocks = raid->ndisk;
+  tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+    while(i<nb_stripe){
+ 		/*init_stripe(&tab);*/
+    tab.nblocks = raid->ndisk;
+    tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+
+ 		id_p = compute_parity_index(i+1);
+ 		read_stripe(&tab, position, raid);
+      int id = 0;
+      while(id<tab.nblocks){
+ 			if(id != id_p-1){
+          int o = 0;
+          while(o<BLOCK_SIZE){
+ 					if(decalage<size)
+ 						buffer[decalage] = tab.stripe[id].data[o];
+ 					decalage++;
+          o++;
+ 				}}
+      id++;}
+ 		position = position + BLOCK_SIZE;
+    ++i;}
+ 	free(tab.stripe);
+ }

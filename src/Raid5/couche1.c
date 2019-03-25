@@ -49,8 +49,8 @@ void super_block_init(void)
 
 void remplir_storage(char* cheminFichier)
 {
-	r5Disk.storage = (FILE**) realloc(r5Disk.storage,(r5Disk.ndisk+1)*sizeof(FILE*));
-	r5Disk.storage[r5Disk.ndisk] = fopen(cheminFichier,"r+");
+	r5Disk.storage = (FILE**) realloc(r5Disk.storage,(r5Disk.ndisk)*sizeof(FILE*));
+	r5Disk.storage[r5Disk.ndisk-1] = fopen(cheminFichier,"r+");
 	if ((r5Disk.storage[r5Disk.ndisk]) == NULL)
 	{
 		fprintf(stderr,"ouverture du fichier disque impossible");
@@ -75,16 +75,20 @@ void eteindre_disk_raid5(void)
 
 uint compute_nblock(uint n)
 {
-	uint nBlockNecessaire = (n/BLOCK_SIZE+(n%BLOCK_SIZE != 0)); // division simple : un block vaux 4 octets (si cela n'est pas entier on rajoute un block)
+	if((n % BLOCK_SIZE)==0)
+				return (n/BLOCK_SIZE);
+	 return (n/BLOCK_SIZE+1);
+	/*uint nBlockNecessaire = (n/BLOCK_SIZE+(n%BLOCK_SIZE != 0)); // division simple : un bloc vaut 4 octets (si cela n'est pas entier on rajoute un block)
 	nBlockNecessaire = ((nBlockNecessaire*r5Disk.number_of_files)/(r5Disk.number_of_files-1)+((nBlockNecessaire*r5Disk.number_of_files)%(r5Disk.number_of_files-1) != 0)); // un block d'un fichier n'est pas utilisé : si c'est pas rond,on rajoute un block
-	nBlockNecessaire += nBlockNecessaire%r5Disk.number_of_files; // on verifie qu'il y ai bien 4 block par fichiers utilisé
-	return nBlockNecessaire;
+	nBlockNecessaire += nBlockNecessaire%r5Disk.number_of_files; // on verifie qu'il y ait bien 4 block par fichiers utilisé
+	return nBlockNecessaire;*/
 }
 
 /*ecrit un bloc block à pos sur disk*/
-void write_block(int pos, FILE *disk, block_t block){
-	fseek(disk, pos, SEEK_SET);
-	fwrite(block.data, sizeof(uchar), BLOCK_SIZE, disk);
+int write_block(int pos, FILE *disk, block_t block){
+	if (fseek(disk, pos, SEEK_SET)==0)return (0);
+	 return (fwrite(block.data, sizeof(uchar), BLOCK_SIZE, disk));
+
 }
 
 int read_block(int pos, FILE *disk, block_t* block){
@@ -93,18 +97,31 @@ int read_block(int pos, FILE *disk, block_t* block){
 	return 0;
 }
 
-int block_repair(virtual_disk_t *raid, int block_id, block_t parite, int pos){
-	block_t block;// Block pour stocké les données des autres
+int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe){
+	block_t parite;// Block pour stocké les données des autres
+	int cond;
+	if (block_id >1){
+		for (int i = 0; i < BLOCK_SIZE; i++) {
+			parite.data[i] = stripe[0].data[i];
+			cond = 0;
+		}}
+		else {
+			for (int i = 0; i < BLOCK_SIZE; i++) {
+				parite.data[i] = stripe[1].data[i];
+				cond = 1;
+			}
+	}
 	for (int i = 0; i < raid->ndisk; i++){
-		if (i != block_id){
-			fseek(raid->storage[i], pos, SEEK_SET);
-			if (fread(block.data, sizeof(uchar), BLOCK_SIZE, raid->storage[i]) < BLOCK_SIZE) return ERR_READ;
+		if (i != block_id-1 && i!=cond){
 			for (int e = 0; e < BLOCK_SIZE; e++){ // XOR sur chaque élément
-				parite.data[e] = parite.data[e] ^ block.data[e];
+				parite.data[e] = parite.data[e] ^ stripe[i].data[e];
 			}
 		}
 	}
-	fseek(raid->storage[block_id], pos, SEEK_SET);
-	fwrite(parite.data, sizeof(uchar), BLOCK_SIZE, raid->storage[block_id]); // Ecriture du block réparer dans le fichier endommagé
+	for (int i = 0; i < BLOCK_SIZE; i++) {
+		stripe[block_id-1].data[i] = parite.data[i];
+
+	}
+
 	return 0;
 }
