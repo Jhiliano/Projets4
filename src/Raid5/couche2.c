@@ -47,35 +47,36 @@ int write_stripe(stripe_t tab, int pos){
  	int pos=0;
  	int test;
 
-
     int i =0;
     while(i<nb_stripe){
- 		/*init_stripe(&tab);*/
-    tab.nblocks = raid->ndisk;
-    tab.stripe = malloc(tab.nblocks*sizeof(block_t));
- 		ind_p = compute_parity_index(i+1);
- 		for(int id_block=0; id_block<tab.nblocks; id_block++){
-      int num_b = 0;
- 			if(num_b != ind_p-1){
-          int num_o = 0;
-          while(num_o < BLOCK_SIZE){
- 					if(pos<size)
- 						tab.stripe[num_b].data[num_o] = buffer[pos];
- 					else
- 						tab.stripe[num_b].data[num_o] = '0';
- 					pos++;
-          num_o ++ ;
- 				}
- 			}
- 		}
- 		compute_parity(raid, &tab, ind_p);
- 		test = write_stripe(tab, position);
- 		if(test != 0){
- 			free(tab.stripe);
- 			return 1;
- 		}
- 		position += BLOCK_SIZE;
-    ++i;
+
+      tab.nblocks = raid->ndisk;
+      tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+   		ind_p = compute_parity_index(i+1);
+
+   		for(int id_block=0; id_block<tab.nblocks; id_block++){
+        int num_b = 0;
+   			if(num_b != ind_p-1){
+            int num_o = 0;
+            while(num_o < BLOCK_SIZE){
+     					if(pos<size)
+     						tab.stripe[num_b].data[num_o] = buffer[pos];
+     					else
+     						tab.stripe[num_b].data[num_o] = '0';
+     					pos++;
+              num_o ++ ;
+   				}
+   			}
+   		}
+   		compute_parity(raid, &tab, ind_p);
+   		test = write_stripe(tab, position);
+
+   		if(test != 0){
+   			free(tab.stripe);
+   			return 1;
+   		}
+   		position += BLOCK_SIZE;
+      ++i;
  	}
  	free(tab.stripe);
  	return 0;
@@ -90,9 +91,8 @@ int write_stripe(stripe_t tab, int pos){
  	int decalage=0;
  	int i=0;
   tab.nblocks = raid->ndisk;
-  tab.stripe = malloc(tab.nblocks*sizeof(block_t));
-    while(i<nb_stripe){
- 		/*init_stripe(&tab);*/
+  tab.stripe = malloc(tab.nblocks*sizeof(block_t)); /*creation nouvelle bande*/
+  while(i<nb_stripe){
     tab.nblocks = raid->ndisk;
     tab.stripe = malloc(tab.nblocks*sizeof(block_t));
 
@@ -110,6 +110,7 @@ int write_stripe(stripe_t tab, int pos){
  				}}
       id++;}
  		position = position + BLOCK_SIZE;
-    ++i;}
+    ++i;
+  }
  	free(tab.stripe);
  }
