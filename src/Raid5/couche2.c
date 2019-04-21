@@ -12,6 +12,7 @@
 
 /* fonctions */
 int compute_nstripe(int nb_blocks){
+  // une stipe peux contenir ndisk - 1 block car il doit tenir compte du block de parité
   if (nb_blocks%r5Disk.ndisk-1 == 0) return nb_blocks/(r5Disk.ndisk-1);
   return nb_blocks/(r5Disk.ndisk-1)+1;
 }

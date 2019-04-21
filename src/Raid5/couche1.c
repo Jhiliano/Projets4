@@ -100,6 +100,7 @@ int read_block(int pos, FILE *disk, block_t* block){
 int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe){
 	block_t parite;// Block pour stocké les données des autres
 	int cond;
+	//BUG pourquoi tu fait les deux condition qui suivent? tu ecris 2x le mm block dans la parite (le block 0 ou 1 sera ecrit 2x)
 	if (block_id >1){
 		for (int i = 0; i < BLOCK_SIZE; i++) {
 			parite.data[i] = stripe[0].data[i];
