@@ -19,11 +19,13 @@ int compute_nstripe(int nb_blocks){
 
 
 void compute_parity(virtual_disk_t* raid, stripe_t* tab, int posP){
+  //meme methode pour la reparation et la création du block de parité.
   block_repair(raid, posP, tab->stripe);
 }
 
 int compute_parity_index(int numBande){
-  return (r5Disk.ndisk)-(numBande%r5Disk.ndisk)+1;
+  //return (r5Disk.ndisk)-(numBande%r5Disk.ndisk)+1;
+  return (r5Disk.ndisk)-((numBande-1)%r5Disk.ndisk);
 }
 
 int write_stripe(stripe_t tab, int pos){
