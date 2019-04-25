@@ -12,8 +12,15 @@
 
 /* fonctions */
 void writefile(char* nomFich, file_t fich){
+  int exist=0;
+  int indAjout;
   for(int i=0; i<INODE_TABLE_SIZE; i++){
-    
+    if(r5Disk.inodes[i].filename == nomFich){
+      exist=1;
+    }
+  }
+  if(exist==0){
+    indAjout = get_unused_inode();
   }
 }
 
