@@ -81,6 +81,8 @@ $(document).ready(function(){initNavTree('couche3_8h.html','');});
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Fonctions</a>  </div>
   <div class="headertitle">
 <div class="title">Référence du fichier couche3.h</div>  </div>
 </div><!--header-->
@@ -89,13 +91,227 @@ $(document).ready(function(){initNavTree('couche3_8h.html','');});
 <p>header de la couche 3  
 <a href="#details">Plus de détails...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="global_8h_source.html">global.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="couche1_8h_source.html">couche1.h</a>&quot;</code><br />
 </div>
 <p><a href="couche3_8h_source.html">Aller au code source de ce fichier.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Fonctions</h2></td></tr>
+<tr class="memitem:af507648d075771c8319d6aae2395eafa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#af507648d075771c8319d6aae2395eafa">read_inodes_table</a> ()</td></tr>
+<tr class="separator:af507648d075771c8319d6aae2395eafa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad520eb28e372764dcdfa1f347302dce5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#ad520eb28e372764dcdfa1f347302dce5">write_inodes_table</a> ()</td></tr>
+<tr class="separator:ad520eb28e372764dcdfa1f347302dce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53339d5f0965c354f4c9de88b72b9a54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#a53339d5f0965c354f4c9de88b72b9a54">delete_inode</a> (int pos)</td></tr>
+<tr class="separator:a53339d5f0965c354f4c9de88b72b9a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47f49cde0ea6b3b43d9c6524ff02194d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#a47f49cde0ea6b3b43d9c6524ff02194d">get_unused_inode</a> ()</td></tr>
+<tr class="separator:a47f49cde0ea6b3b43d9c6524ff02194d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3a6aa7737902a94f06fb63e9d2bb74b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#ac3a6aa7737902a94f06fb63e9d2bb74b">init_inode</a> (char *nomF, <a class="el" href="global_8h.html#a38f1fee666517bad3dcc99e3b1b529f4">uint</a> taille, <a class="el" href="global_8h.html#a38f1fee666517bad3dcc99e3b1b529f4">uint</a> pos)</td></tr>
+<tr class="separator:ac3a6aa7737902a94f06fb63e9d2bb74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6972550020521965d948e085cc2cef73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#a6972550020521965d948e085cc2cef73">cmd_dump_inode</a> (char *nomR)</td></tr>
+<tr class="separator:a6972550020521965d948e085cc2cef73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cbe4c36e172fec15ef5bcba4d35902a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#a0cbe4c36e172fec15ef5bcba4d35902a">write_super_block</a> ()</td></tr>
+<tr class="separator:a0cbe4c36e172fec15ef5bcba4d35902a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7418f8d7145aa81a2a7d99f2d7807a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#ab7418f8d7145aa81a2a7d99f2d7807a6">read_super_block</a> ()</td></tr>
+<tr class="separator:ab7418f8d7145aa81a2a7d99f2d7807a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d3886eb485367603520334263bc9e13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche3_8h.html#a9d3886eb485367603520334263bc9e13">first_free_byte</a> ()</td></tr>
+<tr class="separator:a9d3886eb485367603520334263bc9e13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
 <div class="textblock"><p>header de la couche 3 </p>
 <dl class="section author"><dt>Auteur</dt><dd>Guillaume Fourcroy </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>24 février 2019 </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Documentation des fonctions</h2>
+<a id="af507648d075771c8319d6aae2395eafa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af507648d075771c8319d6aae2395eafa">&#9670;&nbsp;</a></span>read_inodes_table()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void read_inodes_table </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad520eb28e372764dcdfa1f347302dce5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad520eb28e372764dcdfa1f347302dce5">&#9670;&nbsp;</a></span>write_inodes_table()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void write_inodes_table </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a53339d5f0965c354f4c9de88b72b9a54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53339d5f0965c354f4c9de88b72b9a54">&#9670;&nbsp;</a></span>delete_inode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void delete_inode </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Supprime un inode de la table. </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>Position de l'inode à supprimer.</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a47f49cde0ea6b3b43d9c6524ff02194d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47f49cde0ea6b3b43d9c6524ff02194d">&#9670;&nbsp;</a></span>get_unused_inode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int get_unused_inode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Renvoie la position du premier inode disponible.</p>
+<p>Si il n'y a pas d'inode disponible on renvoie -1. </p><dl class="section return"><dt>Renvoie</dt><dd>Un int correspondant à la position.</dd></dl>
+
+</div>
+</div>
+<a id="ac3a6aa7737902a94f06fb63e9d2bb74b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3a6aa7737902a94f06fb63e9d2bb74b">&#9670;&nbsp;</a></span>init_inode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int init_inode </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>nomF</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a38f1fee666517bad3dcc99e3b1b529f4">uint</a>&#160;</td>
+          <td class="paramname"><em>taille</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a38f1fee666517bad3dcc99e3b1b529f4">uint</a>&#160;</td>
+          <td class="paramname"><em>pos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Initialise un inode à partir de son nom, sa taille et sa position.</p>
+<p>Avant d'appeler init_inode il faut vérifier que nomF &lt; FILENAME_MAX_SIZE. </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nomF</td><td>Nom du fichier. </td></tr>
+    <tr><td class="paramname">taille</td><td>Taille du fichier. </td></tr>
+    <tr><td class="paramname">pos</td><td>Position sur le raid. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 si l'inode a été initialisé, 1 sinon.</dd></dl>
+
+</div>
+</div>
+<a id="a6972550020521965d948e085cc2cef73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6972550020521965d948e085cc2cef73">&#9670;&nbsp;</a></span>cmd_dump_inode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cmd_dump_inode </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>nomR</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0cbe4c36e172fec15ef5bcba4d35902a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cbe4c36e172fec15ef5bcba4d35902a">&#9670;&nbsp;</a></span>write_super_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void write_super_block </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab7418f8d7145aa81a2a7d99f2d7807a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7418f8d7145aa81a2a7d99f2d7807a6">&#9670;&nbsp;</a></span>read_super_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void read_super_block </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9d3886eb485367603520334263bc9e13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d3886eb485367603520334263bc9e13">&#9670;&nbsp;</a></span>first_free_byte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void first_free_byte </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

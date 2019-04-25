@@ -49,8 +49,11 @@ void super_block_init(void)
 
 void remplir_storage(char* cheminFichier)
 {
-	r5Disk.storage = (FILE**) realloc(r5Disk.storage,(r5Disk.ndisk)*sizeof(FILE*));
-	r5Disk.storage[r5Disk.ndisk-1] = fopen(cheminFichier,"r+");
+	r5Disk.storage = (FILE**) realloc(r5Disk.storage,(r5Disk.ndisk+1)*sizeof(FILE*));
+	r5Disk.storage[r5Disk.ndisk] = fopen(cheminFichier,"r+");
+	/*Je sais pas pourquoi ce truc a été modifié mais ça marche pas donc j'ai remis la version qui marche*/
+	/*r5Disk.storage = (FILE**) realloc(r5Disk.storage,(r5Disk.ndisk)*sizeof(FILE*));
+	r5Disk.storage[r5Disk.ndisk-1] = fopen(cheminFichier,"r+");*/
 	if ((r5Disk.storage[r5Disk.ndisk]) == NULL)
 	{
 		fprintf(stderr,"ouverture du fichier disque impossible");

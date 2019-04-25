@@ -6,6 +6,7 @@ var global_8h =
     [ "virtual_disk_s", "structvirtual__disk__s.html", "structvirtual__disk__s" ],
     [ "stripe_s", "structstripe__s.html", "structstripe__s" ],
     [ "file_s", "structfile__s.html", "structfile__s" ],
+    [ "ERR_READ", "global_8h.html#a6b84d62f127a9e48e8a98f7c4f50f3ff", null ],
     [ "ERREUR", "global_8h.html#a8a9dac7f648d09d16b17ff585c9f2efe", null ],
     [ "BLOCK_SIZE", "global_8h.html#ad51ded0bbd705f02f73fc60c0b721ced", null ],
     [ "FILENAME_MAX_SIZE", "global_8h.html#a24c1405225e4ce27b24bcf4f32f4ff0e", null ],
@@ -32,5 +33,6 @@ var global_8h =
       [ "UN_ZERO", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6eaee746b0b3b0072f79606f2bd004621cc", null ],
       [ "CINQUANTE", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6ea2226995f0db9d32c88c3c3bf7ba47482", null ],
       [ "CENT", "global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6eaf59ee3d128b9d3f5d89bc37bff97b5ab", null ]
-    ] ]
+    ] ],
+    [ "r5Disk", "global_8h.html#a95b5425e7df13b77b38e1b85a4c804e3", null ]
 ];

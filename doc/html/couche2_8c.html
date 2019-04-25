@@ -81,6 +81,8 @@ $(document).ready(function(){initNavTree('couche2_8c.html','');});
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Fonctions</a>  </div>
   <div class="headertitle">
 <div class="title">Référence du fichier couche2.c</div>  </div>
 </div><!--header-->
@@ -89,11 +91,243 @@ $(document).ready(function(){initNavTree('couche2_8c.html','');});
 <p>ficher de code couche2  
 <a href="#details">Plus de détails...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="couche2_8h_source.html">../../headers/Raid5/couche2.h</a>&quot;</code><br />
-</div><a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
+<code>#include &quot;<a class="el" href="couche1_8h_source.html">../../headers/Raid5/couche1.h</a>&quot;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Fonctions</h2></td></tr>
+<tr class="memitem:acb5799bba951ad804c3755afb1b72fa9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8c.html#acb5799bba951ad804c3755afb1b72fa9">compute_nstripe</a> (int nb_blocks)</td></tr>
+<tr class="separator:acb5799bba951ad804c3755afb1b72fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dca5c1cfb0beab02829508a3e20aa03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8c.html#a4dca5c1cfb0beab02829508a3e20aa03">compute_parity</a> (<a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>, <a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> *tab, int posP)</td></tr>
+<tr class="separator:a4dca5c1cfb0beab02829508a3e20aa03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a709e85cdf678843f9a5035006a88b4df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8c.html#a709e85cdf678843f9a5035006a88b4df">compute_parity_index</a> (int numBande)</td></tr>
+<tr class="separator:a709e85cdf678843f9a5035006a88b4df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aebce168483f92f479f818d48f86237"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8c.html#a3aebce168483f92f479f818d48f86237">write_stripe</a> (<a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> tab, int pos)</td></tr>
+<tr class="separator:a3aebce168483f92f479f818d48f86237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab941059bb4df1595eeae65e2d8ac02fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8c.html#ab941059bb4df1595eeae65e2d8ac02fb">read_stripe</a> (<a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> *stripe, int posP, <a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>)</td></tr>
+<tr class="separator:ab941059bb4df1595eeae65e2d8ac02fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fbc13df204a46e88aeafbb47ffa0584"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8c.html#a5fbc13df204a46e88aeafbb47ffa0584">write_chunk</a> (<a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *buffer, int size, int position, <a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>)</td></tr>
+<tr class="separator:a5fbc13df204a46e88aeafbb47ffa0584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb74265663b295d8a80df2baae706711"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8c.html#abb74265663b295d8a80df2baae706711">read_chunk</a> (<a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *buffer, int size, int position, <a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>)</td></tr>
+<tr class="separator:abb74265663b295d8a80df2baae706711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
 <div class="textblock"><p>ficher de code couche2 </p>
 <dl class="section author"><dt>Auteur</dt><dd>Guillaume Fourcroy </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>24 février 2019 </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Documentation des fonctions</h2>
+<a id="acb5799bba951ad804c3755afb1b72fa9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb5799bba951ad804c3755afb1b72fa9">&#9670;&nbsp;</a></span>compute_nstripe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compute_nstripe </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nb_blocks</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4dca5c1cfb0beab02829508a3e20aa03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dca5c1cfb0beab02829508a3e20aa03">&#9670;&nbsp;</a></span>compute_parity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void compute_parity </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> *&#160;</td>
+          <td class="paramname"><em>tab</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>posP</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a709e85cdf678843f9a5035006a88b4df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a709e85cdf678843f9a5035006a88b4df">&#9670;&nbsp;</a></span>compute_parity_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int compute_parity_index </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numBande</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3aebce168483f92f479f818d48f86237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aebce168483f92f479f818d48f86237">&#9670;&nbsp;</a></span>write_stripe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int write_stripe </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a>&#160;</td>
+          <td class="paramname"><em>tab</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab941059bb4df1595eeae65e2d8ac02fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab941059bb4df1595eeae65e2d8ac02fb">&#9670;&nbsp;</a></span>read_stripe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void read_stripe </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> *&#160;</td>
+          <td class="paramname"><em>stripe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>posP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5fbc13df204a46e88aeafbb47ffa0584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fbc13df204a46e88aeafbb47ffa0584">&#9670;&nbsp;</a></span>write_chunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int write_chunk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abb74265663b295d8a80df2baae706711"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb74265663b295d8a80df2baae706711">&#9670;&nbsp;</a></span>read_chunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void read_chunk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
