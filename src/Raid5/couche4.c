@@ -25,8 +25,8 @@ void writefile(char* nomFich, file_t fich){
   }
   else{
     if(fich.size<=r5Disk.inodes[indAjout].size){
-      fseek(r5Disk.storage[fichier], indAjout, SEEK_SET);
-      fwrite(&r5Disk.inodes[indAjout], sizeof(struct inode_s), 1, r5Disk.storage[fichier]);
+      fseek(r5Disk.storage[fichier], r5Disk.super_block.first_free_byte, SEEK_SET);
+      fwrite(&r5Disk.inodes[indAjout], fich.size, 1, fich);
     }
     else{
 
@@ -34,17 +34,25 @@ void writefile(char* nomFich, file_t fich){
   }
 }
 
+
+
 int read_file(char* nomF, file_t fich){
   return 1;
 }
+
+
 
 int delete_file(char* nomF){
   return 1;
 }
 
+
+
 void load_file_from_host(char* nomFich){
 
 }
+
+
 
 void store_file_to_host(char* nomFich){
 
