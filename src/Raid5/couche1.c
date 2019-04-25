@@ -37,7 +37,7 @@ void init_disk_raid5(char* adresse)
 	r5Disk.number_of_files = r5Disk.ndisk;// IDK j'ai l'impression que c'est la mm chose
 	r5Disk.raidmode = CINQ;
 	super_block_init();// setup du superblock
-	read_inodes_table();
+	read_inodes_table(); // Chargement de la table d'inode et du super block.
 	closedir(rep);
 }
 
@@ -71,7 +71,7 @@ void creation_chemin_fichier(char *cheminFichier, const char* adresse, const cha
 
 void eteindre_disk_raid5(void)
 {
-	write_inodes_table();
+	write_inodes_table(); // Sauvegarde de la table d'inode et du super block.
 	for (int i = 0; i < r5Disk.ndisk;i++) {
 		fclose(r5Disk.storage[i]);//fermeture des fichiers ouverts
 	}

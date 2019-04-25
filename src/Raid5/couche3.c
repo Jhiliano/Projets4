@@ -15,6 +15,7 @@
 int read_inodes_table() {
   /**
   * \brief Lit la table d'inode dans le raid.
+  * \details Chargement de la table d'inodes et du super block.
   * \return 0 si tout c'est bien passé, ERR_READ si il a eu un problème de lecture.
   */
 
@@ -24,10 +25,13 @@ int read_inodes_table() {
   // Parcours du tableau d'inodes.
   for (int i_inode = 0; i_inode < INODE_TABLE_SIZE; i_inode++) {
     fichier = i_inode % r5Disk.ndisk; // On se place dans le bon fichier.
-    if (i_inode > 0 && fichier == 0) pos++; // Si on a lu dans tous les fichiers on incrémente pos.
+    if (i_inode > 0 && fichier == 0) pos += sizeof(struct inode_s); // Si on a lu dans tous les fichiers on incrémente pos.
     fseek(r5Disk.storage[fichier], pos, SEEK_SET); // Placer le curseur sur pos dans le bon fichier.
     if (fread(&r5Disk.inodes[i_inode], sizeof(struct inode_s), 1, r5Disk.storage[fichier]) != 1) return ERR_READ; // Lire l'inode.
   }
+
+  read_super_block(); // Temps qu'à faire autant lire le super block.
+  r5Disk.super_block.raid_type = CINQ; // Alors c'est un peu idiot sachant que c'est sauvegarder mais si c'est le premier appel il va y avoir un 0.
 
   return 0;
 }
@@ -37,6 +41,7 @@ int read_inodes_table() {
 void write_inodes_table() {
   /**
   * \brief Ecrit la table d'inode dans le raid.
+  * \details Sauvegarde de la table d'inodes et du super block.
   */
 
   int pos = INODES_START; // Position de départ du tableau d'inodes dans le raid.
@@ -45,10 +50,12 @@ void write_inodes_table() {
   // Parcours du tableau d'inodes.
   for (int i_inode = 0; i_inode < INODE_TABLE_SIZE; i_inode++) {
     fichier = i_inode % r5Disk.ndisk; // On se place dans le bon fichier.
-    if (i_inode > 0 && fichier == 0) pos++; // Si on a écrit dans tous les fichiers on incrémente pos.
+    if (i_inode > 0 && fichier == 0) pos += sizeof(struct inode_s); // Si on a écrit dans tous les fichiers on incrémente pos.
     fseek(r5Disk.storage[fichier], pos, SEEK_SET); // Placer le curseur sur pos dans le bon fichier.
     fwrite(&r5Disk.inodes[i_inode], sizeof(struct inode_s), 1, r5Disk.storage[fichier]); // Ecrire l'inode.
   }
+
+  write_super_block(); // Sauvegarde du super block;
 }
 
 /*****************************************************************************************************************/
@@ -74,7 +81,7 @@ void delete_inode(int pos) {
     r5Disk.inodes[i] = r5Disk.inodes[i + 1];
 
   // On supprime le dernier inode pour ne pas l'avoir en double
-  r5Disk.inodes[i_inode].first_byte = 0;
+  r5Disk.inodes[i_inode - 1].first_byte = 0;
 }
 
 /*****************************************************************************************************************/
@@ -86,7 +93,7 @@ int get_unused_inode() {
   * \return Un int correspondant à la position.
   */
 
-  // Si le first byte = 0 alos l'inode est disponible.
+  // Si le first byte = 0 alors l'inode est disponible.
   for (int i = 0; i < INODE_TABLE_SIZE; i++)
     if (r5Disk.inodes[i].first_byte == 0) return i;
   return -1;
@@ -130,7 +137,16 @@ int init_inode(char *nomF, uint taille, uint pos) {
 /*****************************************************************************************************************/
 
 void cmd_dump_inode(char *nomR) {
+  /**
+  * \brief Affiche la table d'inodes.
+  * \return Le nombre d'élément écrit.
+  */
 
+  (void)nomR; // Actuellement je sais pas à quoi ça sert d'avoir le nom du répertoire.
+
+  // Parcours de la table d'inodes pour la afficher
+  for (int i = 0; i < INODE_TABLE_SIZE; i++)
+    printf("Fichier : %s\nSize = %d\nNblock = %d\nFirst byte = %d\n\n****************************\n\n", r5Disk.inodes[i].filename, r5Disk.inodes[i].size, r5Disk.inodes[i].nblock, r5Disk.inodes[i].first_byte);
 }
 
 /*****************************************************************************************************************/
@@ -141,6 +157,7 @@ int write_super_block() {
   * \return Le nombre d'élément écrit.
   */
 
+  fseek(r5Disk.storage[0], 0, SEEK_SET); // Placer le curseur au début du premier fichier.
   return (fwrite(&r5Disk.super_block, sizeof(struct super_block_s), 1, r5Disk.storage[1]));
 }
 
@@ -153,6 +170,7 @@ int read_super_block() {
   * \return 0 si la lecture c'est bien passé, ERR_READ sinon.
   */
 
+  fseek(r5Disk.storage[0], 0, SEEK_SET); // Placer le curseur au début du premier fichier.
   if (fread(&r5Disk.super_block, sizeof(struct super_block_s), 1, r5Disk.storage[1]) != 1) return ERR_READ;
 	return 0;
 }
