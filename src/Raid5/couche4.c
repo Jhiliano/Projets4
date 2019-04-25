@@ -17,10 +17,20 @@ void writefile(char* nomFich, file_t fich){
   for(int i=0; i<INODE_TABLE_SIZE; i++){
     if(r5Disk.inodes[i].filename == nomFich){
       exist=1;
+      indAjout=i;
     }
   }
   if(exist==0){
     indAjout = get_unused_inode();
+  }
+  else{
+    if(fich.size<=r5Disk.inodes[indAjout].size){
+      fseek(r5Disk.storage[fichier], indAjout, SEEK_SET);
+      fwrite(&r5Disk.inodes[indAjout], sizeof(struct inode_s), 1, r5Disk.storage[fichier]);
+    }
+    else{
+
+    }
   }
 }
 
