@@ -188,6 +188,10 @@ void first_free_byte() {
   if ((i_inode = get_unused_inode()) == -1)
     i_inode = INODE_TABLE_SIZE - 1;
 
+  // Si il n'y pas d'inode dans la table le premier byte libre est 1 car 0 est occupé par le super block.
+  if (i_inode == 0)
+    r5Disk.super_block.first_free_byte = 1;
   // Pour avoir le premier byte libre on prend le premier byte du dernier inode + la taille du fichier.
-  r5Disk.super_block.first_free_byte = r5Disk.inodes[i_inode -1].first_byte + r5Disk.inodes[i_inode -1].size;
+  else
+    r5Disk.super_block.first_free_byte = r5Disk.inodes[i_inode -1].first_byte + r5Disk.inodes[i_inode -1].size;
 }
