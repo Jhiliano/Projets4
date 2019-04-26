@@ -22,6 +22,8 @@ void writefile(char* nomFich, file_t fich){
   }
   if(exist==0){
     indAjout = get_unused_inode();
+    fseek(r5Disk.storage[fichier], r5Disk.super_block.first_free_byte, SEEK_SET);
+    fwrite(&r5Disk.inodes[indAjout], fich.size, 1, fich);
   }
   else{
     if(fich.size<=r5Disk.inodes[indAjout].size){
@@ -29,6 +31,10 @@ void writefile(char* nomFich, file_t fich){
       fwrite(&r5Disk.inodes[indAjout], fich.size, 1, fich);
     }
     else{
+      delete_inode(indAjout);
+      indAjout = get_unused_inode();
+      fseek(r5Disk.storage[fichier], r5Disk.super_block.first_free_byte, SEEK_SET);
+      fwrite(&r5Disk.inodes[indAjout], fich.size, 1, fich);
 
     }
   }
@@ -37,7 +43,21 @@ void writefile(char* nomFich, file_t fich){
 
 
 int read_file(char* nomF, file_t fich){
-  return 1;
+  int indLecture;
+  for(int i=0; i<INODE_TABLE_SIZE; i++){
+    if(r5Disk.inodes[i].filename == nomFich){
+      exist=1;
+      indLecture=i;
+    }
+  }
+  if(exist==0){
+    return 0;
+  }
+  else{
+    //fseek(r5Disk.inodes[indAjout], r5Disk.inodes[indLecture].first_byte , SEEK_SET);
+    fread(r5Disk.inodes[indLecture], 1, r5Disk.inodes[indLecture].size, fich);
+    return 1;
+  }
 }
 
 
