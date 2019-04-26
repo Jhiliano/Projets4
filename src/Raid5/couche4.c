@@ -63,7 +63,19 @@ int read_file(char* nomF, file_t fich){
 
 
 int delete_file(char* nomF){
-  return 1;
+  int indSup;
+  for(int i=0; i<INODE_TABLE_SIZE; i++){
+    if(r5Disk.inodes[i].filename == nomFich){
+      exist=1;
+      indSup=i;
+    }
+  }
+  if(exist==0){
+    return 0;
+  }
+  else{
+    delete_inode(indSup);
+  }
 }
 
 
