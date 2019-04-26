@@ -81,7 +81,13 @@ int delete_file(char* nomF){
 
 
 void load_file_from_host(char* nomFich){
-
+  stat* info;
+  if(stat(nomFich, info)==0){
+    int pos = get_unused_inode();
+    init_inode(nomFich, (int)(infos->st_size), pos);
+    fseek(r5Disk.inodes[pos], r5Disk.inodes[pos].first_byte, SEEK_SET); // Placer le curseur sur pos dans le bon fichier.
+    fwrite(&r5Disk.inodes[pos], sizeof(struct inode_s), 1, nomFich); // Ecrire l'inode.
+  }
 }
 
 
