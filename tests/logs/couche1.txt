@@ -1,0 +1,23 @@
+
+TEST COUCHE 1
+
+TEST : compute block
+
+nb de block necessaire pour 0 octets : 0
+nb de block necessaire pour 1 octets : 1
+nb de block necessaire pour 4 octets : 1
+nb de block necessaire pour 5 octets : 2
+nb de block necessaire pour 50 octets : 13
+
+TEST : write block
+
+block composé de 1 ecrit en position 0 : bits ecrit = 0
+block composé de 0 ecrit en position 3 : bits ecrit = 0
+
+TEST : read block
+
+
+TEST : print block
+
+block a 0 : 0
+block a 2 puissance BLOCK_SIZE-1 : F

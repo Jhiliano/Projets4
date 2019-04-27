@@ -2,7 +2,7 @@
 EXEC = Exec
 CREATEDISK = createdisk
 
-ARGS = 
+ARGS =
 # Begin generic part of the Makefile
 CC = gcc
 CFLAGS = -Wextra -Wall -pedantic
@@ -16,12 +16,15 @@ SRC = couche1.c\
 OBJ = $(SRC:.c=.o)
 HEAD = $(SRC:.c=.h)
 
+TEST = testunitaire
+
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
 HEADIR = headers
 DISKSDIR = disk
 CREATEDISKDIR = genDisk
+TESTDIR = tests
 
 
 
@@ -37,7 +40,7 @@ endif
 
 all: $(EXEC)
 
-$(EXEC): $(OBJ) main.o
+$(EXEC): $(OBJ) main.o $(addsuffix .o,$(TEST))
 	@echo "Création de l'executabe "$@
 	@$(CC) -o $(addprefix $(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
@@ -50,6 +53,10 @@ run:
 	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
 
 %.o: $(SRCDIR)/%.c
+	@echo "Création de "$@
+	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
+
+%.o: $(TESTDIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
 

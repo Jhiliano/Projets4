@@ -5,11 +5,7 @@
 
 /* dépendances */
 
-#include "../headers/Raid5/couche1.h"
-#include "../headers/Raid5/couche2.h"
-#include "../headers/Raid5/couche3.h"
-#include "../headers/Raid5/couche4.h"
-#include "../headers/Raid5/couche5.h"
+#include "../tests/testunitaire.h"
 
 /* fonctions */
 
@@ -18,6 +14,9 @@ int main(void)
 /// \return EXIT_SUCCESS le programme n'a pas eut d'encombre sinon il aurrai rencontré un exit(EXIT_FAILURE)
 {
   init_disk_raid5("disk");
+  test_couche1();
+
+
 
   /* C'est les tests de la couche 3, je savais pas où les faire donc j'ai fait ici xD Vous pouvez les supprimer si vous voulez. Mais ça marche ^^ */
 
@@ -39,7 +38,6 @@ int main(void)
   write_super_block();*/
 
   eteindre_disk_raid5();
-  printf("%d\n",compute_nblock(50));
 
   return EXIT_SUCCESS;
 }
