@@ -173,3 +173,12 @@ void test_compute_parity_index(FILE* file) {
 /* couche 4 */
 
 /* couche 5 */
+
+/* main */
+int main(void) {
+  init_disk_raid5("disk");
+  test_couche1();
+  test_couche2();
+  eteindre_disk_raid5();
+  return 0;
+}

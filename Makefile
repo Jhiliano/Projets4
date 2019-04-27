@@ -17,6 +17,8 @@ OBJ = $(SRC:.c=.o)
 HEAD = $(SRC:.c=.h)
 
 TEST = testunitaire
+CMDT1 = cmd_test1
+CMDT2 = cmd_test2
 
 SRCDIR = src
 BINDIR = bin
@@ -40,12 +42,34 @@ endif
 
 all: $(EXEC)
 
-$(EXEC): $(OBJ) main.o $(addsuffix .o,$(TEST))
+$(EXEC): $(OBJ) main.o
 	@echo "Création de l'executabe "$@
 	@$(CC) -o $(addprefix $(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
+$(TEST): $(OBJ) $(addsuffix .o,$(TEST))
+	@echo "Creation de l'executable "$@
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+
+$(CMDT1): $(OBJ) $(addsuffix .o,$(CMDT1))
+	@echo "Creation de l'executable "$@
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+
+$(CMDT2): $(OBJ) $(addsuffix .o,$(CMDT2))
+	@echo "Creation de l'executable "$@
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+
 run:
 	./$(BINDIR)/$(EXEC) $(ARGS)
+
+run_cmd_testunitaire:
+		./$(TESTDIR)/$(BINDIR)/$(TEST)
+
+run_cmd_test1:
+	./$(TESTDIR)/$(BINDIR)/$(CMDT1)
+
+run_cmd_test2:
+	./$(TESTDIR)/$(BINDIR)/$(CMDT2)
+
 
 
 %.o: $(SRCDIR)/$(RAID5DIR)/%.c
@@ -80,6 +104,7 @@ clean:
 
 mrproper: clean
 	@rm -f $(BINDIR)/*
+	@rm -f $(TESTDIR)/
 	@rm -f $(EXEC) $(CREATEDISK)
 	@echo "Executable supprimé"
 # End generic part of the makefile

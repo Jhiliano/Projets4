@@ -14,8 +14,6 @@ int main(void)
 /// \return EXIT_SUCCESS le programme n'a pas eut d'encombre sinon il aurrai rencontré un exit(EXIT_FAILURE)
 {
   init_disk_raid5("disk");
-  test_couche1();
-  test_couche2();
 
 
 

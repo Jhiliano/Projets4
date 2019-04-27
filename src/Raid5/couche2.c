@@ -28,14 +28,14 @@ int compute_parity_index(int numBande){
   return (r5Disk.ndisk)-((numBande-1)%r5Disk.ndisk);
 }
 
-int write_stripe(stripe_t tab, int pos){
-  for(int i=0; i<tab.nblocks; i++){
-    if (write_block(pos+i*BLOCK_SIZE, r5Disk.storage[i], tab.stripe[i])!=BLOCK_SIZE) return 1;
+int write_stripe(stripe_t tab, int pos, virtual_disk_t* raid){
+  for(int i = 0; i < tab.nblocks; i++){
+    if (write_block(pos+i*BLOCK_SIZE, raid->storage[i], tab.stripe[i])!=BLOCK_SIZE) return 1;
   }
   return 0;
 }
 
-int write_chunk(uchar* buffer, int size, int* position, virtual_disk_t* raid){
+int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
   // calculs des tailles block-stripe necessaire
  	int nb = compute_nblock(size);
  	int nb_stripe = compute_nstripe(nb);
@@ -58,11 +58,11 @@ int write_chunk(uchar* buffer, int size, int* position, virtual_disk_t* raid){
    		}
    	}
    	compute_parity(raid, &tab, id_p);
-   	if(write_stripe(tab, *position) != 0){
+   	if(write_stripe(tab, position,raid) != 0){
    		free(tab.stripe);
    		return 1;
    	}
-   	(*position) += BLOCK_SIZE*tab.nblocks;
+   	position += BLOCK_SIZE*tab.nblocks;
  	}
  	free(tab.stripe);
  	return 0;
