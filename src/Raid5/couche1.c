@@ -169,16 +169,8 @@ void print_block(FILE* file, block_t block) {
 	* \brief Affichage d'un block
 	* \details L'affichage est en hexadecimal, il affiche sur une ligne sans espace ni retour a ligne
 	*/
-	int somme;
-	int multiplicateur;
-	for (int h = 0; h < BLOCK_SIZE; h+=4) {
-		somme = 0;
-		multiplicateur = 1;
-		for (int i = 0; i < 4; i++) {
-			somme += block.data[h*4+i]*multiplicateur;
-			multiplicateur *=2;
-		}
-		fprintf(file,"%01X",somme);
+	for (int h = 0; h < BLOCK_SIZE/2; h++) {
+		fprintf(file,"%02X",block.data[h]);
 	}
 	fprintf(file," ");
 }

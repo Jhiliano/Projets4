@@ -24,5 +24,9 @@ void test_read_block(FILE* file);
 void test_affichage_couche1(FILE* file);
 void test_block_repair(FILE* file);
 /* couche 2 */
+void test_couche2(void);
+void test_compute_nstripe(FILE * file);
+void test_compute_parity(FILE *file);
+void test_compute_parity_index(FILE* file);
 
 #endif

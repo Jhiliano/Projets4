@@ -1,0 +1,25 @@
+
+TEST COUCHE 2
+
+TEST : compute stripe
+
+stripe pour 0 block : 0
+stripe pour 3 block : 1
+stripe pour 4 block : 2
+stripe pour 50 block : 17
+
+TEST : compute parity
+
+creation des block (sauf la 3e) de valeur : 00FF FF00 FFFF 
+la stripe a donc pour valeur :00FF FF00 0000 FFFF 
+
+TEST : compute parity index
+
+bande de parité de la stripe 1 : 4
+bande de parité de la stripe 2 : 3
+bande de parité de la stripe 3 : 2
+bande de parité de la stripe 4 : 1
+bande de parité de la stripe 5 : 4
+bande de parité de la stripe 6 : 3
+bande de parité de la stripe 7 : 2
+bande de parité de la stripe 8 : 1

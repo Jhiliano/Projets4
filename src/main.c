@@ -15,6 +15,7 @@ int main(void)
 {
   init_disk_raid5("disk");
   test_couche1();
+  test_couche2();
 
 
 

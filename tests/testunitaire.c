@@ -42,11 +42,11 @@ void test_write_block(FILE* file) {
   block_t block1, block2;
   FILE* test = fopen("tests/filetest/c1","w+");
   for (int i = 0; i < BLOCK_SIZE; i++) {
-    block1.data[i] = 1;
-    block2.data[i] = 0;
+    block1.data[i] = 0;
+    block2.data[i] = 255;
   }
-  fprintf(file,"block composé de 1 ecrit en position 0 : bits ecrit = %d\n",write_block(0,test,block1));
-  fprintf(file,"block composé de 0 ecrit en position 4 : bits ecrit = %d\n",write_block(4,test,block2));
+  fprintf(file,"block composé de 0 ecrit en position 0 : bits ecrit = %d\n",write_block(0,test,block1));
+  fprintf(file,"block composé de 255 ecrit en position 4 : bits ecrit = %d\n",write_block(4,test,block2));
   fclose(test);
 }
 
@@ -67,7 +67,7 @@ void test_block_repair(FILE* file) {
   for (int d = 0; d < (r5Disk.ndisk)-1; d++) {
     for (int b = 0; b < BLOCK_SIZE; b++) {
       if (d == b) {
-        stripe[d].data[b] = 1;
+        stripe[d].data[b] = 255;
       } else {
         stripe[d].data[b] = 0;
       }
@@ -93,8 +93,6 @@ void test_block_repair(FILE* file) {
     print_block(file, stripe[d]);
   }
   fprintf(file, "\n");
-
-
 }
 
 void test_affichage_couche1(FILE* file) {
@@ -106,14 +104,69 @@ void test_affichage_couche1(FILE* file) {
   print_block(file, block);
   fprintf(file, "\n");
   for (int i = 0; i < BLOCK_SIZE; i++) {
-    block.data[i] = 1;
+    block.data[i] = 255;
   }
-  fprintf(file, "block a 2 puissance BLOCK_SIZE-1 : ");
+  fprintf(file, "block avec des octets valeur 255 : ");
   print_block(file, block);
   fprintf(file, "\n");
 }
 
 /* couche 2 */
+
+void test_couche2(void) {
+  FILE* log = fopen("tests/logs/couche2.txt","w+");
+  fprintf(log, "\nTEST COUCHE 2\n");
+  fprintf(log, "\nTEST : compute stripe\n\n");
+  test_compute_nstripe(log);
+  fprintf(log, "\nTEST : compute parity\n\n");
+  test_compute_parity(log);
+  fprintf(log, "\nTEST : compute parity index\n\n");
+  test_compute_parity_index(log);
+  fclose(log);
+}
+
+void test_compute_nstripe(FILE * file) {
+  fprintf(file,"stripe pour 0 block : %d\n",compute_nstripe(0));
+  fprintf(file,"stripe pour 3 block : %d\n",compute_nstripe(3));
+  fprintf(file,"stripe pour 4 block : %d\n",compute_nstripe(4));
+  fprintf(file,"stripe pour 50 block : %d\n",compute_nstripe(50));
+}
+
+void test_compute_parity(FILE *file) {
+  stripe_t stripe;
+  stripe.stripe = malloc(r5Disk.ndisk*sizeof(block_t));
+  for (int d = 0; d < (r5Disk.ndisk); d++) {
+    if (d != 2) {
+      for (int b = 0; b < BLOCK_SIZE; b++) {
+        if (d == b) {
+          stripe.stripe[d].data[b] = 0;
+        } else {
+          stripe.stripe[d].data[b] = 255;
+        }
+      }
+    }
+  }
+  fprintf(file, "creation des block (sauf la 3e) de valeur : ");
+  for (int d = 0; d < (r5Disk.ndisk); d++) {
+    if (d != 2) {
+      print_block(file, stripe.stripe[d]);
+    }
+  }
+  fprintf(file, "\n");
+  compute_parity(&r5Disk, &stripe, 3);
+  fprintf(file, "la stripe a donc pour valeur :");
+  for (int d = 0; d < (r5Disk.ndisk); d++) {
+    print_block(file, stripe.stripe[d]);
+  }
+  fprintf(file, "\n");
+  free(stripe.stripe);
+}
+
+void test_compute_parity_index(FILE* file) {
+  for (int i =1 ; i <= 8; i++) {
+      fprintf(file, "bande de parité de la stripe %d : %d\n",i,compute_parity_index(i));
+  }
+}
 
 /* couche 3 */
 

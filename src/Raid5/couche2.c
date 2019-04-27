@@ -13,7 +13,7 @@
 /* fonctions */
 int compute_nstripe(int nb_blocks){
   // une stipe peux contenir ndisk - 1 block car il doit tenir compte du block de parité
-  if (nb_blocks%r5Disk.ndisk-1 == 0) return nb_blocks/(r5Disk.ndisk-1);
+  if (nb_blocks%(r5Disk.ndisk-1) == 0) return nb_blocks/(r5Disk.ndisk-1);
   return nb_blocks/(r5Disk.ndisk-1)+1;
 }
 
@@ -30,94 +30,87 @@ int compute_parity_index(int numBande){
 
 int write_stripe(stripe_t tab, int pos){
   for(int i=0; i<tab.nblocks; i++){
-    if (write_block(pos, r5Disk.storage[i], tab.stripe[i])!=BLOCK_SIZE) return 1;
+    if (write_block(pos+i*BLOCK_SIZE, r5Disk.storage[i], tab.stripe[i])!=BLOCK_SIZE) return 1;
   }
   return 0;
 }
- void read_stripe(stripe_t* stripe, int posP, virtual_disk_t *raid){//BUG sujet "préciser ce que cette fonction dois faire si plusieurs block ne peuvent etre lu"
-   for (int i = 0;i < stripe->nblocks;i++) {
-     read_block(posP, raid->storage[i], &stripe->stripe[i]);//BUG tenir compte du return de readblock
-   }
- }
 
- int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
+int write_chunk(uchar* buffer, int size, int* position, virtual_disk_t* raid){
   // calculs des tailles block-stripe necessaire
  	int nb = compute_nblock(size);
  	int nb_stripe = compute_nstripe(nb);
- 	int ind_p; // id du block de parité
+ 	int id_p; // id du block de parité
  	stripe_t tab;
-  tab.nblocks = raid->ndisk;//BUG tu fait ca en double
+  tab.nblocks = raid->ndisk;
   tab.stripe = malloc(tab.nblocks*sizeof(block_t));
- 	int pos=0;
- 	int test_write;
-
-    int i =0;
-    while(i<nb_stripe){
-
-      tab.nblocks = raid->ndisk;
-      tab.stripe = malloc(tab.nblocks*sizeof(block_t));
-   		ind_p = compute_parity_index(i+1);
-
-   		for(int id_block=0; id_block<tab.nblocks; id_block++){
-        int num_b = 0;
-   			if(num_b != ind_p-1){
-            int num_o = 0;
-            while(num_o < BLOCK_SIZE){
-     					if(pos<size)
-     						tab.stripe[num_b].data[num_o] = buffer[pos];
-     					else
-     						tab.stripe[num_b].data[num_o] = '0';
-     					pos++;
-              num_o ++ ;
-   				}
+ 	int pos = 0;
+  for (int s = 0; s < nb_stripe; s++) {
+   	id_p = compute_parity_index(s+1);
+   	for (int id_block = 0; id_block < tab.nblocks; id_block++){
+   		if (id_block != id_p-1){
+        for (size_t num_o = 0; num_o < BLOCK_SIZE; num_o++) {
+     			if(pos<size)
+     				tab.stripe[id_block].data[num_o] = buffer[pos];
+     			else
+     				tab.stripe[id_block].data[num_o] = '0';
+     		  pos++;
    			}
    		}
-   		compute_parity(raid, &tab, ind_p);//BUG id_p -1?
-   		test_write = write_stripe(tab, position);
-
-   		if(test_write != 0){
-   			free(tab.stripe);
-   			return 1;
-   		}
-   		position += BLOCK_SIZE;//BUG ne faudrai t'il pas le mettre en pointeur position ?
-      ++i;
- 	}// BUG il faut que tu free stripe a chaque passage de boucle
+   	}
+   	compute_parity(raid, &tab, id_p);
+   	if(write_stripe(tab, *position) != 0){
+   		free(tab.stripe);
+   		return 1;
+   	}
+   	(*position) += BLOCK_SIZE*tab.nblocks;
+ 	}
  	free(tab.stripe);
  	return 0;
  }
 
+int read_stripe(stripe_t* stripe, int pos, virtual_disk_t *raid){
+  int erreur = -1;
+  for (int i = 0;i < stripe->nblocks;i++) {
+    if(read_block(pos+i*BLOCK_SIZE, raid->storage[i], &stripe->stripe[i])== ERR_READ) {
+      if (erreur != -1)// on note l'erreur pour la reparer plus tard
+        erreur = i;
+      else
+        return 1;//cas 2 erreurs => on sort
+    }
+  }
+  if (erreur != -1) {// on repare l'erreur
+    block_repair(raid, pos+erreur*BLOCK_SIZE, stripe->stripe);
+    //write_stripe(*stripe, pos);// on le repare sur le disque
+  }
+  return 0;
+}
 
- void read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid){//Cette fonction ne reconstruit pas les block illisible
+int read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid){
   // calculs des tailles block-stripe necessaire
  	int nb = compute_nblock(size);
  	int nb_stripe = compute_nstripe(nb);
  	int id_p; // id du block de parité
  	stripe_t tab;
  	int decalage=0;
- 	int i=0;
-  tab.nblocks = raid->ndisk; //BUG Tu fait ca en double !
+  tab.nblocks = raid->ndisk;
   tab.stripe = malloc(tab.nblocks*sizeof(block_t)); /*creation nouvelle bande*/
-  while(i<nb_stripe){
-    tab.nblocks = raid->ndisk;
-    tab.stripe = malloc(tab.nblocks*sizeof(block_t));
-
- 		id_p = compute_parity_index(i+1);
- 		read_stripe(&tab, position, raid);
-      int id = 0;
-      while(id<tab.nblocks){//BUG boucle for?
- 			if(id != id_p-1){
-          int o = 0;
-          while(o<BLOCK_SIZE){
+  for (int s = 0; s < nb_stripe; s++) {
+ 		id_p = compute_parity_index(s+1);
+ 		if(read_stripe(&tab, position, raid)){// si il y a plus de 2 block illisible on stop
+      free(tab.stripe);
+      return 1;
+    }
+    for(int id_block = 0; id_block < tab.nblocks; id_block++) {
+      if(id_block != id_p-1){
+        for (int o = 0; o < BLOCK_SIZE; o++) {
  					if(decalage<size)
- 						buffer[decalage] = tab.stripe[id].data[o];
+ 						buffer[decalage] = tab.stripe[id_block].data[o];
  					decalage++;
-          o++;
  				}
       }
-      id++;
     }
- 		position = position + BLOCK_SIZE;
-    ++i;
+ 		position = position + BLOCK_SIZE*tab.nblocks;
   }
- 	free(tab.stripe);//BUG faut le free dans le while vu que tu le malloc a chaque fois !
+ 	free(tab.stripe);
+  return 0;
  }
