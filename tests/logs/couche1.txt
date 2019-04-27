@@ -11,13 +11,21 @@ nb de block necessaire pour 50 octets : 13
 
 TEST : write block
 
-block composé de 1 ecrit en position 0 : bits ecrit = 0
-block composé de 0 ecrit en position 3 : bits ecrit = 0
+block composé de 1 ecrit en position 0 : bits ecrit = 4
+block composé de 0 ecrit en position 4 : bits ecrit = 4
 
 TEST : read block
 
+lecture du block composé de 1 en position 0 retour : 0 block : F 
+lecture du block composé de 0 en position 4 retour : 0 block : 0 
+
+TEST : repair block
+
+creation des block de valeur : 1 2 4 avec la creation du block 4 de parite : 7 
+modification du block 1 : 0 2 4 7 
+reparation du block 0 : 1 2 4 7 
 
 TEST : print block
 
-block a 0 : 0
-block a 2 puissance BLOCK_SIZE-1 : F
+block a 0 : 0 
+block a 2 puissance BLOCK_SIZE-1 : F 

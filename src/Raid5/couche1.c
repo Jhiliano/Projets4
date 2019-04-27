@@ -121,7 +121,7 @@ int write_block(int pos, FILE *disk, block_t block){
 	* \param[in] block Le block à ecrire
 	* \return Le nombre d'octets ecrit
 	*/
-	if (fseek(disk, pos, SEEK_SET)==0)return (0);
+	if (fseek(disk, pos, SEEK_SET)!=0)return (0);
 	 return (fwrite(block.data, sizeof(uchar), BLOCK_SIZE, disk));
 }
 
@@ -134,12 +134,12 @@ int read_block(int pos, FILE *disk, block_t* block){
 	* \param[out] block Le block lu
 	* \return 0 si tout se passe bien, ERR_READ sinon
 	*/
-	fseek(disk, pos, SEEK_SET);
+	if (fseek(disk, pos, SEEK_SET) != 0) return ERR_READ;
 	if (fread(block->data, sizeof(uchar), BLOCK_SIZE, disk) < BLOCK_SIZE) return ERR_READ;
 	return 0;
 }
 
-int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe){
+void block_repair(virtual_disk_t* raid, int block_id, block_t* stripe){
 	/**
 	* \brief Reparation d'un block
 	* \details effectue un XOR de chaque block pour recréer le block manquant
@@ -149,21 +149,11 @@ int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe){
 	* \return temoin erreurs
 	*/
 	block_t parite;// Block pour stocké les données des autres
-	int cond;
-	//BUG pourquoi tu fait les deux condition qui suivent? tu ecris 2x le mm block dans la parite (le block 0 ou 1 sera ecrit 2x)
-	if (block_id >1){
-		for (int i = 0; i < BLOCK_SIZE; i++) {
-			parite.data[i] = stripe[0].data[i];
-			cond = 0;
-		}}
-		else {
-			for (int i = 0; i < BLOCK_SIZE; i++) {
-				parite.data[i] = stripe[1].data[i];
-				cond = 1;
-			}
+	for (int i = 0; i < BLOCK_SIZE; i++) {
+		parite.data[i] = 0;
 	}
 	for (int i = 0; i < raid->ndisk; i++){
-		if (i != block_id-1 && i!=cond){
+		if (i != block_id-1){
 			for (int e = 0; e < BLOCK_SIZE; e++){ // XOR sur chaque élément
 				parite.data[e] = parite.data[e] ^ stripe[i].data[e];
 			}
@@ -171,10 +161,7 @@ int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe){
 	}
 	for (int i = 0; i < BLOCK_SIZE; i++) {
 		stripe[block_id-1].data[i] = parite.data[i];
-
 	}
-
-	return 0;
 }
 
 void print_block(FILE* file, block_t block) {
@@ -193,4 +180,5 @@ void print_block(FILE* file, block_t block) {
 		}
 		fprintf(file,"%01X",somme);
 	}
+	fprintf(file," ");
 }

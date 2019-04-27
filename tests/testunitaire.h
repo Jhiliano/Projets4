@@ -16,11 +16,13 @@
 
 /* Fonctions */
 
+/* couche 1 */
 void test_couche1(void);
 void test_compute_nblock(FILE* file);
 void test_write_block(FILE* file);
 void test_read_block(FILE* file);
 void test_affichage_couche1(FILE* file);
-
+void test_block_repair(FILE* file);
+/* couche 2 */
 
 #endif
