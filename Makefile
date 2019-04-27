@@ -61,13 +61,13 @@ $(CMDT2): $(OBJ) $(addsuffix .o,$(CMDT2))
 run:
 	./$(BINDIR)/$(EXEC) $(ARGS)
 
-run_cmd_testunitaire:
+run_TU:
 		./$(TESTDIR)/$(BINDIR)/$(TEST)
 
-run_cmd_test1:
+run_T1:
 	./$(TESTDIR)/$(BINDIR)/$(CMDT1)
 
-run_cmd_test2:
+run_T2:
 	./$(TESTDIR)/$(BINDIR)/$(CMDT2)
 
 
