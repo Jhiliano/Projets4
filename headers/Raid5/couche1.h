@@ -10,7 +10,7 @@
 /* Dépendances */
 
 
-#include "global.h"
+#include "../global.h"
 #include "couche3.h"
 #include <sys/types.h>
 #include <sys/stat.h>

@@ -8,7 +8,6 @@
 
 
 #include "../../headers/Raid5/couche2.h"
-#include "../../headers/Raid5/couche1.h"
 
 /* fonctions */
 int compute_nstripe(int nb_blocks){

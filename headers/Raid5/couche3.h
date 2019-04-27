@@ -10,7 +10,7 @@
 /* Dépendances */
 
 
-#include "global.h"
+#include "../global.h"
 #include "couche1.h"
 
 
