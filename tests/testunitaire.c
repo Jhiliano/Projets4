@@ -87,7 +87,7 @@ void test_block_repair(FILE* file) {
     print_block(file, stripe[d]);
   }
   fprintf(file, "\n");
-  fprintf(file, "reparation du block 0 : ");
+  fprintf(file, "reparation du block 1 : ");
   block_repair(&r5Disk, 1, stripe);
   for (int d = 0; d < (r5Disk.ndisk); d++) {
     print_block(file, stripe[d]);
