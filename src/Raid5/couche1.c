@@ -15,6 +15,11 @@
 
 void init_disk_raid5(char* adresse)
 {
+	/**
+	* \brief Initialise le raid 5
+	* \details Le raid 5 est initialisé en fonction d'un dossier entré en paramètre qui indique la position des disques
+	* \param adresse Nom du dossier r5
+	*/
 	DIR* rep;
 	struct dirent* elem;
 	struct stat infosFichier;
@@ -37,12 +42,16 @@ void init_disk_raid5(char* adresse)
 	r5Disk.number_of_files = r5Disk.ndisk;// IDK j'ai l'impression que c'est la mm chose
 	r5Disk.raidmode = CINQ;
 	super_block_init();// setup du superblock
-	read_inodes_table(); // Chargement de la table d'inode et du super block.
+	read_inodes_table(); // Chargement de la table d'inode et du super block
 	closedir(rep);
 }
 
 void super_block_init(void)
 {
+	/**
+	* \brief Initialise le super block
+	* \details On initialise le type de raid, et on set le premier block et le first byte utilisé a 0
+	*/
 	r5Disk.super_block.raid_type = r5Disk.raidmode;
 	r5Disk.super_block.nb_blocks_used = 0;
 	r5Disk.super_block.first_free_byte = 0;
@@ -50,11 +59,13 @@ void super_block_init(void)
 
 void remplir_storage(char* cheminFichier)
 {
+	/**
+	* \brief Remplit le raid 5 des fichiers
+	* \details Remplit le champ storage de fichier et incrémente le compteur
+	* \param cheminFichier Chemin du fichier placé dans le raid
+	*/
 	r5Disk.storage = (FILE**) realloc(r5Disk.storage,(r5Disk.ndisk+1)*sizeof(FILE*));
 	r5Disk.storage[r5Disk.ndisk] = fopen(cheminFichier,"r+");
-	/*Je sais pas pourquoi ce truc a été modifié mais ça marche pas donc j'ai remis la version qui marche*/
-	/*r5Disk.storage = (FILE**) realloc(r5Disk.storage,(r5Disk.ndisk)*sizeof(FILE*));
-	r5Disk.storage[r5Disk.ndisk-1] = fopen(cheminFichier,"r+");*/
 	if ((r5Disk.storage[r5Disk.ndisk]) == NULL)
 	{
 		fprintf(stderr,"ouverture du fichier disque impossible");
@@ -64,6 +75,12 @@ void remplir_storage(char* cheminFichier)
 
 void creation_chemin_fichier(char *cheminFichier, const char* adresse, const char* nomFichier)
 {
+	/**
+	* \brief Crée le chemin du fichier
+	* \param[out] cheminFichier Chemin du fichier placé dans le raid
+	* \param[in] adresse Adresse du dossier
+	* \param[in] nom du fichier
+	*/
 	strcpy(cheminFichier,adresse);
 	strcat(cheminFichier,"/");
 	strcat(cheminFichier,nomFichier);
@@ -71,6 +88,10 @@ void creation_chemin_fichier(char *cheminFichier, const char* adresse, const cha
 
 void eteindre_disk_raid5(void)
 {
+	/**
+	* \brief Etein le raid 5
+	* \details Sauvegarde la table d'inode et le superblock et free les fichier du raid 5
+	*/
 	write_inodes_table(); // Sauvegarde de la table d'inode et du super block.
 	for (int i = 0; i < r5Disk.ndisk;i++) {
 		fclose(r5Disk.storage[i]);//fermeture des fichiers ouverts
@@ -80,29 +101,53 @@ void eteindre_disk_raid5(void)
 
 uint compute_nblock(uint n)
 {
+	/**
+	* \brief Compte le nombre de block necessaire pour un nombre d'octets
+	* \details Deux cas : le nombre d'octets rentre parfaitement ou le nombre d'octets demande un block de plus par rapport a sa division par BLOCK_SIZE
+	* \param[in] n Un nombre d'octets
+	* \return Un nombre de blocks
+	*/
 	if((n % BLOCK_SIZE)==0)
 				return (n/BLOCK_SIZE);
 	 return (n/BLOCK_SIZE+1);
-	/*uint nBlockNecessaire = (n/BLOCK_SIZE+(n%BLOCK_SIZE != 0)); // division simple : un bloc vaut 4 octets (si cela n'est pas entier on rajoute un block)
-	nBlockNecessaire = ((nBlockNecessaire*r5Disk.number_of_files)/(r5Disk.number_of_files-1)+((nBlockNecessaire*r5Disk.number_of_files)%(r5Disk.number_of_files-1) != 0)); // un block d'un fichier n'est pas utilisé : si c'est pas rond,on rajoute un block
-	nBlockNecessaire += nBlockNecessaire%r5Disk.number_of_files; // on verifie qu'il y ait bien 4 block par fichiers utilisé
-	return nBlockNecessaire;*/
 }
 
-/*ecrit un bloc block à pos sur disk*/
 int write_block(int pos, FILE *disk, block_t block){
+	/**
+	* \brief Ecriture d'un block
+	* \details L'ecriture se fait a partir d'une position pos sur le fichier disk
+	* \param[in] pos La position où ecrire
+	* \param[in,out] disk Le disque à ecrire
+	* \param[in] block Le block à ecrire
+	* \return Le nombre d'octets ecrit
+	*/
 	if (fseek(disk, pos, SEEK_SET)==0)return (0);
 	 return (fwrite(block.data, sizeof(uchar), BLOCK_SIZE, disk));
-
 }
 
 int read_block(int pos, FILE *disk, block_t* block){
+	/**
+	* \brief Lecture d'un block
+	* \details La lecture se fait a partir d'une position pos sur le fichier disk
+	* \param[in] pos La position où lire
+	* \param[in] disk Le disque à lire
+	* \param[out] block Le block lu
+	* \return 0 si tout se passe bien, ERR_READ sinon
+	*/
 	fseek(disk, pos, SEEK_SET);
 	if (fread(block->data, sizeof(uchar), BLOCK_SIZE, disk) < BLOCK_SIZE) return ERR_READ;
 	return 0;
 }
 
 int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe){
+	/**
+	* \brief Reparation d'un block
+	* \details effectue un XOR de chaque block pour recréer le block manquant
+	* \param[in] raid Le raid
+	* \param[in] block_id Le block à reparer
+	* \param[in,out] stripe Un tableau de block
+	* \return temoin erreurs
+	*/
 	block_t parite;// Block pour stocké les données des autres
 	int cond;
 	//BUG pourquoi tu fait les deux condition qui suivent? tu ecris 2x le mm block dans la parite (le block 0 ou 1 sera ecrit 2x)
@@ -130,4 +175,18 @@ int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe){
 	}
 
 	return 0;
+}
+
+void print_block(FILE* file, block_t block) {
+	/**
+	* \brief Affichage d'un block
+	* \details L'affichage est en hexadecimal, il affiche sur une ligne sans espace ni retour a ligne
+	*/
+	int somme = 0;
+	for (int h = 0; h < BLOCK_SIZE; h+=4) {
+		for (int i = 0; i < 4; i++) {
+			somme += pow(2,block.data[h*4+i]);
+		}
+		fprintf(file,"%01X",somme);
+	}
 }

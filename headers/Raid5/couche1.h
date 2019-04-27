@@ -11,10 +11,12 @@
 
 
 #include "global.h"
+#include "couche3.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include "couche3.h"
+#include <math.h>
+
 
 
 /* Fonctions */
@@ -31,4 +33,6 @@ uint compute_nblock(uint n);
 int write_block(int pos, FILE *disk, block_t block);
 int read_block(int pos, FILE *disk, block_t* block);
 int block_repair(virtual_disk_t *raid, int block_id, block_t* stripe);
+
+void print_block(FILE* file, block_t block);
 #endif
