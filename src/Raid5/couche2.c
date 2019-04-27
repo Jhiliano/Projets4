@@ -43,12 +43,12 @@ int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
   tab.nblocks = raid->ndisk;
   tab.stripe = malloc(tab.nblocks*sizeof(block_t));
  	int pos = 0;
-  for (int s = 0; s < nb_stripe; s++) {
+  for (int s = 0; s < nb_stripe; s++) {// parcours de toutes les stripes a ecrire
    	id_p = compute_parity_index(s+1);
-   	for (int id_block = 0; id_block < tab.nblocks; id_block++){
+   	for (int id_block = 0; id_block < tab.nblocks; id_block++){// parcours des block des stripes
    		if (id_block != id_p-1){
-        for (size_t num_o = 0; num_o < BLOCK_SIZE; num_o++) {
-     			if(pos<size)
+        for (size_t num_o = 0; num_o < BLOCK_SIZE; num_o++) {// parcours des octets des stripes
+     			if(pos<size) // gestion si le buffer ne rentre pas completement dans les stripes
      				tab.stripe[id_block].data[num_o] = buffer[pos];
      			else
      				tab.stripe[id_block].data[num_o] = '0';
@@ -56,12 +56,12 @@ int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
    			}
    		}
    	}
-   	compute_parity(raid, &tab, id_p);
-   	if(write_stripe(tab, position,raid) != 0){
+   	compute_parity(raid, &tab, id_p); // on fait le block de parité
+   	if(write_stripe(tab, position,raid) != 0){ //on ecrit sur le Raid + gestion erreurs ecriture
    		free(tab.stripe);
    		return 1;
    	}
-   	position += BLOCK_SIZE*tab.nblocks;
+   	position += BLOCK_SIZE*tab.nblocks;//incrémentation de la longueur d'une stripe
  	}
  	free(tab.stripe);
  	return 0;
@@ -92,23 +92,23 @@ int read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid){
  	stripe_t tab;
  	int decalage=0;
   tab.nblocks = raid->ndisk;
-  tab.stripe = malloc(tab.nblocks*sizeof(block_t)); /*creation nouvelle bande*/
-  for (int s = 0; s < nb_stripe; s++) {
+  tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+  for (int s = 0; s < nb_stripe; s++) { //parcours des stripes a lire
  		id_p = compute_parity_index(s+1);
  		if(read_stripe(&tab, position, raid)){// si il y a plus de 2 block illisible on stop
       free(tab.stripe);
       return 1;
     }
-    for(int id_block = 0; id_block < tab.nblocks; id_block++) {
+    for(int id_block = 0; id_block < tab.nblocks; id_block++) { //parcours des block des stripes
       if(id_block != id_p-1){
-        for (int o = 0; o < BLOCK_SIZE; o++) {
- 					if(decalage<size)
+        for (int o = 0; o < BLOCK_SIZE; o++) {  //parcours des octets des block
+ 					if(decalage<size) // eviter de lire plus qu'on en a besoin
  						buffer[decalage] = tab.stripe[id_block].data[o];
  					decalage++;
  				}
       }
     }
- 		position = position + BLOCK_SIZE*tab.nblocks;
+ 		position = position + BLOCK_SIZE*tab.nblocks;// incrementation de la taile d'une stripe
   }
  	free(tab.stripe);
   return 0;
