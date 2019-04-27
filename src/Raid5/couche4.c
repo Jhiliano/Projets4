@@ -11,6 +11,8 @@
 
 
 /* fonctions */
+
+/*
 void writefile(char* nomFich, file_t fich){
   int exist=0;
   int indAjout;
@@ -95,3 +97,4 @@ void load_file_from_host(char* nomFich){
 void store_file_to_host(char* nomFich){
 
 }
+*/
