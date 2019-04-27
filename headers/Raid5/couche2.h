@@ -10,6 +10,7 @@
 
 
 #include "global.h"
+#include "couche1.h"
 
 
 /* Fonctions */
