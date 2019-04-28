@@ -79,6 +79,8 @@ void delete_inode(int pos) {
   r5Disk.inodes[i_inode - 1].first_byte = 0;
   // Mise à jour du super block.
   first_free_byte();
+  // Mise à jour du Raid
+  r5Disk.number_of_files -= 1;
 }
 
 /*****************************************************************************************************************/
@@ -122,6 +124,8 @@ void init_inode(char *nomF, uint taille, uint pos) {
   // Mise à jour le super block.
   r5Disk.super_block.nb_blocks_used += i.nblock;
   first_free_byte();
+  // Mise à jour du Raid
+  r5Disk.number_of_files += 1;
 }
 
 
