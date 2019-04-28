@@ -20,7 +20,7 @@ int read_inodes_table(void) {
   */
   uchar* buffer = malloc(sizeof(inode_t));
   for (uint i = 0; i < INODE_TABLE_SIZE; i++) {// on fait l'operation suivante pour chaque inode
-    if(read_chunk(buffer, sizeof(inode_t), INODES_START*BLOCK_SIZE+i*INODE_SIZE*BLOCK_SIZE, &r5Disk)) return 1;// on recupere le tableau d'entiers représentant l'inode et on verifie que tout s'est bien passé
+    if(read_chunk(buffer, sizeof(inode_t), INODES_START*BLOCK_SIZE+i*INODE_SIZE*BLOCK_SIZE, &r5Disk)) return ERR_READ;// on recupere le tableau d'entiers représentant l'inode et on verifie que tout s'est bien passé
     for (uint c = 0; c < FILENAME_MAX_SIZE; c++) {// on recupère les FILENAME_MAX_SIZE premiers octets qui représente le nom
       r5Disk.inodes[i].filename[c] = buffer[c];
     }
@@ -39,6 +39,7 @@ int write_inodes_table(void) {
   /**
   * \brief Ecrit la table d'inode dans le raid.
   * \details Sauvegarde de la table d'inodes et du super block.
+  * \return 0 si cela s'est bien passé 1 si il y a eut une erreur de lecture
   */
   uchar* buffer = malloc(sizeof(inode_t));
   for (uint i = 0; i < INODE_TABLE_SIZE; i++) {// on fait l'operation suivante pour chaque inode
@@ -85,8 +86,8 @@ void delete_inode(int pos) {
 int get_unused_inode(void) {
   /**
   * \brief Renvoie la position du premier inode disponible.
-  * \details Si il n'y a pas d'inode disponible on renvoie -1.
-  * \return Un int correspondant à la position.
+  * \details Indique aussi si les innodes sont complet
+  * \return Un int correspondant à la position, -1 si il y a plus de place
   */
 
   // Si le first byte = 0 alors l'inode est disponible.
@@ -97,37 +98,30 @@ int get_unused_inode(void) {
 
 /*****************************************************************************************************************/
 
-int init_inode(char *nomF, uint taille, uint pos) {
+void init_inode(char *nomF, uint taille, uint pos) {
   /**
   * \brief Initialise un inode à partir de son nom, sa taille et sa position.
   * \details Avant d'appeler init_inode il faut vérifier que nomF < FILENAME_MAX_SIZE.
   * \param nomF Nom du fichier.
   * \param taille Taille du fichier.
   * \param pos  Position sur le raid.
-  * \return 0 si l'inode a été initialisé, 1 sinon.
   */
 
   inode_t i; // Nouveau inode.
   int i_inode; // Position à laquelle insérer cet inode.
+  i_inode = get_unused_inode();
+  // On remplit l'inode.
+  strcpy(i.filename, nomF);
+  i.size = taille;
+  i.nblock = compute_nstripe(compute_nblock(taille))*4;
+  i.first_byte = pos;
 
-  // On vérifie qu'il y a de la place pour un inode.
-  if ((i_inode = get_unused_inode()) != -1) {
-    // On remplit l'inode.
-    strcpy(i.filename, nomF);
-    i.size = taille;
-    i.nblock = compute_nstripe(compute_nblock(taille))*4;
-    i.first_byte = pos;
+  // On place l'inode dans la table
+  r5Disk.inodes[i_inode] = i;
 
-    // On place l'inode dans la table
-    r5Disk.inodes[i_inode] = i;
-
-    // Mise à jour le super block.
-    r5Disk.super_block.nb_blocks_used += i.nblock;
-    first_free_byte();
-    return 0;
-  }
-
-  return 1;
+  // Mise à jour le super block.
+  r5Disk.super_block.nb_blocks_used += i.nblock;
+  first_free_byte();
 }
 
 
@@ -136,7 +130,7 @@ int init_inode(char *nomF, uint taille, uint pos) {
 int write_super_block(void) {
   /**
   * \brief Ecrit le super block au début du raid.
-  * \return Le nombre d'élément écrit.
+  * \return 1 si il u a eut une erreur 0 sinon.
   */
   uchar* buffer = malloc(sizeof(super_block_t));
   uint_to_uchar(buffer, 0, r5Disk.super_block.raid_type);// on converti et rentre les 3 uint de la structure et on les palce dans le buffer
@@ -144,7 +138,7 @@ int write_super_block(void) {
   uint_to_uchar(buffer, sizeof(int)*2, r5Disk.super_block.first_free_byte);
   if(write_chunk(buffer, SUPER_BLOCK_SIZE*BLOCK_SIZE, 0, &r5Disk)) return 1;// on ecrit le buffer dans les disques et on verifie que tout s'est bien passé
   free(buffer);
-  return 1;
+  return 0;
 }
 
 /*****************************************************************************************************************/
@@ -156,7 +150,7 @@ int read_super_block(void) {
   * \return 0 si la lecture c'est bien passé, ERR_READ sinon.
   */
   uchar* buffer = malloc(sizeof(super_block_t));
-  if(read_chunk(buffer, SUPER_BLOCK_SIZE*BLOCK_SIZE, 0, &r5Disk)) return 1;
+  if(read_chunk(buffer, SUPER_BLOCK_SIZE*BLOCK_SIZE, 0, &r5Disk)) return ERR_READ;
   r5Disk.super_block.raid_type = uchar_to_uint(buffer, 0);// on converti les uchar en int;
   r5Disk.super_block.nb_blocks_used = uchar_to_uint(buffer, sizeof(uint));
   r5Disk.super_block.first_free_byte = uchar_to_uint(buffer, sizeof(uint)*2);
@@ -185,16 +179,30 @@ void first_free_byte(void) {
 /* utilitaire */
 
 void uint_to_uchar(uchar* buffer, int pos, uint n) {
+  /**
+  * \brief Transformation d'un uint en uchar
+  * \details Fait des decalages a droite pour recupérer les différent uchar
+  * \param[out] buffer le tableau ou sera stocké les uchar
+  * \param[in] pos la position dans le buffer ou stocker les uchar
+  * \param[in] n l'uint a transformer
+  */
   for(uint i = 0; i<sizeof(uint); i+=sizeof(uchar)) {
     buffer[pos+i] = n>>8*sizeof(uchar)*(sizeof(uint)-(i+1));// on prend d'abord les 8*sizeof(uint) bits a gauche et ensuite les suivant ect..
   }
 }
 
 uint uchar_to_uint(uchar* buffer, int pos) {
+  /**
+  * \brief Transformation d'un uchar en uint
+  * \details Fait des decalages a gauche (pour etre symétrique a la fonction précédente) construisant l'int en plusieurs fois
+  * \param[in] buffer le tableau ou est stocké les uchar
+  * \param[in] pos la position dans le buffer ou stocker les uchar
+  * \return l'uint construit a partir des uchar
+  */
   uint n = 0;
   for(uint i = 0; i<sizeof(uint); i+=sizeof(uchar)) {
-    n<<= 8*sizeof(uchar);
-    n += buffer[pos+i];
+    n<<= 8*sizeof(uchar);// a chaque fois je fait des decalages a gauche pour mettre les précédents uchar entré dans l'int a gauche
+    n += buffer[pos+i];// on ajour le uchar
   }
   return n;
 }

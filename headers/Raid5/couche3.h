@@ -21,7 +21,7 @@ int read_inodes_table(void);
 int write_inodes_table(void);
 void delete_inode(int pos);
 int get_unused_inode(void);
-int init_inode(char *nomF, uint taille, uint pos);
+void init_inode(char *nomF, uint taille, uint pos);
 int write_super_block(void);
 int read_super_block(void);
 void first_free_byte(void);
