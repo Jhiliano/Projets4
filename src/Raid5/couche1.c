@@ -11,7 +11,11 @@
 
 
 /* fonctions */
-
+/**
+* \brief Ecrit la table d'inode dans le raid.
+* \details Sauvegarde de la table d'inodes et du super block.
+* \return 0 si cela s'est bien passé 1 si il y a eut une erreur de lecture
+*/
 
 void init_disk_raid5(char* adresse)
 {

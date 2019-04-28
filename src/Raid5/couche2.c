@@ -11,30 +11,63 @@
 
 /* fonctions */
 int compute_nstripe(int nb_blocks){
-  // une stipe peux contenir ndisk - 1 block car il doit tenir compte du block de parité
+  /**
+  * \brief Calcul le nombre de stripe pour un nombre de blocks
+  * \details Une stipe peux contenir ndisk - 1 block car il doit tenir compte du block de parité
+  * \param[in] nb_blocks Le nombre de block à calculer
+  * \return Le nombre de stripe necessaire
+  */
   if (nb_blocks%(r5Disk.ndisk-1) == 0) return nb_blocks/(r5Disk.ndisk-1);
   return nb_blocks/(r5Disk.ndisk-1)+1;
 }
 
 
 void compute_parity(virtual_disk_t* raid, stripe_t* tab, int posP){
-  //meme methode pour la reparation et la création du block de parité.
+  /**
+  * \brief creer le block de parité dans une stripe
+  * \details C'est la meme methode pour la reparation et la création du block de parité.
+  * \param[in] raid Le Raid
+  * \param[in] tab La stripe à compléter
+  * \param[in] posP La position du block de parité
+  */
   block_repair(raid, posP, tab->stripe);
 }
 
 int compute_parity_index(int numBande){
-  //return (r5Disk.ndisk)-(numBande%r5Disk.ndisk)+1;
+  /**
+  * \brief Calcul de l'emplacement du block de parité sur le stripe
+  * \details Calcul cyclique (4->1)
+  * \param[in] numBande Le numero de la bande à calculer
+  * \return L'emplacement du block de parité
+  */
   return (r5Disk.ndisk)-((numBande-1)%r5Disk.ndisk);
 }
 
-int write_stripe(stripe_t tab, int pos, virtual_disk_t* raid){
-  for(int i = 0; i < tab.nblocks; i++){
-    if (write_block(pos+i*BLOCK_SIZE, raid->storage[i], tab.stripe[i])!=BLOCK_SIZE) return 1;
+int write_stripe(stripe_t stripe, int pos, virtual_disk_t* raid){
+  /**
+  * \brief Ecrit sur le raid la stripe
+  * \details Utilise write block de la couche 1
+  * \param[in] stripe La stripe a écrire
+  * \param[in] pos La position ou ecrire la stripe
+  * \param[in] raid Le raid
+  * \return 0 si tout s'est bien passé 1 si il y a eut une erreur d'ecriture
+  */
+  for(int i = 0; i < stripe.nblocks; i++){
+    if (write_block(pos+i*BLOCK_SIZE, raid->storage[i], stripe.stripe[i])!=BLOCK_SIZE) return 1;
   }
   return 0;
 }
 
 int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
+  /**
+  * \brief Ecrit un tableau de uchar sur le raid
+  * \details Créer les block de parité en appellant compute_parity
+  * \param[in] buffer Le buffer sur lequel il y a les uchar
+  * \param[in] size Le nombre d'elements a ecrire
+  * \param[in] position La position sur le raid ou ecrire
+  * \param[in] raid Le raid
+  * \return 0 si tout s'est bien passé 1 si il y a eut une erreur d'ecriture
+  */
   // calculs des tailles block-stripe necessaire
  	int nb = compute_nblock(size);
  	int nb_stripe = compute_nstripe(nb);
@@ -68,6 +101,14 @@ int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
  }
 
 int read_stripe(stripe_t* stripe, int pos, virtual_disk_t *raid){
+  /**
+  * \brief Lis une stripe sur le raid
+  * \details Utilise read block de la couche 1
+  * \param[out] stripe La stripe qui sera lu
+  * \param[in] pos La position ou lire la stripe
+  * \param[in] raid Le raid
+  * \return 0 si tout s'est bien passé ERR_READ si il y a eut une erreur de lecture
+  */
   int erreur = -1;
   for (int i = 0;i < stripe->nblocks;i++) {
     if(read_block(pos+i*BLOCK_SIZE, raid->storage[i], &stripe->stripe[i])== ERR_READ) {
@@ -85,6 +126,15 @@ int read_stripe(stripe_t* stripe, int pos, virtual_disk_t *raid){
 }
 
 int read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid){
+  /**
+  * \brief Ecrit un tableau de uchar sur le raid
+  * \details Créer les block de parité en appellant compute_parity
+  * \param[out] buffer Le buffer sur lequel sera ecrit les données
+  * \param[in] size Le nombre d'elements a lire
+  * \param[in] position La position sur le raid ou lire
+  * \param[in] raid Le raid
+  * \return 0 si tout s'est bien passé 1 si il y a eut une erreur de lecture
+  */
   // calculs des tailles block-stripe necessaire
  	int nb = compute_nblock(size);
  	int nb_stripe = compute_nstripe(nb);

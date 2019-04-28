@@ -17,7 +17,7 @@
 int compute_nstripe(int nb_blocks);
 void compute_parity(virtual_disk_t* raid, stripe_t* tab, int posP);
 int compute_parity_index(int numBande);
-int write_stripe(stripe_t tab, int pos, virtual_disk_t* raid);
+int write_stripe(stripe_t stripe, int pos, virtual_disk_t* raid);
 int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid);
 int read_stripe(stripe_t* stripe, int pos, virtual_disk_t *raid);
 int read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid);
