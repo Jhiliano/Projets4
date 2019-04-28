@@ -12,50 +12,46 @@
 
 /* fonctions */
 
-int read_inodes_table() {
+int read_inodes_table(void) {
   /**
   * \brief Lit la table d'inode dans le raid.
   * \details Chargement de la table d'inodes et du super block.
   * \return 0 si tout c'est bien passé, ERR_READ si il a eu un problème de lecture.
   */
-
-  int pos = INODES_START; // Position de départ du tableau d'inodes dans le raid.
-  int fichier; // fichier sur lequel lire un inode.
-
-  // Parcours du tableau d'inodes.
-  for (int i_inode = 0; i_inode < INODE_TABLE_SIZE; i_inode++) {
-    fichier = i_inode % r5Disk.ndisk; // On se place dans le bon fichier.
-    if (i_inode > 0 && fichier == 0) pos += sizeof(struct inode_s); // Si on a lu dans tous les fichiers on incrémente pos.
-    fseek(r5Disk.storage[fichier], pos, SEEK_SET); // Placer le curseur sur pos dans le bon fichier.
-    if (fread(&r5Disk.inodes[i_inode], sizeof(struct inode_s), 1, r5Disk.storage[fichier]) != 1) return ERR_READ; // Lire l'inode.
+  uchar* buffer = malloc(sizeof(inode_t));
+  for (uint i = 0; i < INODE_TABLE_SIZE; i++) {// on fait l'operation suivante pour chaque inode
+    if(read_chunk(buffer, sizeof(inode_t), INODES_START*BLOCK_SIZE+i*INODE_SIZE*BLOCK_SIZE, &r5Disk)) return 1;// on recupere le tableau d'entiers représentant l'inode et on verifie que tout s'est bien passé
+    for (uint c = 0; c < FILENAME_MAX_SIZE; c++) {// on recupère les FILENAME_MAX_SIZE premiers octets qui représente le nom
+      r5Disk.inodes[i].filename[c] = buffer[c];
+    }
+    r5Disk.inodes[i].size = uchar_to_uint(buffer, FILENAME_MAX_SIZE);// on converti les uchar apres FILENAME_MAX_SIZE en int;
+    r5Disk.inodes[i].nblock = uchar_to_uint(buffer, FILENAME_MAX_SIZE + sizeof(uint));
+    r5Disk.inodes[i].first_byte = uchar_to_uint(buffer, FILENAME_MAX_SIZE + sizeof(uint)*2);
   }
-
-  read_super_block(); // Temps qu'à faire autant lire le super block.
-  r5Disk.super_block.raid_type = CINQ; // Alors c'est un peu idiot sachant que c'est sauvegarder mais si c'est le premier appel il va y avoir un 0.
-
+  free(buffer);
   return 0;
+
 }
 
 /*****************************************************************************************************************/
 
-void write_inodes_table() {
+int write_inodes_table(void) {
   /**
   * \brief Ecrit la table d'inode dans le raid.
   * \details Sauvegarde de la table d'inodes et du super block.
   */
-
-  int pos = INODES_START; // Position de départ du tableau d'inodes dans le raid.
-  int fichier; // fichier sur lequel écrire un inode.
-
-  // Parcours du tableau d'inodes.
-  for (int i_inode = 0; i_inode < INODE_TABLE_SIZE; i_inode++) {
-    fichier = i_inode % r5Disk.ndisk; // On se place dans le bon fichier.
-    if (i_inode > 0 && fichier == 0) pos += sizeof(struct inode_s); // Si on a écrit dans tous les fichiers on incrémente pos.
-    fseek(r5Disk.storage[fichier], pos, SEEK_SET); // Placer le curseur sur pos dans le bon fichier.
-    fwrite(&r5Disk.inodes[i_inode], sizeof(struct inode_s), 1, r5Disk.storage[fichier]); // Ecrire l'inode.
+  uchar* buffer = malloc(sizeof(inode_t));
+  for (uint i = 0; i < INODE_TABLE_SIZE; i++) {// on fait l'operation suivante pour chaque inode
+    for (uint c = 0; c < FILENAME_MAX_SIZE; c++) {// on ecrit les FILENAME_MAX_SIZE premiers octets qui représente le nom
+       buffer[c] = r5Disk.inodes[i].filename[c];
+    }
+    uint_to_uchar(buffer, FILENAME_MAX_SIZE, r5Disk.inodes[i].size);// on converti et rentre les 3 uint apres FILENAME_MAX_SIZE
+    uint_to_uchar(buffer, FILENAME_MAX_SIZE + sizeof(uint), r5Disk.inodes[i].nblock);
+    uint_to_uchar(buffer, FILENAME_MAX_SIZE + sizeof(uint)*2, r5Disk.inodes[i].first_byte);
+    if(write_chunk(buffer, sizeof(inode_t), INODES_START*BLOCK_SIZE+INODE_SIZE*i*BLOCK_SIZE, &r5Disk)) return 1;// on ecrit dans les disques et on verifie que tout s'est bien passé
   }
-
-  write_super_block(); // Sauvegarde du super block;
+  free(buffer);
+  return 0;
 }
 
 /*****************************************************************************************************************/
@@ -72,21 +68,21 @@ void delete_inode(int pos) {
   // Si il n'y a pas d'inode disponible on va à la fin du tableau.
   if ((i_inode = get_unused_inode()) == -1)
     i_inode = INODE_TABLE_SIZE - 1;
-
-  // Mise à jour le super block.
-  r5Disk.super_block.nb_blocks_used -= r5Disk.inodes[pos].nblock;
-
+  // Mise à jour du super block.
+    r5Disk.super_block.nb_blocks_used -= r5Disk.inodes[pos].nblock;
   // On décale les inodes en arrière à partir de l'inode à supprimer.
   for (int i = pos; i < i_inode - 1; i++)
     r5Disk.inodes[i] = r5Disk.inodes[i + 1];
 
   // On supprime le dernier inode pour ne pas l'avoir en double
   r5Disk.inodes[i_inode - 1].first_byte = 0;
+  // Mise à jour du super block.
+  first_free_byte();
 }
 
 /*****************************************************************************************************************/
 
-int get_unused_inode() {
+int get_unused_inode(void) {
   /**
   * \brief Renvoie la position du premier inode disponible.
   * \details Si il n'y a pas d'inode disponible on renvoie -1.
@@ -119,7 +115,7 @@ int init_inode(char *nomF, uint taille, uint pos) {
     // On remplit l'inode.
     strcpy(i.filename, nomF);
     i.size = taille;
-    i.nblock = compute_nblock(taille);
+    i.nblock = compute_nstripe(compute_nblock(taille))*4;
     i.first_byte = pos;
 
     // On place l'inode dans la table
@@ -127,71 +123,78 @@ int init_inode(char *nomF, uint taille, uint pos) {
 
     // Mise à jour le super block.
     r5Disk.super_block.nb_blocks_used += i.nblock;
-
+    first_free_byte();
     return 0;
   }
 
   return 1;
 }
 
-/*****************************************************************************************************************/
-
-void cmd_dump_inode(char *nomR) {
-  /**
-  * \brief Affiche la table d'inodes.
-  * \return Le nombre d'élément écrit.
-  */
-
-  (void)nomR; // Actuellement je sais pas à quoi ça sert d'avoir le nom du répertoire.
-
-  // Parcours de la table d'inodes pour la afficher
-  for (int i = 0; i < INODE_TABLE_SIZE; i++)
-    printf("Fichier : %s\nSize = %d\nNblock = %d\nFirst byte = %d\n\n****************************\n\n", r5Disk.inodes[i].filename, r5Disk.inodes[i].size, r5Disk.inodes[i].nblock, r5Disk.inodes[i].first_byte);
-}
 
 /*****************************************************************************************************************/
 
-int write_super_block() {
+int write_super_block(void) {
   /**
   * \brief Ecrit le super block au début du raid.
   * \return Le nombre d'élément écrit.
   */
-
-  fseek(r5Disk.storage[0], 0, SEEK_SET); // Placer le curseur au début du premier fichier.
-  return (fwrite(&r5Disk.super_block, sizeof(struct super_block_s), 1, r5Disk.storage[1]));
+  uchar* buffer = malloc(sizeof(super_block_t));
+  uint_to_uchar(buffer, 0, r5Disk.super_block.raid_type);// on converti et rentre les 3 uint de la structure et on les palce dans le buffer
+  uint_to_uchar(buffer, sizeof(int), r5Disk.super_block.nb_blocks_used);
+  uint_to_uchar(buffer, sizeof(int)*2, r5Disk.super_block.first_free_byte);
+  if(write_chunk(buffer, SUPER_BLOCK_SIZE*BLOCK_SIZE, 0, &r5Disk)) return 1;// on ecrit le buffer dans les disques et on verifie que tout s'est bien passé
+  free(buffer);
+  return 1;
 }
 
 /*****************************************************************************************************************/
 
-int read_super_block() {
+int read_super_block(void) {
   /**
   * \brief Lecture du super block.
   * \details fread stocke lit le super block au début du raid et le stocke dans r5Disk.super_block.
   * \return 0 si la lecture c'est bien passé, ERR_READ sinon.
   */
-
-  fseek(r5Disk.storage[0], 0, SEEK_SET); // Placer le curseur au début du premier fichier.
-  if (fread(&r5Disk.super_block, sizeof(struct super_block_s), 1, r5Disk.storage[1]) != 1) return ERR_READ;
-	return 0;
+  uchar* buffer = malloc(sizeof(super_block_t));
+  if(read_chunk(buffer, SUPER_BLOCK_SIZE*BLOCK_SIZE, 0, &r5Disk)) return 1;
+  r5Disk.super_block.raid_type = uchar_to_uint(buffer, 0);// on converti les uchar en int;
+  r5Disk.super_block.nb_blocks_used = uchar_to_uint(buffer, sizeof(uint));
+  r5Disk.super_block.first_free_byte = uchar_to_uint(buffer, sizeof(uint)*2);
+  free(buffer);
+  return 0;
 }
 
 /*****************************************************************************************************************/
 
-void first_free_byte() {
+void first_free_byte(void) {
   /**
   * \brief Mise à jour du premier byte libre.
   */
 
-  int i_inode; // Position du premier inode disponible dans le tableau.
+  uint size_inode = INODES_START*BLOCK_SIZE + INODE_SIZE*INODE_TABLE_SIZE*BLOCK_SIZE;// taille de la derniere inode du disque initialisé au premier bit utilisable du raid
+  uint first_byte_inode = 0;// premier bit de la dernière inode
+  for (int i = 0; i < INODE_TABLE_SIZE; i++) {
+    if(first_byte_inode < r5Disk.inodes[i].first_byte) {// on prend a chaque inode la dernière inode
+      first_byte_inode = r5Disk.inodes[i].first_byte;
+      size_inode = r5Disk.inodes[i].nblock*4;
+    }
+  }
+  r5Disk.super_block.first_free_byte = first_byte_inode + size_inode;
+}
 
-  // Si il n'y a pas d'inode disponible on va à la fin du tableau.
-  if ((i_inode = get_unused_inode()) == -1)
-    i_inode = INODE_TABLE_SIZE - 1;
+/* utilitaire */
 
-  // Si il n'y pas d'inode dans la table le premier byte libre est 1 car 0 est occupé par le super block.
-  if (i_inode == 0)
-    r5Disk.super_block.first_free_byte = 1;
-  // Pour avoir le premier byte libre on prend le premier byte du dernier inode + la taille du fichier.
-  else
-    r5Disk.super_block.first_free_byte = r5Disk.inodes[i_inode -1].first_byte + r5Disk.inodes[i_inode -1].size;
+void uint_to_uchar(uchar* buffer, int pos, uint n) {
+  for(uint i = 0; i<sizeof(uint); i+=sizeof(uchar)) {
+    buffer[pos+i] = n>>8*sizeof(uchar)*(sizeof(uint)-(i+1));// on prend d'abord les 8*sizeof(uint) bits a gauche et ensuite les suivant ect..
+  }
+}
+
+uint uchar_to_uint(uchar* buffer, int pos) {
+  uint n = 0;
+  for(uint i = 0; i<sizeof(uint); i+=sizeof(uchar)) {
+    n<<= 8*sizeof(uchar);
+    n += buffer[pos+i];
+  }
+  return n;
 }

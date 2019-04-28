@@ -169,7 +169,68 @@ void test_compute_parity_index(FILE* file) {
 }
 
 /* couche 3 */
+void test_couche3(void) {
+  FILE* log = fopen("tests/logs/couche3.txt","w+");
+  fprintf(log, "\nTEST COUCHE 3\n");
+  fprintf(log, "\nTEST : char to uint \n\n");
+  test_uchar_to_uint(log);
+  fprintf(log, "\nTEST : uint to char \n\n");
+  test_uint_to_uchar(log);
+  fprintf(log, "\nTEST : conversion double sens \n\n");
+  test_double_sens(log, 0);
+  test_double_sens(log, 256425);
+  test_double_sens(log, 4294967295);
+  fprintf(log, "\nTEST : inode \n\n");
+  test_inode(log);
+  fclose(log);
+}
 
+void test_uchar_to_uint(FILE * file) {
+  uchar* buffer = malloc(sizeof(uint));
+  for(uint i = 0; i < sizeof(uint); i++) {
+    buffer[i] = 255;
+  }
+  fprintf(file,"concaténation de uchar de valeur 255 : %ld\n",(long int) uchar_to_uint(buffer, 0));
+}
+
+void test_uint_to_uchar(FILE * file) {
+  uchar* buffer = malloc(sizeof(uint));
+  uint n = 42945;
+  uint_to_uchar(buffer, 0, n);
+  for(uint i = 0; i < sizeof(uint); i++) {
+    fprintf(file,"%d ", (int)buffer[i]);
+  }
+  fprintf(file,"\n");
+}
+
+void test_double_sens(FILE * file, uint valeur) {
+  uchar* buffer = malloc(sizeof(uint));
+  uint_to_uchar(buffer, 0, valeur);
+  fprintf(file ,"double conversion de %ld : %ld\n",(long int) valeur,(long int) uchar_to_uint(buffer, 0));
+}
+
+void test_inode(FILE *file) {
+  fprintf(file,"\n\n\nSUPER BLOCK\nRaid = %d\nBlock used = %d\nFirst = %d\n\n", r5Disk.super_block.raid_type, r5Disk.super_block.nb_blocks_used, r5Disk.super_block.first_free_byte);
+  dump_inode(file);
+  init_inode("test1", 50, 100);
+  init_inode("test2", 60, 200);
+  init_inode("test3", 70, 350);
+  init_inode("test4", 30, 150);
+  init_inode("test5", 42, 230);
+  fprintf(file,"\n\n\nSUPER BLOCK\nRaid = %d\nBlock used = %d\nFirst = %d\n\n", r5Disk.super_block.raid_type, r5Disk.super_block.nb_blocks_used, r5Disk.super_block.first_free_byte);
+  dump_inode(file);
+  delete_inode(2);
+  fprintf(file,"\n\n\nSUPER BLOCK\nRaid = %d\nBlock used = %d\nFirst = %d\n\n", r5Disk.super_block.raid_type, r5Disk.super_block.nb_blocks_used, r5Disk.super_block.first_free_byte);
+  dump_inode(file);
+}
+
+void dump_inode(FILE * file) {
+  for (int i = 0; i < INODE_TABLE_SIZE; i++) {
+    if(r5Disk.inodes[i].first_byte) {
+      fprintf(file,"Fichier %d : %s\nSize = %d\nNblock = %d\nFirst byte = %d\n\n****************************\n\n",i, r5Disk.inodes[i].filename, r5Disk.inodes[i].size, r5Disk.inodes[i].nblock, r5Disk.inodes[i].first_byte);
+    }
+  }
+}
 /* couche 4 */
 
 /* couche 5 */
@@ -179,6 +240,7 @@ int main(void) {
   init_disk_raid5("disk");
   test_couche1();
   test_couche2();
+  test_couche3();
   eteindre_disk_raid5();
   return 0;
 }

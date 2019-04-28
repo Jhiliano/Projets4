@@ -1,0 +1,106 @@
+
+TEST COUCHE 3
+
+TEST : char to uint 
+
+concaténation de uchar de valeur 255 : 4294967295
+
+TEST : uint to char 
+
+0 0 167 193 
+
+TEST : conversion double sens 
+
+double conversion de 0 : 0
+double conversion de 256425 : 256425
+double conversion de 4294967295 : 4294967295
+
+TEST : inode 
+
+
+
+
+SUPER BLOCK
+Raid = 2
+Block used = 0
+First = 0
+
+
+
+
+SUPER BLOCK
+Raid = 2
+Block used = 92
+First = 446
+
+Fichier 0 : test1
+Size = 50
+Nblock = 20
+First byte = 100
+
+****************************
+
+Fichier 1 : test2
+Size = 60
+Nblock = 20
+First byte = 200
+
+****************************
+
+Fichier 2 : test3
+Size = 70
+Nblock = 24
+First byte = 350
+
+****************************
+
+Fichier 3 : test4
+Size = 30
+Nblock = 12
+First byte = 150
+
+****************************
+
+Fichier 4 : test5
+Size = 42
+Nblock = 16
+First byte = 230
+
+****************************
+
+
+
+
+SUPER BLOCK
+Raid = 2
+Block used = 68
+First = 294
+
+Fichier 0 : test1
+Size = 50
+Nblock = 20
+First byte = 100
+
+****************************
+
+Fichier 1 : test2
+Size = 60
+Nblock = 20
+First byte = 200
+
+****************************
+
+Fichier 2 : test4
+Size = 30
+Nblock = 12
+First byte = 150
+
+****************************
+
+Fichier 3 : test5
+Size = 42
+Nblock = 16
+First byte = 230
+
+****************************
+

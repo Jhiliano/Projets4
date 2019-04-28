@@ -22,7 +22,6 @@
 
 
 void init_disk_raid5(char* adresse);
-void super_block_init(void);
 void remplir_storage(char* cheminFichier);
 void creation_chemin_fichier(char *cheminFichier, const char* adresse, const char* nomFichier);
 void eteindre_disk_raid5(void);

@@ -39,22 +39,13 @@ void init_disk_raid5(char* adresse)
 			}
 		}
 	}
-	r5Disk.number_of_files = r5Disk.ndisk;// IDK j'ai l'impression que c'est la mm chose
 	r5Disk.raidmode = CINQ;
-	super_block_init();// setup du superblock
-	read_inodes_table(); // Chargement de la table d'inode et du super block
+	read_super_block();// Chargement super block ou initialisation si les disques sont nouveau (voir createdisk)
+	read_inodes_table(); // Chargement de la table d'inode
+	if (!r5Disk.super_block.first_free_byte) r5Disk.super_block.raid_type = r5Disk.raidmode;// si il est vierge on initialise le raidtype
+	r5Disk.number_of_files = get_unused_inode();
+	r5Disk.number_of_files = (r5Disk.number_of_files == -1)?0:get_unused_inode();
 	closedir(rep);
-}
-
-void super_block_init(void)
-{
-	/**
-	* \brief Initialise le super block
-	* \details On initialise le type de raid, et on set le premier block et le first byte utilisé a 0
-	*/
-	r5Disk.super_block.raid_type = r5Disk.raidmode;
-	r5Disk.super_block.nb_blocks_used = 0;
-	r5Disk.super_block.first_free_byte = 0;
 }
 
 void remplir_storage(char* cheminFichier)
@@ -92,7 +83,8 @@ void eteindre_disk_raid5(void)
 	* \brief Etein le raid 5
 	* \details Sauvegarde la table d'inode et le superblock et free les fichier du raid 5
 	*/
-	write_inodes_table(); // Sauvegarde de la table d'inode et du super block.
+	write_super_block(); // Sauvegarde du superblock
+	write_inodes_table(); // Sauvegarde de la table d'inode
 	for (int i = 0; i < r5Disk.ndisk;i++) {
 		fclose(r5Disk.storage[i]);//fermeture des fichiers ouverts
 	}

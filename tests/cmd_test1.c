@@ -8,7 +8,7 @@ int main(void) {
     buffer[c] = c;
   }
   buffer[255] = 255;
-  err = write_chunk(buffer, 256, 0, &r5Disk);
+  err = write_chunk(buffer, 256, INODES_START + INODE_SIZE*INODE_TABLE_SIZE, &r5Disk);
   free(buffer);
   return err;
   eteindre_disk_raid5();

@@ -12,18 +12,23 @@
 
 #include "../global.h"
 #include "couche1.h"
+#include "couche2.h"
 
 
 /* Fonctions */
 
-int read_inodes_table();
-void write_inodes_table();
+int read_inodes_table(void);
+int write_inodes_table(void);
 void delete_inode(int pos);
-int get_unused_inode();
+int get_unused_inode(void);
 int init_inode(char *nomF, uint taille, uint pos);
-void cmd_dump_inode(char *nomR);
-int write_super_block();
-int read_super_block();
-void first_free_byte();
+int write_super_block(void);
+int read_super_block(void);
+void first_free_byte(void);
+
+/* utilitaires */
+
+void uint_to_uchar(uchar* buffer, int pos, uint n);
+uint uchar_to_uint(uchar* buffer, int pos);
 
 #endif
