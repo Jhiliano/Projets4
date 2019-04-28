@@ -1,4 +1,4 @@
-package javaR5;
+package objetRaid;
 
 public class Stripe {
 	private Block[] blocks;
