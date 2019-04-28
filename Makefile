@@ -20,6 +20,7 @@ TEST = testunitaire
 CMDT1 = cmd_test1
 CMDT2 = cmd_test2
 CMDDI = cmd_dump_inode
+CMDDR = cmd_dump_raid
 
 SRCDIR = src
 BINDIR = bin
@@ -60,8 +61,12 @@ $(CMDT2): $(OBJ) $(addsuffix .o,$(CMDT2))
 	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
 $(CMDDI): $(OBJ) $(addsuffix .o,$(CMDDI))
-		@echo "Creation de l'executable "$@
-		@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@echo "Creation de l'executable "$@
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+
+$(CMDDR): $(OBJ) $(addsuffix .o,$(CMDDR))
+	@echo "Creation de l'executable "$@
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
 
 run:
 	./$(BINDIR)/$(EXEC) $(ARGS)
@@ -74,8 +79,11 @@ run_T1:
 
 run_T2:
 	./$(TESTDIR)/$(BINDIR)/$(CMDT2)
+
 run_DI:
 	./$(TESTDIR)/$(BINDIR)/$(CMDDI) disk
+run_DR:
+	./$(TESTDIR)/$(BINDIR)/$(CMDDR)
 
 
 

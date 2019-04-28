@@ -212,6 +212,11 @@ void test_double_sens(FILE * file, uint valeur) {
 void test_inode(FILE *file) {
   fprintf(file,"\n\n\nSUPER BLOCK\nRaid = %d\nBlock used = %d\nFirst = %d\n\n", r5Disk.super_block.raid_type, r5Disk.super_block.nb_blocks_used, r5Disk.super_block.first_free_byte);
   dump_inode(file);
+  delete_inode(0);
+  delete_inode(1);
+  delete_inode(4);
+  delete_inode(3);
+
   init_inode("test1", 50, 100);
   init_inode("test2", 60, 200);
   init_inode("test3", 70, 350);
