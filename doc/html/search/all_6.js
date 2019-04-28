@@ -1,7 +1,7 @@
 var searchData=
 [
   ['init_5fdisk_5fraid5',['init_disk_raid5',['../couche1_8c.html#a2f1c3cdfe4f6cf00e110147abc74389e',1,'init_disk_raid5(char *adresse):&#160;couche1.c'],['../couche1_8h.html#a2f1c3cdfe4f6cf00e110147abc74389e',1,'init_disk_raid5(char *adresse):&#160;couche1.c']]],
-  ['init_5finode',['init_inode',['../couche3_8c.html#ac3a6aa7737902a94f06fb63e9d2bb74b',1,'init_inode(char *nomF, uint taille, uint pos):&#160;couche3.c'],['../couche3_8h.html#ac3a6aa7737902a94f06fb63e9d2bb74b',1,'init_inode(char *nomF, uint taille, uint pos):&#160;couche3.c']]],
+  ['init_5finode',['init_inode',['../couche3_8c.html#ab8e63d1616cd4a241d4227d8606b909c',1,'init_inode(char *nomF, uint taille, uint pos):&#160;couche3.c'],['../couche3_8h.html#ab8e63d1616cd4a241d4227d8606b909c',1,'init_inode(char *nomF, uint taille, uint pos):&#160;couche3.c']]],
   ['inode_5fs',['inode_s',['../structinode__s.html',1,'']]],
   ['inode_5fsize',['INODE_SIZE',['../global_8h.html#a34a3a3e2e3a4bd30b993bce5b19f3d73',1,'global.h']]],
   ['inode_5ft',['inode_t',['../global_8h.html#aecc98d5532293d656a2a4f8c09b31af0',1,'global.h']]],

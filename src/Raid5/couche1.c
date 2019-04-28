@@ -74,7 +74,7 @@ void creation_chemin_fichier(char *cheminFichier, const char* adresse, const cha
 	* \brief Crée le chemin du fichier
 	* \param[out] cheminFichier Chemin du fichier placé dans le raid
 	* \param[in] adresse Adresse du dossier
-	* \param[in] nom du fichier
+	* \param[in] nomFichier nom du fichier
 	*/
 	strcpy(cheminFichier,adresse);
 	strcat(cheminFichier,"/");

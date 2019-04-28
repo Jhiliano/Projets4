@@ -90,7 +90,8 @@ $(document).ready(function(){initNavTree('couche1_8h.html','');});
 
 <p>header de la couche 1  
 <a href="#details">Plus de détails...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="global_8h_source.html">global.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="global_8h_source.html">../global.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="couche3_8h_source.html">couche3.h</a>&quot;</code><br />
 <code>#include &lt;sys/types.h&gt;</code><br />
 <code>#include &lt;sys/stat.h&gt;</code><br />
 <code>#include &lt;dirent.h&gt;</code><br />
@@ -100,9 +101,8 @@ $(document).ready(function(){initNavTree('couche1_8h.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Fonctions</h2></td></tr>
 <tr class="memitem:a2f1c3cdfe4f6cf00e110147abc74389e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#a2f1c3cdfe4f6cf00e110147abc74389e">init_disk_raid5</a> (char *adresse)</td></tr>
+<tr class="memdesc:a2f1c3cdfe4f6cf00e110147abc74389e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ecrit la table d'inode dans le raid.  <a href="#a2f1c3cdfe4f6cf00e110147abc74389e">Plus de détails...</a><br /></td></tr>
 <tr class="separator:a2f1c3cdfe4f6cf00e110147abc74389e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafd16563cc6392fd28325bd791d3de57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#aafd16563cc6392fd28325bd791d3de57">super_block_init</a> (void)</td></tr>
-<tr class="separator:aafd16563cc6392fd28325bd791d3de57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab30a1e5e2ecf6048a2990f149b2c29f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#ab30a1e5e2ecf6048a2990f149b2c29f8">remplir_storage</a> (char *cheminFichier)</td></tr>
 <tr class="separator:ab30a1e5e2ecf6048a2990f149b2c29f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa31a9658571694f896f21c3a978addcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#aa31a9658571694f896f21c3a978addcc">creation_chemin_fichier</a> (char *cheminFichier, const char *adresse, const char *nomFichier)</td></tr>
@@ -115,8 +115,10 @@ Fonctions</h2></td></tr>
 <tr class="separator:abe95669fc8c4463041f710bb2582a1f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad499b580503dd4b31cc4a381f4247446"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#ad499b580503dd4b31cc4a381f4247446">read_block</a> (int pos, FILE *disk, <a class="el" href="global_8h.html#a9497df9c1d65b018066a9760da7be4e6">block_t</a> *block)</td></tr>
 <tr class="separator:ad499b580503dd4b31cc4a381f4247446"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b78320957724b3cdf091b0c73633def"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#a1b78320957724b3cdf091b0c73633def">block_repair</a> (<a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>, int block_id, <a class="el" href="global_8h.html#a9497df9c1d65b018066a9760da7be4e6">block_t</a> *stripe)</td></tr>
-<tr class="separator:a1b78320957724b3cdf091b0c73633def"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83d501e94f51b3a2c466255c3e39f539"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#a83d501e94f51b3a2c466255c3e39f539">block_repair</a> (<a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>, int block_id, <a class="el" href="global_8h.html#a9497df9c1d65b018066a9760da7be4e6">block_t</a> *stripe)</td></tr>
+<tr class="separator:a83d501e94f51b3a2c466255c3e39f539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d04080f12f606f78305bab221a19bbf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche1_8h.html#a6d04080f12f606f78305bab221a19bbf">print_block</a> (FILE *file, <a class="el" href="global_8h.html#a9497df9c1d65b018066a9760da7be4e6">block_t</a> block)</td></tr>
+<tr class="separator:a6d04080f12f606f78305bab221a19bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
 <div class="textblock"><p>header de la couche 1 </p>
@@ -139,23 +141,15 @@ Fonctions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="aafd16563cc6392fd28325bd791d3de57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafd16563cc6392fd28325bd791d3de57">&#9670;&nbsp;</a></span>super_block_init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void super_block_init </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Ecrit la table d'inode dans le raid. </p>
+<p>Sauvegarde de la table d'inodes et du super block. </p><dl class="section return"><dt>Renvoie</dt><dd>0 si cela s'est bien passé 1 si il y a eut une erreur de lecture </dd></dl>
+<p>Initialise le raid 5</p>
+<p>Le raid 5 est initialisé en fonction d'un dossier entré en paramètre qui indique la position des disques </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">adresse</td><td>Nom du dossier r5</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -174,6 +168,13 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Remplit le raid 5 des fichiers</p>
+<p>Remplit le champ storage de fichier et incrémente le compteur </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cheminFichier</td><td>Chemin du fichier placé dans le raid</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -208,6 +209,14 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Crée le chemin du fichier </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">cheminFichier</td><td>Chemin du fichier placé dans le raid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">adresse</td><td>Adresse du dossier </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nomFichier</td><td>nom du fichier</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -226,6 +235,8 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Etein le raid 5</p>
+<p>Sauvegarde la table d'inode et le superblock et free les fichier du raid 5</p>
 
 </div>
 </div>
@@ -244,6 +255,14 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Compte le nombre de block necessaire pour un nombre d'octets</p>
+<p>Deux cas : le nombre d'octets rentre parfaitement ou le nombre d'octets demande un block de plus par rapport a sa division par BLOCK_SIZE </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>Un nombre d'octets </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>Un nombre de blocks</dd></dl>
 
 </div>
 </div>
@@ -278,6 +297,16 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Ecriture d'un block</p>
+<p>L'ecriture se fait a partir d'une position pos sur le fichier disk </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>La position où ecrire </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">disk</td><td>Le disque à ecrire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">block</td><td>Le block à ecrire </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>Le nombre d'octets ecrit</dd></dl>
 
 </div>
 </div>
@@ -312,17 +341,27 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Lecture d'un block</p>
+<p>La lecture se fait a partir d'une position pos sur le fichier disk </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>La position où lire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">disk</td><td>Le disque à lire </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">block</td><td>Le block lu </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 si tout se passe bien, ERR_READ sinon</dd></dl>
 
 </div>
 </div>
-<a id="a1b78320957724b3cdf091b0c73633def"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b78320957724b3cdf091b0c73633def">&#9670;&nbsp;</a></span>block_repair()</h2>
+<a id="a83d501e94f51b3a2c466255c3e39f539"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83d501e94f51b3a2c466255c3e39f539">&#9670;&nbsp;</a></span>block_repair()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int block_repair </td>
+          <td class="memname">void block_repair </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
           <td class="paramname"><em>raid</em>, </td>
@@ -346,6 +385,46 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Reparation d'un block</p>
+<p>effectue un XOR de chaque block pour recréer le block manquant </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">raid</td><td>Le raid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">block_id</td><td>Le block à reparer </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">stripe</td><td>Un tableau de block </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>temoin erreurs</dd></dl>
+
+</div>
+</div>
+<a id="a6d04080f12f606f78305bab221a19bbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d04080f12f606f78305bab221a19bbf">&#9670;&nbsp;</a></span>print_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void print_block </td>
+          <td>(</td>
+          <td class="paramtype">FILE *&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a9497df9c1d65b018066a9760da7be4e6">block_t</a>&#160;</td>
+          <td class="paramname"><em>block</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Affichage d'un block</p>
+<p>L'affichage est en hexadecimal, il affiche sur une ligne sans espace ni retour a ligne</p>
 
 </div>
 </div>

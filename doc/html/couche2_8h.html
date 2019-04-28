@@ -90,7 +90,8 @@ $(document).ready(function(){initNavTree('couche2_8h.html','');});
 
 <p>header de la couche 2  
 <a href="#details">Plus de détails...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="global_8h_source.html">global.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="global_8h_source.html">../global.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="couche1_8h_source.html">couche1.h</a>&quot;</code><br />
 </div>
 <p><a href="couche2_8h_source.html">Aller au code source de ce fichier.</a></p>
 <table class="memberdecls">
@@ -102,8 +103,14 @@ Fonctions</h2></td></tr>
 <tr class="separator:a4dca5c1cfb0beab02829508a3e20aa03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a709e85cdf678843f9a5035006a88b4df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8h.html#a709e85cdf678843f9a5035006a88b4df">compute_parity_index</a> (int numBande)</td></tr>
 <tr class="separator:a709e85cdf678843f9a5035006a88b4df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25b9e94e50e4ea01e3934a5f5a9c4de1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8h.html#a25b9e94e50e4ea01e3934a5f5a9c4de1">write_stripe</a> (<a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> bande, int pos)</td></tr>
-<tr class="separator:a25b9e94e50e4ea01e3934a5f5a9c4de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae02dafb1c23d17c3846660ff1d0595ea"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8h.html#ae02dafb1c23d17c3846660ff1d0595ea">write_stripe</a> (<a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> stripe, int pos, <a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>)</td></tr>
+<tr class="separator:ae02dafb1c23d17c3846660ff1d0595ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fbc13df204a46e88aeafbb47ffa0584"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8h.html#a5fbc13df204a46e88aeafbb47ffa0584">write_chunk</a> (<a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *buffer, int size, int position, <a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>)</td></tr>
+<tr class="separator:a5fbc13df204a46e88aeafbb47ffa0584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed4d8dd5b57813c19e59a3efb2bf98cb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8h.html#aed4d8dd5b57813c19e59a3efb2bf98cb">read_stripe</a> (<a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> *stripe, int pos, <a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>)</td></tr>
+<tr class="separator:aed4d8dd5b57813c19e59a3efb2bf98cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b6e59e82bd57d6e72d3526add689a90"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="couche2_8h.html#a3b6e59e82bd57d6e72d3526add689a90">read_chunk</a> (<a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *buffer, int size, int position, <a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *<a class="el" href="global_8h.html#a7a2279e0841d50aa8e976d3bb0eb3a6e">raid</a>)</td></tr>
+<tr class="separator:a3b6e59e82bd57d6e72d3526add689a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
 <div class="textblock"><p>header de la couche 2 </p>
@@ -125,6 +132,14 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Calcul le nombre de stripe pour un nombre de blocks</p>
+<p>Une stipe peux contenir ndisk - 1 block car il doit tenir compte du block de parité </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">nb_blocks</td><td>Le nombre de block à calculer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>Le nombre de stripe necessaire</dd></dl>
 
 </div>
 </div>
@@ -159,6 +174,15 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>creer le block de parité dans une stripe</p>
+<p>C'est la meme methode pour la reparation et la création du block de parité. </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">raid</td><td>Le Raid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tab</td><td>La stripe à compléter </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">posP</td><td>La position du block de parité</td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -177,11 +201,19 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Calcul de l'emplacement du block de parité sur le stripe</p>
+<p>Calcul cyclique (4-&gt;1) </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">numBande</td><td>Le numero de la bande à calculer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>L'emplacement du block de parité</dd></dl>
 
 </div>
 </div>
-<a id="a25b9e94e50e4ea01e3934a5f5a9c4de1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25b9e94e50e4ea01e3934a5f5a9c4de1">&#9670;&nbsp;</a></span>write_stripe()</h2>
+<a id="ae02dafb1c23d17c3846660ff1d0595ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae02dafb1c23d17c3846660ff1d0595ea">&#9670;&nbsp;</a></span>write_stripe()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,13 +222,19 @@ Fonctions</h2></td></tr>
           <td class="memname">int write_stripe </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a>&#160;</td>
-          <td class="paramname"><em>bande</em>, </td>
+          <td class="paramname"><em>stripe</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>pos</em>&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -205,6 +243,162 @@ Fonctions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Ecrit sur le raid la stripe</p>
+<p>Utilise write block de la couche 1 </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">stripe</td><td>La stripe a écrire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>La position ou ecrire la stripe </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">raid</td><td>Le raid </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 si tout s'est bien passé 1 si il y a eut une erreur d'ecriture</dd></dl>
+
+</div>
+</div>
+<a id="a5fbc13df204a46e88aeafbb47ffa0584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fbc13df204a46e88aeafbb47ffa0584">&#9670;&nbsp;</a></span>write_chunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int write_chunk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Ecrit un tableau de uchar sur le raid</p>
+<p>Créer les block de parité en appellant compute_parity </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">buffer</td><td>Le buffer sur lequel il y a les uchar </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>Le nombre d'elements a ecrire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">position</td><td>La position sur le raid ou ecrire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">raid</td><td>Le raid </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 si tout s'est bien passé 1 si il y a eut une erreur d'ecriture</dd></dl>
+
+</div>
+</div>
+<a id="aed4d8dd5b57813c19e59a3efb2bf98cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed4d8dd5b57813c19e59a3efb2bf98cb">&#9670;&nbsp;</a></span>read_stripe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int read_stripe </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a8a78758ce04c466e650a58a3e469508a">stripe_t</a> *&#160;</td>
+          <td class="paramname"><em>stripe</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Lis une stripe sur le raid</p>
+<p>Utilise read block de la couche 1 </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">stripe</td><td>La stripe qui sera lu </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>La position ou lire la stripe </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">raid</td><td>Le raid </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 si tout s'est bien passé ERR_READ si il y a eut une erreur de lecture</dd></dl>
+
+</div>
+</div>
+<a id="a3b6e59e82bd57d6e72d3526add689a90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b6e59e82bd57d6e72d3526add689a90">&#9670;&nbsp;</a></span>read_chunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int read_chunk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a86a4b5380e358b45113e47f1340c1a56">uchar</a> *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="global_8h.html#a2528d976f382013ac3618d4257959399">virtual_disk_t</a> *&#160;</td>
+          <td class="paramname"><em>raid</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Ecrit un tableau de uchar sur le raid</p>
+<p>Créer les block de parité en appellant compute_parity </p><dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">buffer</td><td>Le buffer sur lequel sera ecrit les données </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>Le nombre d'elements a lire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">position</td><td>La position sur le raid ou lire </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">raid</td><td>Le raid </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 si tout s'est bien passé 1 si il y a eut une erreur de lecture</dd></dl>
 
 </div>
 </div>

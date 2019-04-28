@@ -15,7 +15,7 @@ bool filexist(char* nomFich, int* id) {
   /**
   * \brief Verifie si le fichier existe dans le raid
   * \param[in] nomFich le nom du fichier
-  * \pram[out] id l'id de l'innode ou il est stocké
+  * \param[out] id l'id de l'innode ou il est stocké
   * \return 1 si il existe 0 sinon
   */
   for(int i=0; i<INODE_TABLE_SIZE; i++){
@@ -33,7 +33,7 @@ int writefile(char* nomFich, file_t fich){
   /**
   * \brief ecrit un fichier dans le Raid
   * \param[in] nomFich le nom du fichier
-  * \pram[in] fich la structure contenant la taille est la data du fichier
+  * \param[in] fich la structure contenant la taille est la data du fichier
   * \return 0 si tout s'est bien passé 1 si il y plus de place 2 en cas d'erreur d'ecriture
   */
   int idEcriture;// l'id de la postion ou il faut ecrire le fichier
@@ -63,7 +63,7 @@ int read_file(char* nomFich, file_t* fich){
   /**
   * \brief lit un fichier dans le raid
   * \param[in] nomFich le nom du fichier
-  * \pram[out] fich la structure contenant la taille est la data du fichier qui est lu
+  * \param[out] fich la structure contenant la taille est la data du fichier qui est lu
   * \return 0 si tout s'est bien passé 1 si le fichier existe pas 2 en cas d'erreur de lecture
   */
   int idLecture;
