@@ -5,10 +5,11 @@ public class Inode {
 	private int size;
 	private int nblock;
 	private int firstByte;
+	public static final int fileNameMaxSize = 32;
 	
-	Inode(char[] filename,int nameSize, int size, int nblock, int firstByte) {
-		filename = new char[nameSize];
-		for (int i = 0; i < nameSize; i++) {
+	Inode(char[] filename, int size, int nblock, int firstByte) {
+		filename = new char[fileNameMaxSize];
+		for (int i = 0; i < fileNameMaxSize; i++) {
 			this.filename[i] = filename[i];
 		}
 		this.size = size;

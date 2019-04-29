@@ -5,12 +5,15 @@ public class Raid {
 	private Superblock superblock;
 	private Inode[] inodes;
 	private enum raidType {ZERO,UN,CINQ,ZERO_UN,UN_ZERO,CINQUANTE,CENT};
-	private File[] fichiers;
-	Raid(int raidType, int nbInode, File[] fichiers, int nbFichiers) {
+	private File[] disk;
+	private static int nbDisk;
+	
+	Raid(int raidType, int nbInode, File[] fichiers, int nbDisk) {
 		this.numberOfFiles = 0;
 		this.superblock = new Superblock(0,0,raidType);
 		this.inodes = new Inode[nbInode];
-		this.fichiers = new File[nbFichiers];
+		this.disk = new File[nbDisk];
+		this.nbDisk = nbDisk;
 	}
 	public int getNumberOfFiles() {
 		return numberOfFiles;
@@ -21,4 +24,8 @@ public class Raid {
 	public Inode[] getInodes() {
 		return inodes;
 	}
+	public int getNbDisk() {
+		return nbDisk;
+	}
+	
 }
