@@ -52,7 +52,7 @@
 /// \def INODES_START
 /// taille de l'inode en octets
 
-#define INODE_SIZE 11
+#define INODE_SIZE 16
 /// \def INODE_SIZE
 // inodes en blocks avec parité
 
