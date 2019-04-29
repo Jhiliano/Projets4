@@ -24,11 +24,11 @@ public class Block {
 		}
 	}
 	
-	public int write(int pos, RandomAccessFile fichier) {
+	public int write(int pos, RandomAccessFile disk) {
 		for(int c = 0; c < size; c++) {
 			try {
-				fichier.seek(pos+c);
-				fichier.writeChar(donnees[c]);
+				disk.seek(pos+c);
+				disk.writeChar(donnees[c]);
 			} catch (IOException e) {
 				return 1;
 			}
@@ -36,11 +36,11 @@ public class Block {
 		return 0;
 	}
 	
-	public int read(int pos, RandomAccessFile fichier) {
+	public int read(int pos, RandomAccessFile disk) {
 		for(int c = 0; c < size; c++) {
 			try {
-				fichier.seek(pos+c);
-				fichier.readChar();
+				disk.seek(pos+c);
+				disk.readChar();
 			} catch (IOException e) {
 				return 1;
 			}

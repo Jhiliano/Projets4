@@ -1,15 +1,12 @@
 package objetRaid;
 
-import java.io.RandomAccessFile;
+import java.io.*;
 
 public class Stripe {
 	private Block[] blocks;
 	private int size;
-	public Stripe(Block[] blocks, int size) {
+	public Stripe(int size) {
 		this.blocks = new Block[size];
-		for (int i = 0; i < size; i++) {
-			this.blocks[i] = blocks[i];
-		}
 		this.size = size;
 	}
 	
@@ -36,12 +33,12 @@ public class Stripe {
 		return (raid.getNbDisk())-((numBande-1)%raid.getNbDisk());
 	}
 	
-	public int read(int pos, Raid raid, RandomAccessFile[] fichiers) {
+	public int read(int pos, RandomAccessFile[] disk) {
 		int erreur = -1;
-		for (int i = 0; i < size; i++) {
-			if(blocks[i].read(pos, fichiers[i]) == 1) {
+		for (int d = 0; d < size; d++) {
+			if(blocks[d].read(pos, disk[d]) != 0) {
 				if(erreur != -1) {
-					erreur = i;
+					erreur = d;
 				} else {
 					return 1;
 				}
@@ -53,14 +50,69 @@ public class Stripe {
 		return 0;
 	}
 	
-	public int write(int pos, Raid raid, RandomAccessFile[] fichiers) {
-		for (int i = 0; i < size; i++) {
-			if(blocks[i].write(pos,fichiers[i]) == 1) return 1;
+	public int write(int pos, RandomAccessFile[] disk) {
+		for (int d = 0; d < size; d++) {
+			if(blocks[d].write(pos,disk[d]) != 0) return 1;
+		}
+		return 0;
+	}
+	
+	public static int readChunk(char[] buffer, int size, int pos, Raid raid) {
+		int nbBlock = Block.computeNBlock(size);
+		int nbStripe = Stripe.computeNStripe(nbBlock, raid.getNbDisk());
+		int idParity;
+		Stripe stripe = new Stripe(raid.getNbDisk());
+		int decalage = 0;
+		for (int s = 0; s < nbStripe; s++) {
+			idParity = Stripe.computeParityIndex(s+1, raid);
+			if (stripe.read(pos, raid.getDisk()) != 0) return 1;
+			for (int b = 0; b < stripe.getSize(); b++) {
+				if (b != idParity-1) {
+					for (int c = 0; c < Block.size; c++) {
+						if (decalage < size) {
+							buffer[decalage] = stripe.getBlocks()[b].getDonnees()[c];
+						}
+						decalage++;
+					}
+				}
+			}
+			pos =+ Block.size*stripe.getSize();
+		}
+		return 0;
+	}
+	
+	public static int writeChunk(char[] buffer, int size, int pos, Raid raid) {
+		int nbBlock = Block.computeNBlock(size);
+		int nbStripe = Stripe.computeNStripe(nbBlock, raid.getNbDisk());
+		int idParity;
+		Stripe stripe = new Stripe(raid.getNbDisk());
+		int decalage = 0;
+		for (int s = 0; s < nbStripe; s++) {
+			idParity = Stripe.computeParityIndex(s+1, raid);
+			for (int b = 0; b < stripe.getSize(); b++) {
+				if (b != idParity-1) {
+					for (int c = 0; c < Block.size; c++) {
+						if (decalage < size) {
+							stripe.getBlocks()[b].getDonnees()[c] = buffer[decalage];
+						} else {
+							stripe.getBlocks()[b].getDonnees()[c] = '0';
+						}
+						decalage++;
+					}
+				}
+			}
+			stripe.computeParity(idParity);
+			if(stripe.write(pos, raid.getDisk()) != 0) return 1;
+			pos += Block.size*stripe.getSize();
 		}
 		return 0;
 	}
 	
 	public Block[] getBlocks() {
 		return blocks;
+	}
+
+	public int getSize() {
+		return size;
 	}
 }
