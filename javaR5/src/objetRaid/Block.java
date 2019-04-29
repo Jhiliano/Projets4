@@ -2,10 +2,10 @@ package objetRaid;
 import java.io.*;
 
 public class Block {
-	private char[] donnees;
+	private byte[] donnees;
 	public static final int size = 4;
 	public Block() {
-		this.donnees = new char[size];
+		this.donnees = new byte[size];
 	}
 	
 	public static int computeNBlock(int nblock) {
@@ -25,10 +25,10 @@ public class Block {
 	}
 	
 	public int write(int pos, RandomAccessFile disk) {
-		for(int c = 0; c < size; c++) {
+		for(int o = 0; o < size; o++) {
 			try {
-				disk.seek(pos+c);
-				disk.writeChar(donnees[c]);
+				disk.seek(pos+o);
+				disk.writeByte(donnees[o]);
 			} catch (IOException e) {
 				return 1;
 			}
@@ -37,10 +37,10 @@ public class Block {
 	}
 	
 	public int read(int pos, RandomAccessFile disk) {
-		for(int c = 0; c < size; c++) {
+		for(int o = 0; o < size; o++) {
 			try {
-				disk.seek(pos+c);
-				disk.readChar();
+				disk.seek(pos+o);
+				disk.readByte();
 			} catch (IOException e) {
 				return 1;
 			}
@@ -54,7 +54,7 @@ public class Block {
 		}
 	}
 	
-	public char[] getDonnees() {
+	public byte[] getDonnees() {
 		return donnees;
 	}
 }

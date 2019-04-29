@@ -57,7 +57,7 @@ public class Stripe {
 		return 0;
 	}
 	
-	public static int readChunk(char[] buffer, int size, int pos, Raid raid) {
+	public static int readChunk(byte[] buffer, int size, int pos, Raid raid) {
 		int nbBlock = Block.computeNBlock(size);
 		int nbStripe = Stripe.computeNStripe(nbBlock, raid.getNbDisk());
 		int idParity;
@@ -68,9 +68,9 @@ public class Stripe {
 			if (stripe.read(pos, raid.getDisk()) != 0) return 1;
 			for (int b = 0; b < stripe.getSize(); b++) {
 				if (b != idParity-1) {
-					for (int c = 0; c < Block.size; c++) {
+					for (int o = 0; o < Block.size; o++) {
 						if (decalage < size) {
-							buffer[decalage] = stripe.getBlocks()[b].getDonnees()[c];
+							buffer[decalage] = stripe.getBlocks()[b].getDonnees()[o];
 						}
 						decalage++;
 					}
@@ -81,7 +81,7 @@ public class Stripe {
 		return 0;
 	}
 	
-	public static int writeChunk(char[] buffer, int size, int pos, Raid raid) {
+	public static int writeChunk(byte[] buffer, int size, int pos, Raid raid) {
 		int nbBlock = Block.computeNBlock(size);
 		int nbStripe = Stripe.computeNStripe(nbBlock, raid.getNbDisk());
 		int idParity;
@@ -91,11 +91,11 @@ public class Stripe {
 			idParity = Stripe.computeParityIndex(s+1, raid);
 			for (int b = 0; b < stripe.getSize(); b++) {
 				if (b != idParity-1) {
-					for (int c = 0; c < Block.size; c++) {
+					for (int o = 0; o < Block.size; o++) {
 						if (decalage < size) {
-							stripe.getBlocks()[b].getDonnees()[c] = buffer[decalage];
+							stripe.getBlocks()[b].getDonnees()[o] = buffer[decalage];
 						} else {
-							stripe.getBlocks()[b].getDonnees()[c] = '0';
+							stripe.getBlocks()[b].getDonnees()[o] = '0';
 						}
 						decalage++;
 					}
