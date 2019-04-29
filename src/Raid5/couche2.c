@@ -80,7 +80,7 @@ int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
    	id_p = compute_parity_index(s+1);
    	for (int id_block = 0; id_block < tab.nblocks; id_block++){// parcours des block des stripes
    		if (id_block != id_p-1){
-        for (size_t num_o = 0; num_o < BLOCK_SIZE; num_o++) {// parcours des octets des stripes
+        for (int num_o = 0; num_o < BLOCK_SIZE; num_o++) {// parcours des octets des stripes
      			if(pos<size) // gestion si le buffer ne rentre pas completement dans les stripes
      				tab.stripe[id_block].data[num_o] = buffer[pos];
      			else
