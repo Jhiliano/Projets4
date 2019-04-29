@@ -10,7 +10,7 @@
 /* Dépendances */
 
 
-#include "../global.h"
+#include "couche3.h"
 
 
 /* Fonctions */

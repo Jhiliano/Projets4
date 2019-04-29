@@ -9,9 +9,6 @@
 
 /* Dépendances */
 
-
-#include "../global.h"
-#include "couche1.h"
 #include "couche2.h"
 
 
