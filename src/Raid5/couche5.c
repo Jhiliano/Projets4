@@ -40,6 +40,7 @@ void interpret(){
 
   char commande[FILENAME_MAX_SIZE*2];
   char* tCommande[NBMOTSMAX+1];
+  // pid_t pidF;
   if(scanf("%s", commande)!=0) exit(1);
   Decoupe(commande, tCommande);
 
@@ -52,7 +53,17 @@ void interpret(){
       file_t nouv;
       writefile(tCommande[1], nouv);
     }
-    else if(strcmp(tCommande[0], "edit")) NULL;
+
+    else if(strcmp(tCommande[0], "edit")){
+      /*pidF=fork();
+      char* tab = {"launch_atom", tCommande[1], NULL};
+    	switch(pidF){
+    		case -1:	perror("Echec fork\n");
+    					    exit(1);
+    		case 0:		execvp(tCommande[1], tab);
+    		default:	wait(NULL);
+    	}*/
+    }
     if(scanf("%s", commande)!=0) exit(1);
   }
 }
