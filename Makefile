@@ -15,20 +15,23 @@ SRC = couche1.c\
 			couche5.c
 OBJ = $(SRC:.c=.o)
 HEAD = $(SRC:.c=.h)
-
+MAIN = main.o
 TEST = testunitaire
 CMDT1 = cmd_test1
 CMDT2 = cmd_test2
 CMDDI = cmd_dump_inode
 CMDDR = cmd_dump_raid
+CMDRR = cmd_repair_raid
+CMDDD = cmd_defrag_raid
 
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
 HEADIR = headers
-DISKSDIR = disk
+DISQUESDIR = disk
 CREATEDISKDIR = genDisk
 TESTDIR = tests
+UTILDIR = utilitaire
 
 
 
@@ -42,31 +45,39 @@ else
 	LDFLAGS =
 endif
 
-all: $(EXEC) $(TEST) $(CMDT1) $(CMDT2) $(CMDDI) $(CMDDR)
+all: $(EXEC) $(TEST) $(CMDT1) $(CMDT2) $(CMDDI) $(CMDDR) $(CMDRR) $(CMDD)
 
-$(EXEC): $(OBJ) main.o
+$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(MAIN))
 	@echo "Création de l'executabe "$@
-	@$(CC) -o $(addprefix $(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
 
-$(TEST): $(OBJ) $(addsuffix .o,$(TEST))
+$(TEST): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(TEST)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $^ $(LDFLAGS)
 
-$(CMDT1): $(OBJ) $(addsuffix .o,$(CMDT1))
+$(CMDT1): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT1)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $^ $(LDFLAGS)
 
-$(CMDT2): $(OBJ) $(addsuffix .o,$(CMDT2))
+$(CMDT2): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT2)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $^ $(LDFLAGS)
 
-$(CMDDI): $(OBJ) $(addsuffix .o,$(CMDDI))
+$(CMDDI): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDI)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
 
-$(CMDDR): $(OBJ) $(addsuffix .o,$(CMDDR))
+$(CMDDR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDR)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $(addprefix $(OBJDIR)/,$^) $(LDFLAGS)
+	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
+
+$(CMDRR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDRR)))
+	@echo "Creation de l'executable "$@
+	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
+
+$(CMDDD): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDD)))
+	@echo "Creation de l'executable "$@
+	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
 
 run:
 	./$(BINDIR)/$(EXEC) $(ARGS)
@@ -80,25 +91,38 @@ run_T1:
 run_T2:
 	./$(TESTDIR)/$(BINDIR)/$(CMDT2)
 
-run_DI:
-	./$(TESTDIR)/$(BINDIR)/$(CMDDI) disk
+dump_inode:
+	./$(BINDIR)/$(CMDDI) disk
 
-run_DR:
-	./$(TESTDIR)/$(BINDIR)/$(CMDDR) disk
+dump_raid:
+	./$(BINDIR)/$(CMDDR) disk
+
+repair_raid:
+	./$(BINDIR)/$(CMDRR) disk $(ARGS)
+
+defrag_raid:
+	./$(BINDIR)/$(CMDDD) disk
 
 
 
-%.o: $(SRCDIR)/$(RAID5DIR)/%.c
+
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
-	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
-%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo "Création de "$@
-	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
-%.o: $(TESTDIR)/%.c
+$(OBJDIR)/%.o: $(TESTDIR)/%.c
 	@echo "Création de "$@
-	@$(CC) -o $(addprefix $(OBJDIR)/,$@) -c $< $(CFLAGS) $(LDFLAGS)
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(UTILDIR)/%.c
+	@echo "Création de "$@
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+
 
 .PHONY: clean mrproper doc
 
@@ -111,16 +135,20 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@$(CC) -o $(BINDIR)/$@ $^
 	@echo "Création de 4 disk de 50*1024 octets"
 
-	@./bin/$@ $(DISKSDIR) 4 51200
+	@./bin/$@ $(DISQUESDIR) 4 51200
 
 clean:
 	@rm -f $(OBJDIR)/*.o
 	@echo "Fichiers intermédiaires supprimés"
 
-mrproper: clean
+cleandisk:
+	@rm -f $(DISQUESDIR)/*
+	@make $(CREATEDISK) > /dev/null
+	@echo "Disques réinitialisés"
+
+mrproper: clean cleandisk
 	@rm -f $(BINDIR)/*
 	@rm -f $(TESTDIR)/$(BINDIR)/*
-	@rm -f $(EXEC) $(CREATEDISK)
 	@echo "Executable supprimé"
 # End generic part of the makefile
 
