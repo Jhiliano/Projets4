@@ -20,7 +20,7 @@ int read_inodes_table(void) {
   */
   uchar* buffer = malloc(sizeof(inode_t));
   for (uint i = 0; i < INODE_TABLE_SIZE; i++) {// on fait l'operation suivante pour chaque inode
-    if(read_chunk(buffer, sizeof(inode_t), INODES_START*BLOCK_SIZE+i*INODE_SIZE*BLOCK_SIZE, &r5Disk)) return ERR_READ;// on recupere le tableau d'entiers représentant l'inode et on verifie que tout s'est bien passé
+    if(read_chunk(buffer, sizeof(inode_t), INODES_START+i*INODE_SIZE*BLOCK_SIZE-1, &r5Disk)) return ERR_READ;// on recupere le tableau d'entiers représentant l'inode et on verifie que tout s'est bien passé
     for (uint c = 0; c < FILENAME_MAX_SIZE; c++) {// on recupère les FILENAME_MAX_SIZE premiers octets qui représente le nom
       r5Disk.inodes[i].filename[c] = buffer[c];
     }
@@ -49,7 +49,7 @@ int write_inodes_table(void) {
     uint_to_uchar(buffer, FILENAME_MAX_SIZE, r5Disk.inodes[i].size);// on converti et rentre les 3 uint apres FILENAME_MAX_SIZE
     uint_to_uchar(buffer, FILENAME_MAX_SIZE + sizeof(uint), r5Disk.inodes[i].nblock);
     uint_to_uchar(buffer, FILENAME_MAX_SIZE + sizeof(uint)*2, r5Disk.inodes[i].first_byte);
-    if(write_chunk(buffer, sizeof(inode_t), INODES_START*BLOCK_SIZE+INODE_SIZE*i*BLOCK_SIZE, &r5Disk)) return 1;// on ecrit dans les disques et on verifie que tout s'est bien passé
+    if(write_chunk(buffer, sizeof(inode_t), INODES_START+INODE_SIZE*i*BLOCK_SIZE-1, &r5Disk)) return 1;// on ecrit dans les disques et on verifie que tout s'est bien passé
   }
   free(buffer);
   return 0;
@@ -158,6 +158,7 @@ int read_super_block(void) {
   r5Disk.super_block.raid_type = uchar_to_uint(buffer, 0);// on converti les uchar en int;
   r5Disk.super_block.nb_blocks_used = uchar_to_uint(buffer, sizeof(uint));
   r5Disk.super_block.first_free_byte = uchar_to_uint(buffer, sizeof(uint)*2);
+  if(r5Disk.super_block.first_free_byte == 0) r5Disk.super_block.first_free_byte = INODES_START + INODE_SIZE*INODE_TABLE_SIZE*BLOCK_SIZE;
   free(buffer);
   return 0;
 }
@@ -169,12 +170,12 @@ void first_free_byte(void) {
   * \brief Mise à jour du premier byte libre.
   */
 
-  uint size_inode = INODES_START*BLOCK_SIZE + INODE_SIZE*INODE_TABLE_SIZE*BLOCK_SIZE;// taille de la derniere inode du disque initialisé au premier bit utilisable du raid
+  uint size_inode = INODES_START + INODE_SIZE*INODE_TABLE_SIZE*BLOCK_SIZE;// taille de la derniere inode du disque initialisé au premier bit utilisable du raid
   uint first_byte_inode = 0;// premier bit de la dernière inode
   for (int i = 0; i < INODE_TABLE_SIZE; i++) {
     if(first_byte_inode < r5Disk.inodes[i].first_byte) {// on prend a chaque inode la dernière inode
       first_byte_inode = r5Disk.inodes[i].first_byte;
-      size_inode = r5Disk.inodes[i].nblock*4;
+      size_inode = r5Disk.inodes[i].nblock*BLOCK_SIZE;
     }
   }
   r5Disk.super_block.first_free_byte = first_byte_inode + size_inode;

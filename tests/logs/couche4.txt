@@ -1,0 +1,12 @@
+
+TEST COUCHE 4
+
+TEST : ecriture 
+
+lecture fichier 3 : code retour 0
+lecture fichier 1 : code retour 0
+lecture fichier 2 : code retour 0
+lecture fichier 3 : code retour 0
+lecture fichier 3 : code retour 0
+lecture fichier 3 : code retour 0
+lecture fichier 3 : code retour 0

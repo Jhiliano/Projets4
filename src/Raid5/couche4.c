@@ -19,9 +19,11 @@ bool filexist(char* nomFich, int* id) {
   * \return 1 si il existe 0 sinon
   */
   for(int i=0; i<INODE_TABLE_SIZE; i++){
-    if(strcmp(r5Disk.inodes[i].filename,nomFich)){
-      *id=i;
-      return 1;
+    if (r5Disk.inodes[i].first_byte) {
+      if(!strcmp(r5Disk.inodes[i].filename,nomFich)){
+        *id=i;
+        return 1;
+      }
     }
   }
   return 0;
@@ -52,6 +54,7 @@ int writefile(char* nomFich, file_t fich){
     }
   }
   if (idEcriture == -1) return 1;// cas ou il y a pas de place
+  printf("taille fichier : %d premier bit %d\n",fich.size, first_byte);
   if (write_chunk(fich.data, fich.size, first_byte, &r5Disk)) return 2;// cas ou il y a une erreur de lecture
   init_inode(nomFich, fich.size, first_byte);
   return 0;

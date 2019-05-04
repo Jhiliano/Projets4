@@ -26,7 +26,7 @@ public class Stripe {
 			}
 			b++;
 		}
-		this.blocks[pos].blockrepair(blocks, size-1);
+		this.blocks[pos].blockrepair(this, size-1,pos);
 	}
 	
 	public static int computeParityIndex(int numBande, Raid raid) {
