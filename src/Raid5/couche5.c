@@ -37,28 +37,20 @@ int Decoupe(char Chaine[], char *pMots[])
 }
 
 
-void interpret(int argc, char*argv[]){
-  char *pMots[NBMOTSMAX+1];
-	pid_t pidF;
-	int i =0;
-	printf("> ");
-	for(i=0; i<argc; i++){
-		printf("%s ", argv[i]);
-	}
-	printf("\n");
+void interpret(){
 
-	for(i=1; i<argc; i++){
-		pidF=fork();
-		switch(pidF){
-			case -1:	perror("Echec fork\n");
-						exit(1);
-			case 0:	printf("[%d] Je lance %s :\n", (int)getpid(), argv[i]);
-  						Decoupe(argv[i],pMots);
-  						execvp(pMots[0],pMots);
-  						perror(argv[i]);
-  						exit(2);
-			default: wait(NULL);
-		}
-	}
-	printf(">\n");
+  char commande[FILENAME_MAX_SIZE*2];
+  char* tCommande[NBMOTSMAX+1];
+  if(scanf("%s", commande)!=0) exit(1);
+  Decoupe(commande, tCommande);
+
+  while(!(strcmp(tCommande[0], "quit"))){
+    if(strcmp(tCommande[0], "ls") || strcmp(tCommande[0], "cat")) execvp(commande, tCommande);
+    else if(strcmp(tCommande[0], "rm")) delete_file(tCommande[1]);
+    else if(strcmp(tCommande[0], "load")) load_file_from_host(tCommande[1]);
+    else if(strcmp(tCommande[0], "store")) store_file_to_host(tCommande[1]);
+    else if(strcmp(tCommande[0], "create")){};
+    else if(strcmp(tCommande[0], "edit")){};
+    if(scanf("%s", commande)!=0) exit(1);
+  }
 }
