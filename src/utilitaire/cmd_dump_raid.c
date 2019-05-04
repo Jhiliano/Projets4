@@ -21,7 +21,7 @@ int dump_raid(void) {
 
 int main(int argc, char* argv[]) {
   struct stat inforep;
-  if (argc != 3) {
+  if (argc != 2) {
     fprintf(stderr, "nombre d'argument incorrect");
     fprintf(stderr, "Usage %s repertoire",argv[0]);
     return 2;

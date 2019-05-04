@@ -2,12 +2,24 @@
 
 
 int defrag_raid(void) {
+  file_t file;
+  int pos = INODES_START + INODE_SIZE*INODE_TABLE_SIZE*BLOCK_SIZE;
+  for (int i = 0; i < INODE_TABLE_SIZE; i++) {
+    if(r5Disk.inodes[i].first_byte) {
+      file.size = r5Disk.inodes[i].size;
+      if(read_chunk(file.data, file.size, pos, &r5Disk)) return 1;
+      if(write_chunk(file.data, file.size, pos, &r5Disk)) return 1;
+      r5Disk.inodes[i].first_byte = pos;
+      pos+=r5Disk.inodes[i].nblock*BLOCK_SIZE;
+    }
+  }
+  first_free_byte();
   return 0;
 }
 
 int main(int argc, char* argv[]) {
   struct stat inforep;
-  if (argc != 3) {
+  if (argc != 2) {
     fprintf(stderr, "nombre d'argument incorrect");
     fprintf(stderr, "Usage %s repertoire",argv[0]);
     return 2;

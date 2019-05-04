@@ -31,12 +31,12 @@ First = 656
 SUPER BLOCK
 Raid = 0
 Block used = 92
-First = 446
+First = 880
 
 Fichier 0 : test1
 Size = 50
 Nblock = 20
-First byte = 100
+First byte = 800
 
 ****************************
 
@@ -74,12 +74,12 @@ First byte = 230
 SUPER BLOCK
 Raid = 0
 Block used = 68
-First = 294
+First = 880
 
 Fichier 0 : test1
 Size = 50
 Nblock = 20
-First byte = 100
+First byte = 800
 
 ****************************
 

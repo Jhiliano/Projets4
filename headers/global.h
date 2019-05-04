@@ -172,5 +172,6 @@ uchar data [MAX_FILE_SIZE] ;
 
 
 virtual_disk_t r5Disk;
+virtual_disk_t r0Disk;
 
 #endif
