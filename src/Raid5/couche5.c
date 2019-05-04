@@ -18,6 +18,23 @@
 #define NBMOTSMAX 20
 
 /* fonctions */
+/// \file couche5.c
+/// \brief ficher de code couche5
+/// \author Guillaume Fourcroy
+/// \date 24 février 2019
+
+
+/* dépendances */
+
+
+#include "../../headers/Raid5/couche5.h"
+#include <sys/types.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#define NBMOTSMAX 20
+
+/* fonctions */
 int Decoupe(char Chaine[], char *pMots[])
 {
   char *p;
@@ -52,8 +69,8 @@ void interpret(){
     else if(strcmp(tCommande[0], "rm")) delete_file(tCommande[1]);
     else if(strcmp(tCommande[0], "load")) load_file_from_host(tCommande[1]);
     else if(strcmp(tCommande[0], "store")) store_file_to_host(tCommande[1]);
-    else if(strcmp(tCommande[0], "create")){};
-    else if(strcmp(tCommande[0], "edit")){};
+    else if(strcmp(tCommande[0], "create")) NULL;
+    else if(strcmp(tCommande[0], "edit")) NULL;
     if(scanf("%s", commande)!=0) exit(1);
   }
 }
