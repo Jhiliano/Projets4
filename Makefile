@@ -45,7 +45,7 @@ else
 	LDFLAGS =
 endif
 
-all: dircreate $(BINDIR)/$(EXEC) $(TESTDIR)/$(BINDIR)/$(TEST) $(TESTDIR)/$(BINDIR)/$(CMDT1) $(TESTDIR)/$(BINDIR)/$(CMDT2) $(BINDIR)/$(CMDDI) $(BINDIR)/$(CMDDR) $(BINDIR)/$(CMDRR) $(BINDIR)/$(CMDDD)
+all: $(BINDIR)/$(EXEC) $(TESTDIR)/$(BINDIR)/$(TEST) $(TESTDIR)/$(BINDIR)/$(CMDT1) $(TESTDIR)/$(BINDIR)/$(CMDT2) $(BINDIR)/$(CMDDI) $(BINDIR)/$(CMDDR) $(BINDIR)/$(CMDRR) $(BINDIR)/$(CMDDD)
 
 $(BINDIR)/$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(MAIN))
 	@echo "Création de l'executabe "$@
@@ -135,9 +135,6 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@$(CC) -o $(BINDIR)/$@ $^
 	@echo "Création de 4 disk de 50*1024 octets"
 	@./bin/$@ $(DISQUESDIR) 4 51200
-
-dircreate:
-	@sh dircreate.sh
 clean:
 	@rm -f $(OBJDIR)/*.o
 	@echo "Fichiers intermédiaires supprimés"
