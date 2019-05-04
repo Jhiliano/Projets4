@@ -42,7 +42,7 @@ else
 	LDFLAGS =
 endif
 
-all: $(EXEC)
+all: $(EXEC) $(TEST) $(CMDT1) $(CMDT2) $(CMDDI) $(CMDDR)
 
 $(EXEC): $(OBJ) main.o
 	@echo "Création de l'executabe "$@
@@ -114,12 +114,11 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 
 clean:
 	@rm -f $(OBJDIR)/*.o
-	@rm -f *.o
 	@echo "Fichiers intermédiaires supprimés"
 
 mrproper: clean
 	@rm -f $(BINDIR)/*
-	@rm -f $(TESTDIR)/
+	@rm -f $(TESTDIR)/$(BINDIR)/*
 	@rm -f $(EXEC) $(CREATEDISK)
 	@echo "Executable supprimé"
 # End generic part of the makefile

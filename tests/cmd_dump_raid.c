@@ -2,16 +2,19 @@
 
 int main(void) {
   init_disk_raid5("disk");
-  int err;
-  int nbmax = compute_nstripe(compute_nblock(1024*50))*4;
-  uchar * buffer = malloc(nbmax*sizeof(uchar));
-  err = read_chunk(buffer, nbmax, 0, &r5Disk);
-  if(err) return 0;
-  for (int c = 0; c < nbmax; c++) {
-    printf("%02X ",buffer[c]);
+  int nbmax = compute_nstripe(compute_nblock(MAX_FILE_SIZE));
+  stripe_t tab;
+  tab.nblocks= r5Disk.ndisk;
+  tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+  for (int s = 0; s < nbmax; s++) {
+    read_stripe(&tab, s*tab.nblocks*BLOCK_SIZE, &r5Disk);
+    printf("%d | %d[",s*tab.nblocks*BLOCK_SIZE,compute_parity_index(s+1));
+    for (int b = 0; b < tab.nblocks; b++) {
+      print_block(stdout, tab.stripe[b]);
+    }
+    printf("]\n");
   }
-  printf("%d",err);
-  free(buffer);
+  free(tab.stripe);
   eteindre_disk_raid5();
   return 0;
 }

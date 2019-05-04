@@ -72,8 +72,9 @@ int read_file(char* nomFich, file_t* fich){
   int idLecture;
   bool exist = filexist(nomFich, &idLecture);
   if(!exist) return 1;// cas ou il existe pas
-  if (read_chunk(fich->data, fich->size, r5Disk.inodes[idLecture].first_byte, &r5Disk)) return 2;// cas d'erreur de lecture
   fich->size = r5Disk.inodes[idLecture].size;
+  if (read_chunk(fich->data, fich->size, r5Disk.inodes[idLecture].first_byte, &r5Disk)) return 2;// cas d'erreur de lecture
+
   return 0;
 }
 
@@ -115,12 +116,13 @@ int store_file_to_host(char* nomFich){
   * \param[in] nomFich le nom du fichier
   * \return 0 si tout s'est bien passé 1 si le fichier existe pas 2 en cas d'erreur de lecture 3 si il y a une erreur d'ouverture du fichier 4 si il y a une erreur d'ecriture du fichier
   */
-  FILE* fichier = fopen(nomFich,"w");
+  FILE* fichier;
   file_t depotFich;
   int erreur = read_file(nomFich, &depotFich);
+  if(erreur) return erreur;
+  fichier = fopen(nomFich,"w");
   uint oLus;
   if(!fichier) return 3; // cas erreur d'ouverture
-  if(erreur) return erreur;
   oLus = fwrite(depotFich.data,sizeof(uchar),depotFich.size,fichier);
   if(oLus != depotFich.size) return 4; // fichier pas entierement lus
   fclose(fichier);
