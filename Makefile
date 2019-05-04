@@ -45,39 +45,39 @@ else
 	LDFLAGS =
 endif
 
-all: $(EXEC) $(TEST) $(CMDT1) $(CMDT2) $(CMDDI) $(CMDDR) $(CMDRR) $(CMDD)
+all: $(BINDIR)/$(EXEC) $(TESTDIR)/$(BINDIR)/$(TEST) $(TESTDIR)/$(BINDIR)/$(CMDT1) $(TESTDIR)/$(BINDIR)/$(CMDT2) $(BINDIR)/$(CMDDI) $(BINDIR)/$(CMDDR) $(BINDIR)/$(CMDRR) $(BINDIR)/$(CMDDD)
 
-$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(MAIN))
+$(BINDIR)/$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(MAIN))
 	@echo "Création de l'executabe "$@
-	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(TEST): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(TEST)))
+$(TESTDIR)/$(BINDIR)/$(TEST): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(TEST)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(CMDT1): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT1)))
+$(TESTDIR)/$(BINDIR)/$(CMDT1): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT1)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(CMDT2): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT2)))
+$(TESTDIR)/$(BINDIR)/$(CMDT2): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT2)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(TESTDIR)/$(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(CMDDI): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDI)))
+$(BINDIR)/$(CMDDI): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDI)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(CMDDR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDR)))
+$(BINDIR)/$(CMDDR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDR)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(CMDRR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDRR)))
+$(BINDIR)/$(CMDRR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDRR)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(CMDDD): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDD)))
+$(BINDIR)/$(CMDDD): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDD)))
 	@echo "Creation de l'executable "$@
-	@$(CC) -o $(addprefix $(BINDIR)/,$@) $^ $(LDFLAGS)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
 run:
 	./$(BINDIR)/$(EXEC) $(ARGS)

@@ -69,6 +69,7 @@ int write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
   * \return 0 si tout s'est bien passé 1 si il y a eut une erreur d'ecriture
   */
   // calculs des tailles block-stripe necessaire
+  if(size == 0) return 0;
  	int nb = compute_nblock(size);
  	int nb_stripe = compute_nstripe(nb);
  	int id_p; // id du block de parité
