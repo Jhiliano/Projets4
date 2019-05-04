@@ -14,6 +14,6 @@
 
 
 /* Fonctions */
-
+void interpret(int argc, char*argv[]);
 
 #endif
