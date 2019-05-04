@@ -10,7 +10,6 @@
 /* Dépendances */
 
 
-#include "couche3.h"
 
 
 /* Fonctions */
