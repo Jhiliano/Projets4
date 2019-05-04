@@ -71,7 +71,7 @@ $(CMDDR): $(OBJ) $(addsuffix .o,$(CMDDR))
 run:
 	./$(BINDIR)/$(EXEC) $(ARGS)
 
-run_TU:
+run_TU: $(CREATEDISK)
 		./$(TESTDIR)/$(BINDIR)/$(TEST)
 
 run_T1:

@@ -1,23 +1,33 @@
 package objetRaid;
 
+import java.util.Base64;
+
 public class Inode {
-	private char[] filename;
+	private String filename;
 	private int size;
 	private int nblock;
 	private int firstByte;
 	public static final int fileNameMaxSize = 32;
+	static final int inodeSize = 44;
 	
-	Inode(char[] filename, int size, int nblock, int firstByte) {
-		filename = new char[fileNameMaxSize];
-		for (int i = 0; i < fileNameMaxSize; i++) {
-			this.filename[i] = filename[i];
-		}
-		this.size = size;
-		this.nblock = nblock;
-		this.firstByte = firstByte;
+	Inode() {
+		this.size = 0;
+		this.nblock = 0;
+		this.firstByte = 0;
 	}
 
-	public char[] getFilename() {
+	public static int readInodeTable(Raid raid) {
+		byte[] buffer = new byte[Inode.inodeSize];
+		for (int i = 0; i < Raid.inodeTableSize; i++) {
+			if(Stripe.readChunk(buffer, Inode.fileNameMaxSize, Superblock.sizeSuperBlock+i*Inode.inodeSize, raid) == 1) return 1;
+			Base64.getEncoder().encodeToString(buffer);
+			if(Stripe.readChunk(buffer, Inode.fileNameMaxSize - Inode.fileNameMaxSize, Superblock.sizeSuperBlock+i*Inode.inodeSize+Inode.fileNameMaxSize, raid) == 1) return 1;
+			
+		}
+		
+	}
+	
+	public String getFilename() {
 		return filename;
 	}
 

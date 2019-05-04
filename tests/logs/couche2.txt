@@ -10,8 +10,8 @@ stripe pour 50 block : 17
 
 TEST : compute parity
 
-creation des block (sauf la 3e) de valeur : 00FF FF00 FFFF 
-la stripe a donc pour valeur :00FF FF00 0000 FFFF 
+creation des block (sauf la 3e) de valeur : 00FFFFFF FF00FFFF FFFFFF00 
+la stripe a donc pour valeur :00FFFFFF FF00FFFF 0000FF00 FFFFFF00 
 
 TEST : compute parity index
 

@@ -16,16 +16,16 @@ block composé de 255 ecrit en position 4 : bits ecrit = 4
 
 TEST : read block
 
-lecture du block composé de 1 en position 0 retour : 0 block : 0000 
-lecture du block composé de 0 en position 4 retour : 0 block : FFFF 
+lecture du block composé de 1 en position 0 retour : 0 block : 00000000 
+lecture du block composé de 0 en position 4 retour : 0 block : FFFFFFFF 
 
 TEST : repair block
 
-creation des block de valeur : FF00 00FF 0000 avec la creation du block 4 de parite : FFFF 
-modification du block 1 : 0000 00FF 0000 FFFF 
-reparation du block 1 : FF00 00FF 0000 FFFF 
+creation des block de valeur : FF000000 00FF0000 0000FF00 avec la creation du block 4 de parite : FFFFFF00 
+modification du block 1 : 00000000 00FF0000 0000FF00 FFFFFF00 
+reparation du block 1 : FF000000 00FF0000 0000FF00 FFFFFF00 
 
 TEST : print block
 
-block a 0 : 0000 
-block avec des octets valeur 255 : FFFF 
+block a 0 : 00000000 
+block avec des octets valeur 255 : FFFFFFFF 

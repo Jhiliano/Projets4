@@ -21,15 +21,15 @@ TEST : inode
 
 
 SUPER BLOCK
-Raid = 2
+Raid = 0
 Block used = 0
-First = 0
+First = 656
 
 
 
 
 SUPER BLOCK
-Raid = 2
+Raid = 0
 Block used = 92
 First = 446
 
@@ -72,7 +72,7 @@ First byte = 230
 
 
 SUPER BLOCK
-Raid = 2
+Raid = 0
 Block used = 68
 First = 294
 

@@ -48,7 +48,7 @@
 /// \def SUPER_BLOCK_SIZE
 /// nombre de blocs avec parité
 
-#define INODES_START SUPER_BLOCK_SIZE*BLOCK_SIZE+1
+#define INODES_START SUPER_BLOCK_SIZE*BLOCK_SIZE
 /// \def INODES_START
 /// taille de l'inode en octets
 

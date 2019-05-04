@@ -212,11 +212,6 @@ void test_double_sens(FILE * file, uint valeur) {
 void test_inode(FILE *file) {
   fprintf(file,"\n\n\nSUPER BLOCK\nRaid = %d\nBlock used = %d\nFirst = %d\n\n", r5Disk.super_block.raid_type, r5Disk.super_block.nb_blocks_used, r5Disk.super_block.first_free_byte);
   dump_inode(file);
-  delete_inode(0);
-  delete_inode(1);
-  delete_inode(4);
-  delete_inode(3);
-
   init_inode("test1", 50, 100);
   init_inode("test2", 60, 200);
   init_inode("test3", 70, 350);
@@ -227,6 +222,10 @@ void test_inode(FILE *file) {
   delete_inode(2);
   fprintf(file,"\n\n\nSUPER BLOCK\nRaid = %d\nBlock used = %d\nFirst = %d\n\n", r5Disk.super_block.raid_type, r5Disk.super_block.nb_blocks_used, r5Disk.super_block.first_free_byte);
   dump_inode(file);
+  delete_inode(0);
+  delete_inode(1);
+  delete_inode(4);
+  delete_inode(3);
 }
 
 void dump_inode(FILE * file) {
@@ -237,7 +236,27 @@ void dump_inode(FILE * file) {
   }
 }
 /* couche 4 */
+void test_couche4(void) {
+  FILE* log = fopen("tests/logs/couche4.txt","w+");
+  fprintf(log, "\nTEST COUCHE 4\n");
+  fprintf(log, "\nTEST : ecriture \n\n");
+  fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/compress.zip"));
+  fprintf(log, "lecture fichier 1 : code retour %d\n",  load_file_from_host("tests/in/image1.png"));
+  fprintf(log, "lecture fichier 2 : code retour %d\n",  load_file_from_host("tests/in/image2.png"));
+  fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/text1.txt"));
+  fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/text2.txt"));
+  fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/text3.txt"));
+  fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/text4.txt"));
 
+  /*
+  fprintf(log, "\nTEST : lecture \n\n");
+  fprintf(log, "ecriture fichier 5 : code retour %d\n", store_file_to_host("tests/in/image1.png"));
+  fprintf(log, "ecriture fichier 6 : code retour %d\n", store_file_to_host("tests/in/image2.png"));
+  fprintf(log, "ecriture fichier 7 : code retour %d\n", store_file_to_host("tests/in/text.txt"));
+  fprintf(log, "ecriture fichier 7 : code retour %d\n", store_file_to_host("tests/in/compress.zip"));
+  fclose(log);
+  */
+}
 /* couche 5 */
 
 /* main */
@@ -246,6 +265,8 @@ int main(void) {
   test_couche1();
   test_couche2();
   test_couche3();
+  test_couche4();
+
   eteindre_disk_raid5();
   return 0;
 }

@@ -3,6 +3,7 @@ package objetRaid;
 public class Superblock {
 	private int nbBlockUsed;
 	private int firstFreeByte;
+	static final int sizeSuperBlock = 12;
 	private enum raidType {ZERO,UN,CINQ,ZERO_UN,UN_ZERO,CINQUANTE,CENT};
 	Superblock(int nbBlockUsed, int firstFreeByte, int raidType) {
 		this.nbBlockUsed = nbBlockUsed;

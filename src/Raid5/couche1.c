@@ -165,7 +165,7 @@ void print_block(FILE* file, block_t block) {
 	* \brief Affichage d'un block
 	* \details L'affichage est en hexadecimal, il affiche sur une ligne sans espace ni retour a ligne
 	*/
-	for (int h = 0; h < BLOCK_SIZE/2; h++) {
+	for (int h = 0; h < BLOCK_SIZE; h++) {
 		fprintf(file,"%02X",block.data[h]);
 	}
 	fprintf(file," ");

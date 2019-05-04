@@ -28,12 +28,14 @@ void test_couche2(void);
 void test_compute_nstripe(FILE * file);
 void test_compute_parity(FILE *file);
 void test_compute_parity_index(FILE* file);
-/* couche 3*/
+/* couche 3 */
 void test_couche3(void);
 void test_uchar_to_uint(FILE * file);
 void test_uint_to_uchar(FILE * file);
 void test_double_sens(FILE * file, uint valeur);
 void dump_inode(FILE * file);
 void test_inode(FILE *file);
+/* couche 4 */
+void test_couche4(void);
 
 #endif

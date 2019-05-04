@@ -13,13 +13,16 @@ public class Block {
 		return nblock/size+1;
 	}
 	
-	public void blockrepair(Block[] blocks, int nbBlock) {
+	public void blockrepair(Stripe stripe, int nbBlock, int pos) {
 		for (int d = 0; d < Block.size; d++) {
 			donnees[d] = 0;
 		}
 		for (int b = 0; b < nbBlock; b++) {
 			for (int d = 0; d < Block.size; d++) {
-				donnees[d] ^= blocks[b].getDonnees()[d];
+				if(d != pos) {
+					donnees[d] ^= stripe.getBlocks()[d].getDonnees()[d];					
+				}
+
 			}
 		}
 	}
