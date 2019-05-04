@@ -134,7 +134,6 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@echo "Création de l'executable de generation du disque"
 	@$(CC) -o $(BINDIR)/$@ $^
 	@echo "Création de 4 disk de 50*1024 octets"
-
 	@./bin/$@ $(DISQUESDIR) 4 51200
 
 clean:
@@ -150,6 +149,7 @@ mrproper: clean cleandisk
 	@rm -f $(BINDIR)/*
 	@rm -f $(TESTDIR)/$(BINDIR)/*
 	@echo "Executable supprimé"
+
 # End generic part of the makefile
 
 # Specific file dependencies
