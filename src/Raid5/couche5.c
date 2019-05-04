@@ -15,8 +15,7 @@
 #define NBMOTSMAX 20
 
 /* fonctions */
-int Decoupe(char Chaine[], char *pMots[])
-{
+int Decoupe(char Chaine[], char *pMots[]) {
   char *p;
   int NbMots=0;
 
@@ -49,7 +48,10 @@ void interpret(){
     else if(strcmp(tCommande[0], "rm")) delete_file(tCommande[1]);
     else if(strcmp(tCommande[0], "load")) load_file_from_host(tCommande[1]);
     else if(strcmp(tCommande[0], "store")) store_file_to_host(tCommande[1]);
-    else if(strcmp(tCommande[0], "create")) NULL;
+    else if(strcmp(tCommande[0], "create")){
+      file_t nouv;
+      writefile(tCommande[1], nouv);
+    }
     else if(strcmp(tCommande[0], "edit")) NULL;
     if(scanf("%s", commande)!=0) exit(1);
   }
