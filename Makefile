@@ -82,8 +82,9 @@ run_T2:
 
 run_DI:
 	./$(TESTDIR)/$(BINDIR)/$(CMDDI) disk
+
 run_DR:
-	./$(TESTDIR)/$(BINDIR)/$(CMDDR)
+	./$(TESTDIR)/$(BINDIR)/$(CMDDR) disk
 
 
 
