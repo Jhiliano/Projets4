@@ -8,13 +8,20 @@ CC = gcc
 CFLAGS = -Wextra -Wall -pedantic
 LDFLAGS =
 
-SRC = couche1.c\
-			couche2.c\
-			couche3.c\
-			couche4.c\
-			couche5.c
-OBJ = $(SRC:.c=.o)
-HEAD = $(SRC:.c=.h)
+SRC5 = couche1_5.c\
+			couche2_5.c\
+			couche3_5.c\
+			couche4_5.c\
+			couche5_5.c
+OBJ5 = $(SRC5:.c=.o)
+HEAD5 = $(SRC5:.c=.h)
+SRC50 = couche1_50.c\
+			couche2_50.c\
+			couche3_50.c\
+			couche4_50.c\
+			couche5_50.c
+OBJ50 = $(SRC50:.c=.o)
+HEAD50 = $(SRC50:.c=.h)
 MAIN = main.o
 TEST = testunitaire
 CMDT1 = cmd_test1
@@ -36,6 +43,7 @@ UTILDIR = utilitaire
 
 
 RAID5DIR = Raid5
+RAID50DIR = Raid50
 
 ifeq ($(DEBUG),yes)
 	CFLAG += -g
@@ -47,35 +55,35 @@ endif
 
 all: $(BINDIR)/$(EXEC) $(TESTDIR)/$(BINDIR)/$(TEST) $(TESTDIR)/$(BINDIR)/$(CMDT1) $(TESTDIR)/$(BINDIR)/$(CMDT2) $(BINDIR)/$(CMDDI) $(BINDIR)/$(CMDDR) $(BINDIR)/$(CMDRR) $(BINDIR)/$(CMDDD)
 
-$(BINDIR)/$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(MAIN))
+$(BINDIR)/$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(OBJ50)) $(addprefix $(OBJDIR)/,$(MAIN))
 	@echo "Création de l'executabe "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(TESTDIR)/$(BINDIR)/$(TEST): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(TEST)))
+$(TESTDIR)/$(BINDIR)/$(TEST): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(TEST)))
 	@echo "Creation de l'executable "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(TESTDIR)/$(BINDIR)/$(CMDT1): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT1)))
+$(TESTDIR)/$(BINDIR)/$(CMDT1): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT1)))
 	@echo "Creation de l'executable "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(TESTDIR)/$(BINDIR)/$(CMDT2): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT2)))
+$(TESTDIR)/$(BINDIR)/$(CMDT2): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDT2)))
 	@echo "Creation de l'executable "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(BINDIR)/$(CMDDI): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDI)))
+$(BINDIR)/$(CMDDI): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDI)))
 	@echo "Creation de l'executable "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(BINDIR)/$(CMDDR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDR)))
+$(BINDIR)/$(CMDDR): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDR)))
 	@echo "Creation de l'executable "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(BINDIR)/$(CMDRR): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDRR)))
+$(BINDIR)/$(CMDRR): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDRR)))
 	@echo "Creation de l'executable "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
-$(BINDIR)/$(CMDDD): $(addprefix $(OBJDIR)/,$(OBJ)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDD)))
+$(BINDIR)/$(CMDDD): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(addsuffix .o,$(CMDDD)))
 	@echo "Creation de l'executable "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
@@ -108,6 +116,10 @@ defrag_raid:
 
 
 $(OBJDIR)/%.o: $(SRCDIR)/$(RAID5DIR)/%.c
+	@echo "Création de "$@
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(RAID50DIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 

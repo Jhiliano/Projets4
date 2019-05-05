@@ -7,17 +7,11 @@
 /* dépendances */
 
 
-#include "../../headers/Raid5/couche4.h"
+#include "../../headers/Raid50/couche4_50.h"
 
 /* utilitaires */
-
+/**
 bool filexist(char* nomFich, int* id) {
-  /**
-  * \brief Verifie si le fichier existe dans le raid
-  * \param[in] nomFich le nom du fichier
-  * \param[out] id l'id de l'innode ou il est stocké
-  * \return 1 si il existe 0 sinon
-  */
   for(int i=0; i<INODE_TABLE_SIZE; i++){
     if (r5Disk.inodes[i].first_byte) {
       if(!strcmp(r5Disk.inodes[i].filename,nomFich)){
@@ -28,16 +22,10 @@ bool filexist(char* nomFich, int* id) {
   }
   return 0;
 }
-
+**/
 /* fonctions */
-
+/**
 int writefile(char* nomFich, file_t fich){
-  /**
-  * \brief ecrit un fichier dans le Raid
-  * \param[in] nomFich le nom du fichier
-  * \param[in] fich la structure contenant la taille est la data du fichier
-  * \return 0 si tout s'est bien passé 1 si il y plus de place 2 en cas d'erreur d'ecriture
-  */
   int idEcriture;// l'id de la postion ou il faut ecrire le fichier
   bool exist = filexist(nomFich, &idEcriture);
   int first_byte;
@@ -63,12 +51,6 @@ int writefile(char* nomFich, file_t fich){
 
 
 int read_file(char* nomFich, file_t* fich){
-  /**
-  * \brief lit un fichier dans le raid
-  * \param[in] nomFich le nom du fichier
-  * \param[out] fich la structure contenant la taille est la data du fichier qui est lu
-  * \return 0 si tout s'est bien passé 1 si le fichier existe pas 2 en cas d'erreur de lecture
-  */
   int idLecture;
   bool exist = filexist(nomFich, &idLecture);
   if(!exist) return 1;// cas ou il existe pas
@@ -81,11 +63,6 @@ int read_file(char* nomFich, file_t* fich){
 
 
 int delete_file(char* nomFich){
-  /**
-  * \brief supprime un fichier dans le raid
-  * \param[in] nomFich le nom du fichier
-  * \return 0 si tout s'est bien passé 1 si le fichier n'exsite pas
-  */
   int idSuppression;
   bool exist = filexist(nomFich, &idSuppression);
   if(!exist) return 1;
@@ -94,11 +71,6 @@ int delete_file(char* nomFich){
 }
 
 int load_file_from_host(char* nomFich){
-  /**
-  * \brief lit un fichier du host est l'ecrit sur le raid
-  * \param[in] nomFich le nom du fichier
-  * \return 0 si tout s'est bien passé 1 si il y plus de place 2 en cas d'erreur d'ecriture 3 si il y a une erreur d'ouverture du fichier 4 si il y a une erreur de lecture du fichier
-  */
   FILE* fichier = fopen(nomFich,"r");
   file_t depotFich;
   if(!fichier) return 3; // cas erreur d'ouverture
@@ -111,11 +83,6 @@ int load_file_from_host(char* nomFich){
 
 
 int store_file_to_host(char* nomFich){
-  /**
-  * \brief lit un fichier sur le raid et l'ecrit sur le host
-  * \param[in] nomFich le nom du fichier
-  * \return 0 si tout s'est bien passé 1 si le fichier existe pas 2 en cas d'erreur de lecture 3 si il y a une erreur d'ouverture du fichier 4 si il y a une erreur d'ecriture du fichier
-  */
   FILE* fichier;
   file_t depotFich;
   int erreur = read_file(nomFich, &depotFich);
@@ -128,3 +95,4 @@ int store_file_to_host(char* nomFich){
   fclose(fichier);
   return 0;
 }
+*/

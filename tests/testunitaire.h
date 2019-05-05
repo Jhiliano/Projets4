@@ -8,11 +8,7 @@
 
 /* dépendances */
 
-#include "../headers/Raid5/couche1.h"
-#include "../headers/Raid5/couche2.h"
-#include "../headers/Raid5/couche3.h"
-#include "../headers/Raid5/couche4.h"
-#include "../headers/Raid5/couche5.h"
+#include "../headers/Raid5/couche5_5.h"
 
 /* Fonctions */
 

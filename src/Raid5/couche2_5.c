@@ -7,7 +7,7 @@
 /* dépendances */
 
 
-#include "../../headers/Raid5/couche2.h"
+#include "../../headers/Raid5/couche2_5.h"
 
 /* fonctions */
 int compute_nstripe(int nb_blocks){

@@ -10,10 +10,13 @@
 /* Dépendances */
 
 
-#include "couche4.h"
+#include "couche4_50.h"
+#include <unistd.h>
+#include <sys/wait.h>
 
 
 /* Fonctions */
+/*
 void interpret();
-
+*/
 #endif

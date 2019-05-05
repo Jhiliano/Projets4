@@ -7,31 +7,28 @@
 /* dépendances */
 
 
-#include "../../headers/Raid5/couche5.h"
-#include <sys/types.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
+#include "../../headers/Raid50/couche5_50.h"
 #define NBMOTSMAX 20
 
 /* fonctions */
+/*
 int Decoupe(char Chaine[], char *pMots[]) {
   char *p;
   int NbMots=0;
 
-  p=Chaine; /* On commence par le début */
-  /* Tant que la fin de la chaîne n'est pas atteinte et qu'on ne déborde pas */
+  p=Chaine; //On commence par le début
+  //Tant que la fin de la chaîne n'est pas atteinte et qu'on ne déborde pas
   while ((*p)!='\0' && NbMots<NBMOTSMAX)
   {
-    while ((*p)==' ' && (*p)!='\0') p++; /* Recherche du début du mot */
-    if ((*p)=='\0') break; /* Fin de chaîne atteinte */
-    pMots[NbMots++]=p; /* Rangement de l'adresse du 1er caractère du mot */
-    while ((*p)!=' ' && (*p)!='\0') p++; /* Recherche de la fin du mot */
-    if ((*p)=='\0') break; /* Fin de chaîne atteinte */
-    *p='\0'; /* Marquage de la fin du mot */
-    p++; /* Passage au caractère suivant */
+    while ((*p)==' ' && (*p)!='\0') p++; //Recherche du début du mot
+    if ((*p)=='\0') break; //Fin de chaîne atteinte
+    pMots[NbMots++]=p; //Rangement de l'adresse du 1er caractère du mot
+    while ((*p)!=' ' && (*p)!='\0') p++; //Recherche de la fin du mot
+    if ((*p)=='\0') break; // Fin de chaîne atteinte
+    *p='\0'; //Marquage de la fin du mot
+    p++; //Passage au caractère suivant
   }
-  pMots[NbMots]=NULL; /* Dernière adresse */
+  pMots[NbMots]=NULL; //Dernière adresse
   return NbMots;
 }
 
@@ -76,3 +73,4 @@ void interpret(){
     if(scanf("%s", commande)!=0) exit(1);
   }
 }
+*/

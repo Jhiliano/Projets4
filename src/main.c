@@ -5,7 +5,8 @@
 
 /* dépendances */
 
-#include "../headers/Raid5/couche5.h"
+#include "../headers/Raid5/couche5_5.h"
+#include "../headers/Raid50/couche5_50.h"
 
 /* fonctions */
 
