@@ -40,12 +40,21 @@ void interpret(){
 
   char commande[FILENAME_MAX_SIZE*2];
   char* tCommande[NBMOTSMAX+1];
-  // pid_t pidF;
+  pid_t pidF;
   if(scanf("%s", commande)!=0) exit(1);
   Decoupe(commande, tCommande);
 
   while(!(strcmp(tCommande[0], "quit"))){
-    if(strcmp(tCommande[0], "ls") || strcmp(tCommande[0], "cat")) execvp(commande, tCommande);
+    if(strcmp(tCommande[0], "ls") || strcmp(tCommande[0], "cat")) {
+      pidF=fork();
+    	switch(pidF){
+    		case -1:	perror("Echec fork\n");
+    					    exit(1);
+    		case 0:		execvp(commande, tCommande);
+                  break;
+    		default:	wait(NULL);
+    	}
+    }
     else if(strcmp(tCommande[0], "rm")) delete_file(tCommande[1]);
     else if(strcmp(tCommande[0], "load")) load_file_from_host(tCommande[1]);
     else if(strcmp(tCommande[0], "store")) store_file_to_host(tCommande[1]);
@@ -61,6 +70,7 @@ void interpret(){
     		case -1:	perror("Echec fork\n");
     					    exit(1);
     		case 0:		execvp(tCommande[1], tab);
+                  break:
     		default:	wait(NULL);
     	}*/
     }
