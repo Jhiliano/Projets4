@@ -43,7 +43,7 @@ void init_disk_raid5(char* adresse)
 			}
 		}
 	}
-	r5Disk.raidmode = CINQ;
+	r5Disk.raidmode = CINQ; //50
 	read_super_block();// Chargement super block ou initialisation si les disques sont nouveau (voir createdisk)
 	read_inodes_table(); // Chargement de la table d'inode
 	if (!r5Disk.super_block.first_free_byte) r5Disk.super_block.raid_type = r5Disk.raidmode;// si il est vierge on initialise le raidtype
@@ -51,6 +51,12 @@ void init_disk_raid5(char* adresse)
 	r5Disk.number_of_files = (r5Disk.number_of_files == -1)?0:get_unused_inode();
 	closedir(rep);
 }
+
+/*---------------------FONCTION RAID50---------------*/
+/*void init_disk_raid50(char* adresse1, char* adresse2){
+	init_disk_raid5(adresse1);
+	init_disk_raid5(adresse2);
+}*/
 
 void remplir_storage(char* cheminFichier)
 {
@@ -67,6 +73,7 @@ void remplir_storage(char* cheminFichier)
 	}
 	r5Disk.ndisk++;
 }
+
 
 void creation_chemin_fichier(char *cheminFichier, const char* adresse, const char* nomFichier)
 {
