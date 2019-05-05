@@ -7,7 +7,10 @@ public class Stripe {
 	private int size;
 	public Stripe(int size) {
 		this.blocks = new Block[size];
-		this.size = size;
+		for(int b = 0; b < size; b++) {
+			this.blocks[b] = new Block();
+		}
+ 		this.size = size;
 	}
 	
 	public static int computeNStripe(int nbBlock, int size) {

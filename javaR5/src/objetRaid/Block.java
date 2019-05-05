@@ -43,7 +43,7 @@ public class Block {
 		for(int o = 0; o < size; o++) {
 			try {
 				disk.seek(pos+o);
-				disk.readByte();
+				donnees[o] = disk.readByte();
 			} catch (IOException e) {
 				return 1;
 			}
