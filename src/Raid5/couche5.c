@@ -64,15 +64,14 @@ void interpret(){
     }
 
     else if(strcmp(tCommande[0], "edit")){
-      /*pidF=fork();
-      char* tab = {"launch_atom", tCommande[1], NULL};
+      pidF=fork();
     	switch(pidF){
     		case -1:	perror("Echec fork\n");
     					    exit(1);
-    		case 0:		execvp(tCommande[1], tab);
-                  break:
+    		case 0:		execvp(tCommande[1], tCommande);
+                  break;
     		default:	wait(NULL);
-    	}*/
+    	}
     }
     if(scanf("%s", commande)!=0) exit(1);
   }
