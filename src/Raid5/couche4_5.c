@@ -56,7 +56,7 @@ int writefile(char* nomFich, file_t fich){
   if (idEcriture == -1) return 1;// cas ou il y a pas de place
   printf("taille fichier : %d premier bit %d\n",fich.size, first_byte);
   if (write_chunk(fich.data, fich.size, first_byte, &r5Disk)) return 2;// cas ou il y a une erreur de lecture
-  init_inode(nomFich, fich.size, first_byte);
+  if (r5Disk.inodes[idEcriture].first_byte == 0) init_inode(nomFich, fich.size, first_byte);
   return 0;
 }
 

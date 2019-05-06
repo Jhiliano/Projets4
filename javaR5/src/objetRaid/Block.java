@@ -13,47 +13,50 @@ public class Block {
 		return nblock/size+1;
 	}
 	
-	public void blockrepair(Stripe stripe, int nbBlock, int pos) {
+	public void blockrepair(Stripe stripe, int pos) {
 		for (int d = 0; d < Block.size; d++) {
 			donnees[d] = 0;
 		}
-		for (int b = 0; b < nbBlock; b++) {
-			for (int d = 0; d < Block.size; d++) {
-				if(d != pos) {
-					donnees[d] ^= stripe.getBlocks()[d].getDonnees()[d];					
+		for (int b = 0; b < stripe.getSize(); b++) {
+			if(b != pos) {
+				for (int d = 0; d < Block.size; d++) {
+					donnees[d] = (byte) (donnees[d]^stripe.getBlocks()[b].getDonnees()[d]);					
 				}
-
 			}
 		}
 	}
 	
-	public int write(int pos, RandomAccessFile disk) {
+	public int write(int pos, File disk) {
+		try {
+		RandomAccessFile file = new RandomAccessFile(disk,"rw");
 		for(int o = 0; o < size; o++) {
-			try {
-				disk.seek(pos+o);
-				disk.writeByte(donnees[o]);
-			} catch (IOException e) {
-				return 1;
-			}
+				file.seek(pos+o);
+				file.writeByte(donnees[o]);
+		}
+		file.close();
+		} catch (IOException e) {
+			return 1;
 		}
 		return 0;
 	}
 	
-	public int read(int pos, RandomAccessFile disk) {
+	public int read(int pos, File disk) {
+		try {
+		RandomAccessFile file = new RandomAccessFile(disk,"rw");
 		for(int o = 0; o < size; o++) {
-			try {
-				disk.seek(pos+o);
-				donnees[o] = disk.readByte();
-			} catch (IOException e) {
-				return 1;
-			}
+				file.seek(pos+o);
+				donnees[o] = file.readByte();
+		}
+		file.close();
+		} catch (IOException e) {
+			return 1;
 		}
 		return 0;
 	}
 	
 	public void printblock() {
 		for(int i = 0; i < size; i++) {
-			System.out.print(String.format("%02x",donnees[i]));			
+			System.out.print(String.format("%02x ",donnees[i]));			
 		}
 	}
 	

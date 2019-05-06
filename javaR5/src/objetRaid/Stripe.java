@@ -19,24 +19,14 @@ public class Stripe {
 	}
 	
 	public void computeParity(int pos) {
-		Block[] blocks = new Block[size-1];
-		int i = 0;
-		int b = 0;
-		while (b < size) {
-			if (b != pos) {
-				blocks[i] = this.blocks[b];
-				i++;
-			}
-			b++;
-		}
-		this.blocks[pos].blockrepair(this, size-1,pos);
+		this.blocks[pos].blockrepair(this,pos);
 	}
 	
 	public static int computeParityIndex(int numBande, Raid raid) {
 		return (raid.getNbDisk())-((numBande-1)%raid.getNbDisk());
 	}
 	
-	public int read(int pos, RandomAccessFile[] disk) {
+	public int read(int pos, File[] disk) {
 		int erreur = -1;
 		for (int d = 0; d < size; d++) {
 			if(blocks[d].read(pos, disk[d]) != 0) {
@@ -53,7 +43,7 @@ public class Stripe {
 		return 0;
 	}
 	
-	public int write(int pos, RandomAccessFile[] disk) {
+	public int write(int pos, File[] disk) {
 		for (int d = 0; d < size; d++) {
 			if(blocks[d].write(pos,disk[d]) != 0) return 1;
 		}
@@ -61,12 +51,13 @@ public class Stripe {
 	}
 	
 	public static int readChunk(byte[] buffer, int size, int pos, Raid raid) {
+		if(size == 0) return 0;
 		int nbBlock = Block.computeNBlock(size);
 		int nbStripe = Stripe.computeNStripe(nbBlock, raid.getNbDisk());
 		int idParity;
-		Stripe stripe = new Stripe(raid.getNbDisk());
 		int decalage = 0;
 		for (int s = 0; s < nbStripe; s++) {
+			Stripe stripe = new Stripe(raid.getNbDisk());
 			idParity = Stripe.computeParityIndex(s+1, raid);
 			if (stripe.read(pos, raid.getDisk()) != 0) return 1;
 			for (int b = 0; b < stripe.getSize(); b++) {
@@ -79,18 +70,19 @@ public class Stripe {
 					}
 				}
 			}
-			pos =+ Block.size*stripe.getSize();
+			pos += Block.size*stripe.getSize();
 		}
 		return 0;
 	}
 	
 	public static int writeChunk(byte[] buffer, int size, int pos, Raid raid) {
+		if(size == 0) return 0;
 		int nbBlock = Block.computeNBlock(size);
 		int nbStripe = Stripe.computeNStripe(nbBlock, raid.getNbDisk());
 		int idParity;
-		Stripe stripe = new Stripe(raid.getNbDisk());
 		int decalage = 0;
 		for (int s = 0; s < nbStripe; s++) {
+			Stripe stripe = new Stripe(raid.getNbDisk());
 			idParity = Stripe.computeParityIndex(s+1, raid);
 			for (int b = 0; b < stripe.getSize(); b++) {
 				if (b != idParity-1) {
@@ -104,8 +96,8 @@ public class Stripe {
 					}
 				}
 			}
-			stripe.computeParity(idParity);
-			if(stripe.write(pos, raid.getDisk()) != 0) return 1;
+			stripe.computeParity(idParity-1);
+			if (stripe.write(pos, raid.getDisk()) != 0) return 1;
 			pos += Block.size*stripe.getSize();
 		}
 		return 0;

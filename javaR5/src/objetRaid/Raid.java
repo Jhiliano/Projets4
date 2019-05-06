@@ -5,35 +5,68 @@ public class Raid {
 	private int numberOfFiles;
 	private Superblock superblock;
 	private Inode[] inodes;
-	static final int inodeTableSize = 10;
+	public static final int inodeTableSize = 10;
 	private int raidType;
-	private RandomAccessFile[] disk;
+	private File[] disk;
 	private int nbDisk;
+	public static final int nbMaxDisk = 8;
 	
-	Raid(int raidType, File[] fichiers, int nbDisk) {
+	public Raid(int raidType) {
 		this.numberOfFiles = 0;
-		this.superblock = new Superblock(0,0,raidType);
-		this.disk = new RandomAccessFile[nbDisk];
-		this.nbDisk = nbDisk;
+		this.disk = new File[nbMaxDisk];
 		this.raidType = raidType;
+		this.superblock = new Superblock(raidType);
 		this.inodes = new Inode[inodeTableSize];
 		for(int i = 0; i < inodeTableSize; i++) {
 			this.inodes[i] = new Inode();
 		}
 	}
 	
+	public int initRaid(String Nomrepertoire) {
+		if(this.initDisk(Nomrepertoire) != 0) return 1;
+		if(this.superblock.read(this) != 0) return 2;
+		if(Inode.readInodeTable(this) != 0) return 3;
+		this.numberOfFiles = Inode.getUnusedInode(this);
+		if(numberOfFiles == -1) numberOfFiles = 0;
+		return 0;
+	}
+	
+	public int shutDownRaid() {
+		if(this.superblock.write(this) != 0) return 1;
+		if(Inode.writeInodeTable(this) != 0) return 2;
+		for(int i = 0; i < nbDisk; i++) {
+		}
+		return 0;
+	}
+	
+	private int initDisk(String Nomrepertoire) {
+		this.nbDisk = 0;
+		File repertoire = new File(Nomrepertoire);
+		if(!repertoire.isDirectory()) {
+			return 1;
+		}
+		File[] disk = repertoire.listFiles();
+		if(disk == null) return 1;
+		for (int i = 0; i<disk.length; i++) {
+			if (disk[i].isFile() && this.nbDisk <= nbMaxDisk) {
+				this.disk[this.nbDisk] = disk[i];
+				this.nbDisk+=1;
+			}
+		}
+		return 0;
+	}
+	
 	public int deleteFile(String nomFichier) {
-		int idSuppression = File.filexist(nomFichier, this);
+		int idSuppression = Fichier.filexist(nomFichier, this);
 		if(idSuppression == -1) return 1;
 		Inode.deleteInode(this, idSuppression);
-		this.supfile();
 		return 0;
 	}
 	
 	public int loadFileToHost(String nomFichier) {
 		try {
 			RandomAccessFile fileIn = new RandomAccessFile(nomFichier,"r");
-			File fileBuffer = new File((int) fileIn.length());
+			Fichier fileBuffer = new Fichier((int) fileIn.length());
 			fileIn.read(fileBuffer.getData(), 0, (int) fileIn.length());
 			fileIn.close();
 			return fileBuffer.write(nomFichier, this);
@@ -45,11 +78,11 @@ public class Raid {
 	
 	public int storeFileToHost(String nomFichier) {
 		int err;
-		File filebuffer = new File(0);
+		Fichier filebuffer = new Fichier(0);
 		err = filebuffer.read(nomFichier, this);
 		if (err != 0) return err;
 		try {
-			RandomAccessFile fileOut = new RandomAccessFile(nomFichier,"w");
+			RandomAccessFile fileOut = new RandomAccessFile(nomFichier,"rw");
 			fileOut.write(filebuffer.getData(), 0, filebuffer.getSize());
 			fileOut.close();
 		} catch (IOException e) {
@@ -58,7 +91,22 @@ public class Raid {
 		return 0;
 	}
 	
-	public RandomAccessFile[] getDisk() {
+	public int ajouterFichier(String nomFichier) {
+		Fichier fileBuffer = new Fichier(0);
+		return fileBuffer.write(nomFichier, this);
+	}
+	
+	public String afficherFichier(String nomFichier) {
+		int err;
+		Fichier filebuffer = new Fichier(0);
+		err = filebuffer.read(nomFichier, this);
+		if(err != 0) {
+			return "";
+		}
+		return filebuffer.returnStringFile();
+	}
+	
+	public File[] getDisk() {
 		return disk;
 	}
 
@@ -75,17 +123,10 @@ public class Raid {
 		return nbDisk;
 	}
 	
-	public void addfile() {
-		this.numberOfFiles += 1;
-	}
-	
-	public void supfile() {
-		this.numberOfFiles -=1;
-	}
-
 	void setNumberOfFiles(int numberOfFiles) {
 		this.numberOfFiles = numberOfFiles;
 	}
+
 	int getRaidType() {
 		return raidType;
 	}

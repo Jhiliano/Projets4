@@ -1,6 +1,6 @@
 package objetRaid;
 
-import java.util.Base64;
+import java.io.UnsupportedEncodingException;
 
 public class Inode {
 	private String filename;
@@ -8,8 +8,8 @@ public class Inode {
 	private int nblock;
 	private int firstByte;
 	public static final int fileNameMaxSize = 32;
-	static final int inodeSize = 44;
-	
+	static final int sizeofinode = 44;
+	static final int InodeSize = 16;
 	Inode() {
 		this.size = 0;
 		this.nblock = 0;
@@ -21,46 +21,59 @@ public class Inode {
 		this.size = size;
 		this.nblock = Utilitaire.sizeWithParity(size, raid);
 		this.firstByte = pos;
-		raid.getSuperblock().setNbBlockUsed(raid.getSuperblock().getNbBlockUsed()+this.nblock);
 		raid.getSuperblock().firstFreeByte(raid);
 	}
 
 	public static int readInodeTable(Raid raid) {
 		for (int i = 0; i < Raid.inodeTableSize; i++) {
-			if(raid.getInodes()[i].write(i, raid) == 1) return 1;
+			if(raid.getInodes()[i].read(i, raid) == 1) return 1;
 		}
 		return 0;
 	}
 	
 	public static int writeInodeTable(Raid raid) {
 		for (int i = 0; i < Raid.inodeTableSize; i++) {
-			if(raid.getInodes()[i].read(i,raid) == 1) return 1;
+			if(raid.getInodes()[i].firstByte != 0) {
+				if(raid.getInodes()[i].write(i,raid) == 1) return 1;
+			}
 		}
-		return 0;
-	}
-	
-	private int read(int numero, Raid raid) {
-		byte[] buffer = new byte[Inode.inodeSize];
-		byte[] bufferString = new byte[Inode.fileNameMaxSize];
-		bufferString = this.filename.getBytes();
-		for(int o = 0; o < Inode.fileNameMaxSize; o++) {
-			buffer[o] = bufferString[o];
-		}
-		Utilitaire.int_to_byte(buffer, Inode.fileNameMaxSize + 0, this.size);
-		Utilitaire.int_to_byte(buffer, Inode.fileNameMaxSize + Block.size, this.nblock);
-		Utilitaire.int_to_byte(buffer, Inode.fileNameMaxSize + Block.size*2, this.firstByte);
-		if(Stripe.writeChunk(buffer, Inode.inodeSize, Superblock.sizeSuperBlock+numero*Inode.inodeSize, raid) == 1) return 1;
 		return 0;
 	}
 	
 	private int write(int numero, Raid raid) {
-		byte[] buffer = new byte[Inode.inodeSize];
+		byte[] buffer = new byte[Inode.sizeofinode];
 		byte[] bufferString = new byte[Inode.fileNameMaxSize];
-		if(Stripe.readChunk(buffer, Inode.inodeSize, Superblock.sizeSuperBlock+numero*Inode.inodeSize, raid) == 1) return 1;
+		try {
+			bufferString = this.filename.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return 2;
+		}
 		for(int o = 0; o < Inode.fileNameMaxSize; o++) {
+			if (o < bufferString.length)
+				buffer[o] = bufferString[o];
+			else buffer[o] = (byte) 0;
+		}
+		Utilitaire.int_to_byte(buffer, this.size, Inode.fileNameMaxSize + 0);
+		Utilitaire.int_to_byte(buffer, this.nblock,Inode.fileNameMaxSize + Block.size);
+		Utilitaire.int_to_byte(buffer, this.firstByte, Inode.fileNameMaxSize + Block.size*2);
+		if(Stripe.writeChunk(buffer, Inode.sizeofinode,Superblock.inodeStart + numero*Inode.InodeSize*Block.size-1, raid) == 1) return 1;
+		return 0;
+	}
+	
+	private int read(int numero, Raid raid) {
+		byte[] buffer = new byte[Inode.sizeofinode];
+		int nameLength = 0;
+		if(Stripe.readChunk(buffer, Inode.sizeofinode, Superblock.inodeStart + numero*Inode.InodeSize*Block.size-1, raid) == 1) return 1;
+		for(int o = 0; o < Inode.fileNameMaxSize; o++) {
+			if(buffer[o] != 0) {
+				nameLength++;
+			}
+		}
+		byte[] bufferString = new byte[nameLength];
+		for(int o = 0; o < nameLength; o++) {
 			bufferString[o] = buffer[o];
 		}
-		this.filename = Base64.getEncoder().encodeToString(bufferString);
+		this.filename = new String(bufferString);
 		this.size = Utilitaire.byte_to_int(buffer,Inode.fileNameMaxSize + 0);
 		this.nblock = Utilitaire.byte_to_int(buffer,Inode.fileNameMaxSize + Block.size);
 		this.firstByte = Utilitaire.byte_to_int(buffer,Inode.fileNameMaxSize + Block.size*2);
@@ -78,7 +91,6 @@ public class Inode {
 		}
 		raid.getInodes()[iInode-1].firstByte = 0;
 		raid.getSuperblock().firstFreeByte(raid);
-		raid.supfile();
 	}
 	
 	public static int getUnusedInode(Raid raid) {
