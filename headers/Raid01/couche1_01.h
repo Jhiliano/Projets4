@@ -16,6 +16,10 @@
 
 
 /* Fonctions */
-
+void r01_half_init_disk_raid5(char* adresse, virtual_disk_t* raid);
+void r01_init_disk_raid5();
+void r01_remplir_storage(char* cheminFichier, virtual_disk_t* raid);
+void r01_half_eteindre_disk_raid5(virtual_disk_t* raid);
+void r01_eteindre_disk_raid5();
 
 #endif
