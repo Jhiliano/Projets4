@@ -17,5 +17,6 @@
 
 /* Fonctions */
 
+void r0_init_disk_raid5(char* adresse);
 
 #endif
