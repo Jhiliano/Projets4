@@ -14,4 +14,10 @@
 
 /* Fonctions */
 
+int r01_read_super_block(virtual_disk_t raid);
+int r01_read_inodes_table(virtual_disk_t raid);
+int r01_write_super_block(virtual_disk_t raid);
+int r01_write_inodes_table(virtual_disk_t raid);
+void r01_delete_inode(int pos);
+
 #endif

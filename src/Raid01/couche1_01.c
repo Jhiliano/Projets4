@@ -38,8 +38,8 @@ void r01_half_init_disk_raid5(char* adresse, virtual_disk_t* raid)
 		}
 	}
 	raid->raidmode = ZERO;
-	read_super_block();// Chargement super block ou initialisation si les disques sont nouveau (voir createdisk)
-	read_inodes_table(); // Chargement de la table d'inode
+	r01_read_super_block(*raid);// Chargement super block ou initialisation si les disques sont nouveau (voir createdisk)
+	r01_read_inodes_table(*raid); // Chargement de la table d'inode
 	if (!raid->super_block.first_free_byte) raid->super_block.raid_type = raid->raidmode;// si il est vierge on initialise le raidtype
 	raid->number_of_files = get_unused_inode();
 	raid->number_of_files = (raid->number_of_files == -1)?0:get_unused_inode();
@@ -73,8 +73,8 @@ void r01_half_eteindre_disk_raid5(virtual_disk_t* raid)
 	* \brief Etein le raid 5
 	* \details Sauvegarde la table d'inode et le superblock et free les fichier du raid 5
 	*/
-	write_super_block(); // Sauvegarde du superblock
-	write_inodes_table(); // Sauvegarde de la table d'inode
+	r01_write_super_block(*raid); // Sauvegarde du superblock
+	r01_write_inodes_table(*raid); // Sauvegarde de la table d'inode
 	for (int i = 0; i < raid->ndisk;i++) {
 		fclose(raid->storage[i]);//fermeture des fichiers ouverts
 	}

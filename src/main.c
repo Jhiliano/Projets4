@@ -15,7 +15,8 @@ int main(void)
 /// \brief Main
 /// \return EXIT_SUCCESS le programme n'a pas eut d'encombre sinon il aurrai rencontré un exit(EXIT_FAILURE)
 {
-  r0_init_disk_raid5("disk/raid5");
+  //r0_init_disk_raid5("disk/raid5");
+  init_disk_raid5("disk/raid5");
 
   interpret();
 

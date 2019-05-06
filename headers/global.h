@@ -170,8 +170,8 @@ uchar data [MAX_FILE_SIZE] ;
 /// redefinit file_s en file_t
 
 typedef struct virtual_disk_s_01{
-  virtual_disk_t* r0Disk1;
-  virtual_disk_t* r0Disk2;
+  virtual_disk_t r0Disk1;
+  virtual_disk_t r0Disk2;
 }virtual_disk_t_01;
 /*Variables globales*/
 
