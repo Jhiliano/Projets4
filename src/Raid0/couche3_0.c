@@ -40,6 +40,7 @@ void r0_init_inode(char *nomF, uint taille, uint pos) {
   r5Disk.number_of_files += 1;
 }
 
+
 int r0_write_inodes_table(void) {
   /**
   * \brief Ecrit la table d'inode dans le raid.
@@ -60,6 +61,7 @@ int r0_write_inodes_table(void) {
   return 0;
 }
 
+
 int r0_write_super_block(void) {
   /**
   * \brief Ecrit le super block au début du raid.
@@ -72,4 +74,43 @@ int r0_write_super_block(void) {
   if(r0_write_chunk(buffer, SUPER_BLOCK_SIZE*BLOCK_SIZE, 0, &r5Disk)) return 1;// on ecrit le buffer dans les disques et on verifie que tout s'est bien passé
   free(buffer);
   return 0;
+}
+
+
+int r0_read_super_block(void) {
+  /**
+  * \brief Lecture du super block.
+  * \details fread stocke lit le super block au début du raid et le stocke dans r5Disk.super_block.
+  * \return 0 si la lecture c'est bien passé, ERR_READ sinon.
+  */
+  uchar* buffer = malloc(sizeof(super_block_t));
+  if(r0_read_chunk(buffer, SUPER_BLOCK_SIZE*BLOCK_SIZE, 0, &r5Disk)) return ERR_READ;
+  r5Disk.super_block.raid_type = uchar_to_uint(buffer, 0);// on converti les uchar en int;
+  r5Disk.super_block.nb_blocks_used = uchar_to_uint(buffer, sizeof(uint));
+  r5Disk.super_block.first_free_byte = uchar_to_uint(buffer, sizeof(uint)*2);
+  if(r5Disk.super_block.first_free_byte == 0) r5Disk.super_block.first_free_byte = INODES_START + INODE_SIZE*INODE_TABLE_SIZE*BLOCK_SIZE;
+  free(buffer);
+  return 0;
+}
+
+
+int r0_read_inodes_table(void) {
+  /**
+  * \brief Lit la table d'inode dans le raid.
+  * \details Chargement de la table d'inodes et du super block.
+  * \return 0 si tout c'est bien passé, ERR_READ si il a eu un problème de lecture.
+  */
+  uchar* buffer = malloc(sizeof(inode_t));
+  for (uint i = 0; i < INODE_TABLE_SIZE; i++) {// on fait l'operation suivante pour chaque inode
+    if(r0_read_chunk(buffer, sizeof(inode_t), INODES_START+i*INODE_SIZE*BLOCK_SIZE-1, &r5Disk)) return ERR_READ;// on recupere le tableau d'entiers représentant l'inode et on verifie que tout s'est bien passé
+    for (uint c = 0; c < FILENAME_MAX_SIZE; c++) {// on recupère les FILENAME_MAX_SIZE premiers octets qui représente le nom
+      r5Disk.inodes[i].filename[c] = buffer[c];
+    }
+    r5Disk.inodes[i].size = uchar_to_uint(buffer, FILENAME_MAX_SIZE);// on converti les uchar apres FILENAME_MAX_SIZE en int;
+    r5Disk.inodes[i].nblock = uchar_to_uint(buffer, FILENAME_MAX_SIZE + sizeof(uint));
+    r5Disk.inodes[i].first_byte = uchar_to_uint(buffer, FILENAME_MAX_SIZE + sizeof(uint)*2);
+  }
+  free(buffer);
+  return 0;
+
 }
