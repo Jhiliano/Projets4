@@ -247,7 +247,7 @@ void test_couche4(void) {
   fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/text3.txt"));
   fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/text4.txt"));
   fprintf(log, "lecture fichier 3 : code retour %d\n",  load_file_from_host("tests/in/compress.zip"));
-  delete_inode(0);  
+  delete_inode(0);
 
   /*
   fprintf(log, "\nTEST : lecture \n\n");
@@ -260,7 +260,7 @@ void test_couche4(void) {
 }
 /* main */
 int main(void) {
-  init_disk_raid5("disk");
+  init_disk_raid5("disk/raid5");
   test_couche1();
   test_couche2();
   test_couche3();

@@ -15,13 +15,20 @@ SRC5 = couche1_5.c\
 			couche5_5.c
 OBJ5 = $(SRC5:.c=.o)
 HEAD5 = $(SRC5:.c=.h)
-SRC50 = couche1_50.c\
-			couche2_50.c\
-			couche3_50.c\
-			couche4_50.c\
-			couche5_50.c
-OBJ50 = $(SRC50:.c=.o)
-HEAD50 = $(SRC50:.c=.h)
+SRC0 = couche1_0.c\
+			couche2_0.c\
+			couche3_0.c\
+			couche4_0.c\
+			couche5_0.c
+OBJ0 = $(SRC0:.c=.o)
+HEAD0 = $(SRC0:.c=.h)
+SRC01 = couche1_01.c\
+			couche2_01.c\
+			couche3_01.c\
+			couche4_01.c\
+			couche5_01.c
+OBJ01 = $(SRC01:.c=.o)
+HEAD01 = $(SRC01:.c=.h)
 MAIN = main.o
 TEST = testunitaire
 CMDT1 = cmd_test1
@@ -43,7 +50,8 @@ UTILDIR = utilitaire
 
 
 RAID5DIR = Raid5
-RAID50DIR = Raid50
+RAID0DIR = Raid0
+RAID01DIR = Raid01
 
 ifeq ($(DEBUG),yes)
 	CFLAG += -g
@@ -55,7 +63,7 @@ endif
 
 all: $(BINDIR)/$(EXEC) $(TESTDIR)/$(BINDIR)/$(TEST) $(TESTDIR)/$(BINDIR)/$(CMDT1) $(TESTDIR)/$(BINDIR)/$(CMDT2) $(BINDIR)/$(CMDDI) $(BINDIR)/$(CMDDR) $(BINDIR)/$(CMDRR) $(BINDIR)/$(CMDDD)
 
-$(BINDIR)/$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(OBJ50)) $(addprefix $(OBJDIR)/,$(MAIN))
+$(BINDIR)/$(EXEC): $(addprefix $(OBJDIR)/,$(OBJ5)) $(addprefix $(OBJDIR)/,$(OBJ0)) $(addprefix $(OBJDIR)/,$(OBJ01)) $(addprefix $(OBJDIR)/,$(MAIN))
 	@echo "Création de l'executabe "$@
 	@$(CC) -o $@ $^ $(LDFLAGS)
 
@@ -100,16 +108,16 @@ run_T2:
 	./$(TESTDIR)/$(BINDIR)/$(CMDT2)
 
 dump_inode:
-	./$(BINDIR)/$(CMDDI) disk
+	./$(BINDIR)/$(CMDDI) disk/raid5
 
 dump_raid:
-	./$(BINDIR)/$(CMDDR) disk
+	./$(BINDIR)/$(CMDDR) disk/raid5
 
 repair_raid:
-	./$(BINDIR)/$(CMDRR) disk $(ARGS)
+	./$(BINDIR)/$(CMDRR) disk/raid5 $(ARGS)
 
 defrag_raid:
-	./$(BINDIR)/$(CMDDD) disk
+	./$(BINDIR)/$(CMDDD) disk/raid5
 
 
 
@@ -119,7 +127,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/$(RAID5DIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/$(RAID50DIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/$(RAID0DIR)/%.c
+	@echo "Création de "$@
+	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(RAID01DIR)/%.c
 	@echo "Création de "$@
 	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS)
 
@@ -146,13 +158,19 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@echo "Création de l'executable de generation du disque"
 	@$(CC) -o $(BINDIR)/$@ $^
 	@echo "Création de 4 disk de 50*1024 octets"
-	@./bin/$@ $(DISQUESDIR) 4 51200
+	@./bin/$@ $(DISQUESDIR)/raid5 4 51200
+	@./bin/$@ $(DISQUESDIR)/raid0 4 51200
+	@./bin/$@ $(DISQUESDIR)/raid01/Grape1 4 51200
+	@./bin/$@ $(DISQUESDIR)/raid01/Grape2 4 51200
 clean:
 	@rm -f $(OBJDIR)/*.o
 	@echo "Fichiers intermédiaires supprimés"
 
 cleandisk:
-	@rm -f $(DISQUESDIR)/*
+	@rm -f $(DISQUESDIR)/raid5/*
+	@rm -f $(DISQUESDIR)/raid0/*
+	@rm -f $(DISQUESDIR)/raid01/Grape1/*
+	@rm -f $(DISQUESDIR)/raid01/Grape2/*
 	@make $(CREATEDISK) > /dev/null
 	@echo "Disques réinitialisés"
 

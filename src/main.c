@@ -6,7 +6,8 @@
 /* dépendances */
 
 #include "../headers/Raid5/couche5_5.h"
-#include "../headers/Raid50/couche5_50.h"
+#include "../headers/Raid0/couche5_0.h"
+#include "../headers/Raid01/couche5_01.h"
 
 /* fonctions */
 
@@ -14,7 +15,7 @@ int main(void)
 /// \brief Main
 /// \return EXIT_SUCCESS le programme n'a pas eut d'encombre sinon il aurrai rencontré un exit(EXIT_FAILURE)
 {
-  init_disk_raid5("disk");
+  init_disk_raid5("disk/raid5");
 
   interpret();
 

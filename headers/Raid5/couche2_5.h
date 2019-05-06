@@ -3,8 +3,8 @@
 /// \author Guillaume Fourcroy
 /// \date 24 février 2019
 
-#ifndef COUCHE2_H
-#define COUCHE2_H
+#ifndef COUCHE2_5_H
+#define COUCHE2_5_H
 
 /* Dépendances */
 

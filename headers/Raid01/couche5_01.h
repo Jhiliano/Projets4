@@ -3,20 +3,17 @@
 /// \author Guillaume Fourcroy
 /// \date 24 février 2019
 
-#ifndef COUCHE5_H
-#define COUCHE5_H
+#ifndef COUCHE5_01_H
+#define COUCHE5_01_H
 
 
 /* Dépendances */
 
 
-#include "couche4_50.h"
-#include <unistd.h>
-#include <sys/wait.h>
+#include "couche4_01.h"
+#include "../Raid0/couche5_0.h"
 
 
 /* Fonctions */
-/*
-void interpret();
-*/
+
 #endif
