@@ -1,5 +1,5 @@
-/// \file couche3.h
-/// \brief header de la couche 3
+/// \file couche3_0.h
+/// \brief header de la couche 3 raid 0
 /// \author Guillaume Fourcroy
 /// \date 24 février 2019
 

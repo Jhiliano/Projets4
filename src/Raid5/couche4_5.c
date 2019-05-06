@@ -1,5 +1,5 @@
-/// \file couche4.c
-/// \brief ficher de code couche4
+/// \file couche4_5.c
+/// \brief ficher de code couche4 raid 5
 /// \author Guillaume Fourcroy
 /// \date 24 février 2019
 

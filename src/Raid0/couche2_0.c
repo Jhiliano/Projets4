@@ -1,5 +1,5 @@
-/// \file couche2.c
-/// \brief ficher de code couche2
+/// \file couche2_0.c
+/// \brief ficher de code couche2 raid 0
 /// \author Guillaume Fourcroy
 /// \date 24 février 2019
 

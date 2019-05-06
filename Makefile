@@ -164,6 +164,7 @@ $(CREATEDISK): $(SRCDIR)/$(CREATEDISKDIR)/$(addsuffix .c,$(CREATEDISK))
 	@./bin/$@ $(DISQUESDIR)/raid01/Grape2 4 51200
 clean:
 	@rm -f $(OBJDIR)/*.o
+	@cp antidel $(OBJDIR)/
 	@echo "Fichiers intermédiaires supprimés"
 
 cleandisk:
@@ -176,7 +177,9 @@ cleandisk:
 
 mrproper: clean cleandisk
 	@rm -f $(BINDIR)/*
+	@cp antidel $(BINDIR)/
 	@rm -f $(TESTDIR)/$(BINDIR)/*
+	@cp antidel $(TESTDIR)/$(BINDIR)/
 	@echo "Executable supprimé"
 
 # End generic part of the makefile

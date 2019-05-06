@@ -1,5 +1,5 @@
-/// \file couche2.h
-/// \brief header de la couche 2
+/// \file couche2_01.h
+/// \brief header de la couche 2 raid 01
 /// \author Guillaume Fourcroy
 /// \date 24 février 2019
 
