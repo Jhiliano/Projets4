@@ -57,3 +57,62 @@ int r0_write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid){
  	free(tab.stripe);
  	return 0;
  }
+
+ int r0_read_stripe(stripe_t* stripe, int pos, virtual_disk_t *raid){
+   /**
+   * \brief Lis une stripe sur le raid
+   * \details Utilise read block de la couche 1
+   * \param[out] stripe La stripe qui sera lu
+   * \param[in] pos La position ou lire la stripe
+   * \param[in] raid Le raid
+   * \return 0 si tout s'est bien passé ERR_READ si il y a eut une erreur de lecture
+   */
+   int erreur = -1;
+   for (int i = 0;i < stripe->nblocks;i++) {
+     if(read_block(pos+i*BLOCK_SIZE, raid->storage[i], &stripe->stripe[i])== ERR_READ) {
+       if (erreur != -1)// on note l'erreur pour la reparer plus tard
+         erreur = i;
+       else
+         return 1;//cas 2 erreurs => on sort
+     }
+   }
+   if (erreur != -1) {// on repare l'erreur
+     return 1;
+   }
+   return 0;
+ }
+
+ int r0_read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid){
+   /**
+   * \brief Ecrit un tableau de uchar sur le raid
+   * \details Créer les block de parité en appellant compute_parity
+   * \param[out] buffer Le buffer sur lequel sera ecrit les données
+   * \param[in] size Le nombre d'elements a lire
+   * \param[in] position La position sur le raid ou lire
+   * \param[in] raid Le raid
+   * \return 0 si tout s'est bien passé 1 si il y a eut une erreur de lecture
+   */
+   // calculs des tailles block-stripe necessaire
+    int nb = compute_nblock(size);
+    int nb_stripe = compute_nstripe(nb);
+    stripe_t tab;
+    int decalage=0;
+    tab.nblocks = raid->ndisk;
+    tab.stripe = malloc(tab.nblocks*sizeof(block_t));
+    for (int s = 0; s < nb_stripe; s++) { //parcours des stripes a lire
+    	if(read_stripe(&tab, position, raid)){// si il y a plus de 1 block illisible on stop
+       free(tab.stripe);
+       return 1;
+      }
+      for(int id_block = 0; id_block < tab.nblocks; id_block++) { //parcours des block des stripes
+         for (int o = 0; o < BLOCK_SIZE; o++) {  //parcours des octets des block
+    				if(decalage<size) // eviter de lire plus qu'on en a besoin
+    					buffer[decalage] = tab.stripe[id_block].data[o];
+    				decalage++;
+    			}
+      }
+    	position = position + BLOCK_SIZE*tab.nblocks;// incrementation de la taile d'une stripe
+    }
+    free(tab.stripe);
+    return 0;
+  }
