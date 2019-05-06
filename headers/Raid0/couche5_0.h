@@ -15,5 +15,10 @@
 
 
 /* Fonctions */
+void r0_cat(char *commande[], int nbMot);
+void r0_load(char *commande[], int nbMot);
+void r0_create(char *commande[], int nbMot);
+void r0_edit(char *commande[], int nbMot);
+void r0_interpret();
 
 #endif

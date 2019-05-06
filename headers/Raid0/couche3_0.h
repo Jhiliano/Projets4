@@ -14,5 +14,11 @@
 
 
 /* Fonctions */
+void r0_init_inode(char *nomF, uint taille, uint pos);
+int r0_write_inodes_table(void);
+int r0_write_super_block(void);
+int r0_read_super_block(void);
+int r0_read_inodes_table(void);
+
 
 #endif

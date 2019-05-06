@@ -5,6 +5,7 @@
 
 #ifndef COUCHE5_5_H
 #define COUCHE5_5_H
+#define NBMOTSMAX 20
 
 
 /* Dépendances */
@@ -16,6 +17,14 @@
 
 
 /* Fonctions */
+int Decoupe(char Chaine[], char *pMots[]);
+void ls(char *commande[], int nbMot);
+void cat(char *commande[], int nbMot);
+void rm(char *commande[], int nbMot);
+void load(char *commande[], int nbMot);
+void store(char *commande[], int nbMot);
+void create(char *commande[], int nbMot);
+void edit(char *commande[], int nbMot);
 void interpret();
 
 #endif

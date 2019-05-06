@@ -27,7 +27,7 @@ void r0_init_inode(char *nomF, uint taille, uint pos) {
   // On remplit l'inode.
   strcpy(i.filename, nomF);
   i.size = taille;
-  i.nblock = r0compute_nstripe(compute_nblock(taille))*4;
+  i.nblock = r0_compute_nstripe(compute_nblock(taille))*4;
   i.first_byte = pos;
 
   // On place l'inode dans la table

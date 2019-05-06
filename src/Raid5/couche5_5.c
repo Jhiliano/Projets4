@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#define NBMOTSMAX 20
+
 
 /* fonctions */
 int Decoupe(char Chaine[], char *pMots[]) {

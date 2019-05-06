@@ -16,6 +16,8 @@
 /* Fonctions */
 int r0_compute_nstripe(int nb_blocks);
 int r0_write_chunk(uchar* buffer, int size, int position, virtual_disk_t* raid);
+int r0_read_stripe(stripe_t* stripe, int pos, virtual_disk_t *raid);
+int r0_read_chunk(uchar* buffer, int size, int position, virtual_disk_t *raid);
 
 
 #endif
