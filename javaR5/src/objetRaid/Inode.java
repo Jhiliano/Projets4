@@ -97,7 +97,7 @@ public class Inode {
 		for (int i = 0; i < Raid.inodeTableSize; i++) {
 			if (raid.getInodes()[i].firstByte == 0) return i;
 		}
-		return 0;
+		return -1;
 	}
 	
 	public String getFilename() {

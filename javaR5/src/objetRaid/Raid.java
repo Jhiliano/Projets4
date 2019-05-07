@@ -10,6 +10,7 @@ public class Raid {
 	private File[] disk;
 	private int nbDisk;
 	public static final int nbMaxDisk = 8;
+	private String fileEdit ="";
 	
 	public Raid(int raidType) {
 		this.numberOfFiles = 0;
@@ -57,6 +58,7 @@ public class Raid {
 	}
 	
 	public int deleteFile(String nomFichier) {
+		if(nomFichier.equals("")) return 4;
 		int idSuppression = Fichier.filexist(nomFichier, this);
 		if(idSuppression == -1) return 1;
 		Inode.deleteInode(this, idSuppression);
@@ -64,6 +66,7 @@ public class Raid {
 	}
 	
 	public int loadFileToHost(String nomFichier) {
+		if(nomFichier.equals("")) return 4;
 		try {
 			RandomAccessFile fileIn = new RandomAccessFile(nomFichier,"r");
 			Fichier fileBuffer = new Fichier((int) fileIn.length());
@@ -78,6 +81,7 @@ public class Raid {
 	
 	public int storeFileToHost(String nomFichier) {
 		int err;
+		if(nomFichier.equals("")) return 4;
 		Fichier filebuffer = new Fichier(0);
 		err = filebuffer.read(nomFichier, this);
 		if (err != 0) return err;
@@ -96,14 +100,29 @@ public class Raid {
 		return fileBuffer.write(nomFichier, this);
 	}
 	
+	public int editerFichier(String buffer) {
+		byte[] data = new byte[buffer.length()*2];
+		try {
+			data = buffer.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return 3;
+		}
+		if(this.fileEdit.equals("")) return 4;
+		Fichier fileBuffer = new Fichier(data.length, data);
+		return fileBuffer.write(this.fileEdit, this);
+	}
+	
 	public String afficherFichier(String nomFichier) {
 		int err;
-		Fichier filebuffer = new Fichier(0);
+		if(nomFichier.equals("")) return nomFichier;
+		Fichier filebuffer = new Fichier(Fichier.sizeMaxFile);
 		err = filebuffer.read(nomFichier, this);
 		if(err != 0) {
 			return "";
 		}
+		this.fileEdit = nomFichier;
 		return filebuffer.returnStringFile();
+		
 	}
 	
 	public File[] getDisk() {

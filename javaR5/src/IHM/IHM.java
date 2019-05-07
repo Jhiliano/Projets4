@@ -1,4 +1,5 @@
 package IHM;
+import javax.swing.UIManager;
 import objetRaid.Raid;
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,10 +31,12 @@ public class IHM {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                
+                /*if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+                }*/
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Fenetre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -49,7 +52,14 @@ public class IHM {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+
+                String diskFolder = fenetre.choixfichier(fenetre.FolderChooser);
+                if (diskFolder == null || diskFolder.equals("") ) {
+                    System.exit(0);
+                }
                 fenetre.setVisible(true);
+                raid5.initRaid(diskFolder);
+                fenetre.actualiserJlist();
             }
         });
     }
@@ -58,8 +68,7 @@ public class IHM {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 fenetre.setVisible(true);
-                raid5.initRaid("../disk/raid5/");
-                fenetre.ActualiserJlist();
+
                 
                 
                 
@@ -72,6 +81,7 @@ public class IHM {
             public void run() {
                 fenetre.setVisible(false);
                 raid5.shutDownRaid();
+                System.exit(0);
                 
             }
         });

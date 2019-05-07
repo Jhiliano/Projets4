@@ -27,11 +27,13 @@ public class Fichier {
 	}
 	
 	public String returnStringFile() {
+		String s; 
 		byte[] buffer = new byte[this.size];
 		for (int i = 0; i < this.size; i++) {
 			buffer[i] = this.data[i];
 		}
-		return new String(buffer);
+		s = new String(buffer);
+		return s;
 	}
 	
 	public int write(String nomFichier, Raid raid) {
@@ -40,22 +42,27 @@ public class Fichier {
 		if(idEcriture == -1) {
 			idEcriture = Inode.getUnusedInode(raid);
 			firstByte = raid.getSuperblock().getFirstFreeByte();
+			System.out.println("A");
 		}
 		else {
 			if (size <= raid.getInodes()[idEcriture].getSize()) {
 				firstByte = raid.getInodes()[idEcriture].getFirstByte();
+				System.out.println("B");
 			}
 			else {
 				Inode.deleteInode(raid, idEcriture);
 				idEcriture = Inode.getUnusedInode(raid);
 				firstByte = raid.getSuperblock().getFirstFreeByte();
+				System.out.println("C");
 			}
 			
 		}
 		if (idEcriture == -1) return 1;
+		System.out.println("D");
 		if (this.size != 0) {
 			if (Stripe.writeChunk(this.data, this.size, firstByte, raid) != 0) return 2;
 		}
+		System.out.println("E");
 		raid.getInodes()[idEcriture] = new Inode(nomFichier,this.size, firstByte, raid);
 		raid.getSuperblock().firstFreeByte(raid);
 		return 0;
