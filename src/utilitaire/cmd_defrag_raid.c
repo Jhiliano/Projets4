@@ -7,8 +7,8 @@ int defrag_raid(void) {
   for (int i = 0; i < INODE_TABLE_SIZE; i++) {
     if(r5Disk.inodes[i].first_byte) {
       file.size = r5Disk.inodes[i].size;
-      if(read_chunk(file.data, file.size, pos, &r5Disk)) return 1;
-      if(write_chunk(file.data, file.size, pos, &r5Disk)) return 1;
+      if(read_chunk(file.data, file.size, r5Disk.inodes[i].first_byte, &r5Disk)) return 1;
+      if(write_chunk(file.data, file.size, pos, &r5Disk)) return 2;
       r5Disk.inodes[i].first_byte = pos;
       pos+=r5Disk.inodes[i].nblock*BLOCK_SIZE;
     }

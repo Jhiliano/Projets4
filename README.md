@@ -1,6 +1,6 @@
 # Projets S4
 
-# Ici est postÃ© les informations principales du projet
+# Ici est posté les informations principales du projet
 # src = dossier des fichiers de code
 # obj = dossier des fichiers objets
 # headers = dossier des fichier headers

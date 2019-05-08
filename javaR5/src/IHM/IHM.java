@@ -17,7 +17,7 @@ import objetRaid.Raid;
  */
 public class IHM {
 
-    static Fenetre fenetre = new Fenetre();
+    static Fenetres fenetres = new Fenetres();
     static Raid raid5 = new Raid(5);
     
    /**
@@ -39,13 +39,13 @@ public class IHM {
                 UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Fenetre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fenetres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Fenetre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fenetres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Fenetre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fenetres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Fenetre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Fenetres.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -53,38 +53,14 @@ public class IHM {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                String diskFolder = fenetre.choixfichier(fenetre.FolderChooser);
+                String diskFolder = fenetres.choixfichier(fenetres.FolderChooser);
                 if (diskFolder == null || diskFolder.equals("") ) {
                     System.exit(0);
                 }
-                fenetre.setVisible(true);
-                raid5.initRaid(diskFolder);
-                fenetre.actualiserJlist();
+                if(raid5.initRaid(diskFolder) != 0) System.exit(1);
+                fenetres.setVisible(true);
+                fenetres.actualiserInfos();
             }
         });
     }
-    
-    public static void ouvrirFenetre(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                fenetre.setVisible(true);
-
-                
-                
-                
-            }
-        });
-    }
-    
-    public static void fermerFenetre(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                fenetre.setVisible(false);
-                raid5.shutDownRaid();
-                System.exit(0);
-                
-            }
-        });
-    }
-    
 }
