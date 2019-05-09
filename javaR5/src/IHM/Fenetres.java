@@ -457,7 +457,7 @@ public class Fenetres extends javax.swing.JFrame {
             if (input != null) {
                 try {
                     size = Integer.parseInt(input);
-                    if (size < 52000) {
+                    if (size < 51200) {
                         JOptionPane.showMessageDialog(Erreur,"Cela doit etre une valeur superieur ou egal a 52000","Erreur",JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -465,7 +465,7 @@ public class Fenetres extends javax.swing.JFrame {
                          JOptionPane.showMessageDialog(Erreur,"Cela doit etre une valeur en int","Erreur",JOptionPane.ERROR_MESSAGE);
                 }
             }
-        } while((size < 52000 || size%4 != 0) && input != null);
+        } while((size < 51200 || size%4 != 0) && input != null);
         if(input != null) {
             if(IHM.raid5.reinitialiser(size) != 0) {
                 JOptionPane.showMessageDialog(Erreur," Erreur dans la réinitialisation des disques","Erreur",JOptionPane.ERROR_MESSAGE);
@@ -664,7 +664,7 @@ public class Fenetres extends javax.swing.JFrame {
     private javax.swing.JDialog DialogParametres;
     private javax.swing.JButton Editer;
     private javax.swing.JOptionPane Entree;
-    private javax.swing.JOptionPane Erreur;
+    javax.swing.JOptionPane Erreur;
     private javax.swing.JLabel EspaceRestant;
     private javax.swing.JLabel EspaceUtilise;
     private javax.swing.JButton Exporter;

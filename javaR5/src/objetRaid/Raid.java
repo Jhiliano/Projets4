@@ -23,9 +23,25 @@ public class Raid {
 	 */
 	public static final int inodeTableSize = 10;
 	/**
+	 * Enumeration du raid 5
+	 * @author Guillaume FOURCROY
+	 *
+	 */
+	public enum RaidTypes {
+		ZERO,UN,CINQ,ZERO_UN,UN_ZERO,CINQUANTE,CENT;	
+		public RaidTypes getType(int value) {
+			for (RaidTypes rT : RaidTypes.values()) {
+				if(value == rT.ordinal()) {
+					return rT;
+				}
+			}
+			return RaidTypes.ZERO;
+		}
+	}
+	/**
 	 * le type du raid
 	 */
-	private int raidType;
+	private RaidTypes raidType;
 	/**
 	 * les disques du raid qui sont representes sous forme de fichiers
 	 */
@@ -45,13 +61,13 @@ public class Raid {
 	private String fileEdit ="";
 	/**
 	 * Le constructeur de l'objet Raid
-	 * @param raidType le type du raid
+	 * @param cinq le type du raid
 	 */
-	public Raid(int raidType) {
+	public Raid(RaidTypes type) {
 		this.numberOfFiles = 0;
 		this.disk = new File[nbMaxDisk];
-		this.raidType = raidType;
-		this.superblock = new Superblock(raidType);
+		this.raidType = type;
+		this.superblock = new Superblock(type);
 		this.inodes = new Inode[inodeTableSize];
 		for(int i = 0; i < inodeTableSize; i++) {
 			this.inodes[i] = new Inode();
@@ -66,6 +82,7 @@ public class Raid {
 		if(this.initDisk(Nomrepertoire) != 0) return 1;// les disques n'a pas pu etre initalise
 		if(this.superblock.read(this) != 0) return 2;// on ne peux pas lire le superblock
 		if(Inode.readInodeTable(this) != 0) return 3;// on ne peux pas lire les inodes
+		if(this.superblock.getRaidType() != raidType.ordinal()) return 4; // le raid est pas bon
 		this.numberOfFiles = Inode.getUnusedInode(this);
 		if(numberOfFiles == -1) numberOfFiles = 0;// on initialise le nombre de fichiers
 		return 0;
@@ -205,7 +222,7 @@ public class Raid {
 	public int reinitialiser(int size) {
 		if(Utilitaire.reinitialiserRaid(this, size) != 0) return 1;// on return en cas d'erreur de reinitialisation
 		numberOfFiles = 0;
-		superblock = new Superblock(5);
+		superblock = new Superblock(RaidTypes.CINQ);
 		for(int i = 0; i < inodeTableSize; i++) {
 			this.inodes[i] = new Inode();
 		}
@@ -299,7 +316,7 @@ public class Raid {
 	 * Getter RaidType
 	 * @return le type du raid
 	 */
-	public int getRaidType() {
+	public RaidTypes getRaidType() {
 		return raidType;
 	}
 	/**

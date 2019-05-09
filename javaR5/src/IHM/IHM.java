@@ -1,4 +1,5 @@
 package IHM;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import objetRaid.Raid;
 /*
@@ -18,7 +19,7 @@ import objetRaid.Raid;
 public class IHM {
 
     static Fenetres fenetres = new Fenetres();
-    static Raid raid5 = new Raid(5);
+    static Raid raid5 = new Raid(Raid.RaidTypes.CINQ);
     
    /**
      * @param args the command line arguments
@@ -57,7 +58,10 @@ public class IHM {
                 if (diskFolder == null || diskFolder.equals("") ) {
                     System.exit(0);
                 }
-                if(raid5.initRaid(diskFolder) != 0) System.exit(1);
+                if(raid5.initRaid(diskFolder) != 0) {
+                    JOptionPane.showMessageDialog(fenetres.Erreur,"Le raid est pas conforme","Erreur",JOptionPane.ERROR_MESSAGE);
+                    System.exit(1);
+                }
                 fenetres.setVisible(true);
                 fenetres.actualiserInfos();
             }

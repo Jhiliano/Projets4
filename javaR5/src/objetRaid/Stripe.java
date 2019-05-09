@@ -74,6 +74,7 @@ class Stripe {
 		}
 		return 0;
 	}
+
 	/**
 	 * Ecrit la stripe dans les disques du raid
 	 * @param pos la position ou ecrire

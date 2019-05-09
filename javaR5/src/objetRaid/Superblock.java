@@ -28,12 +28,12 @@ package objetRaid;
 	/**
 	 * le type du raid
 	 */
-	private int raidType;
+	private Raid.RaidTypes raidType;
 	/**
 	 * Constructeur du superblock
 	 * @param raidType le type du raid
 	 */
-	Superblock(int raidType) {
+	Superblock(Raid.RaidTypes raidType) {
 		this.nbBlockUsed = 0;
 		this.firstFreeByte = inodeStart + Inode.InodeSize*Raid.inodeTableSize*Block.size;
 		this.raidType = raidType;
@@ -71,7 +71,7 @@ package objetRaid;
 		if(Stripe.readChunk(buffer, Superblock.sizeofSuperblock, 0, raid) == 1) return 1;// erreur de lecture
 		this.firstFreeByte = Utilitaire.byteToInt(buffer,Block.size*2);
 		if(firstFreeByte != 0) {// cas d'un raid non vide
-			this.raidType = Utilitaire.byteToInt(buffer,0);
+			this.raidType.getType(Utilitaire.byteToInt(buffer,0));
 			this.nbBlockUsed = Utilitaire.byteToInt(buffer,Block.size);
 		}
 		else {
@@ -86,7 +86,7 @@ package objetRaid;
 	 */
 	int write(Raid raid) {
 		byte[] buffer = new byte[Superblock.sizeofSuperblock];
-		Utilitaire.intToByte(buffer, this.raidType, 0);
+		Utilitaire.intToByte(buffer, this.raidType.ordinal(), 0);
 		Utilitaire.intToByte(buffer, this.nbBlockUsed, Block.size);
 		Utilitaire.intToByte(buffer, this.firstFreeByte, Block.size*2);
 		if(Stripe.writeChunk(buffer, Superblock.sizeofSuperblock, 0, raid) == 1) return 1;// erreur d'ecriture
@@ -134,7 +134,7 @@ package objetRaid;
 	 * @return le type de raid
 	 */
 	int getRaidType() {
-		return raidType;
+		return raidType.ordinal();
 	}
 	
 	
